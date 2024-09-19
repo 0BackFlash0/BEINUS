@@ -29,7 +29,7 @@ const tabBars = [
     {
         icon: "./assets/test.png",
         name: "배터리 정보",
-        key: "batteryinfo",
+        key: "battery_info",
     },
     {
         icon: "./assets/test.png",
@@ -43,9 +43,14 @@ const tabBars = [
     },
     {
         icon: "./assets/test.png",
-        name: "공급망",
-        key: "supply",
+        name: "재활용",
+        key: "recycling",
     },
+    {
+        icon: "./assets/test.png",
+        name: "정비",
+        key: "maintenance",
+    }
 ];
 
 const elementInfo = {
@@ -69,62 +74,86 @@ const elementInfo = {
         type: "text",
         name: "상태",
     },
-    weight: {
+    manufactured_date: {
         type: "text",
-        name: "배터리 무게",
+        name: "제조일자",
     },
-    rated_capacity: {
-        type: "text",
-        name: "Rated Capacity",
-    },
+    // weight: {
+    //     type: "text",
+    //     name: "배터리 무게",
+    // },
+    // rated_capacity: {
+    //     type: "text",
+    //     name: "Rated Capacity",
+    // },
     remaining_capacity: {
         type: "text",
         name: "Remaining Capacity",
     },
-    minimum_voltage: {
+    maximum_capacity: {
         type: "text",
-        name: "Minimum Voltage",
+        name: "Maximum Capacity",
     },
-    maximum_voltage: {
-        type: "text",
-        name: "Maximum Voltage",
-    },
+    // minimum_voltage: {
+    //     type: "text",
+    //     name: "Minimum Voltage",
+    // },
+    // maximum_voltage: {
+    //     type: "text",
+    //     name: "Maximum Voltage",
+    // },
     normal_voltage: {
         type: "text",
         name: "Nominal Voltage",
     },
-    power_20: {
+    soc: {
         type: "text",
-        name: "20% 충전 상태에서의 전력",
+        name: "State of Charge"
     },
-    power_80_20: {
+    soh: {
         type: "text",
-        name: "80%와 20% 충전 상태 간 전력 비율",
+        name: "State of Health"
     },
+    // power_20: {
+    //     type: "text",
+    //     name: "20% 충전 상태에서의 전력",
+    // },
+    // power_80_20: {
+    //     type: "text",
+    //     name: "80%와 20% 충전 상태 간 전력 비율",
+    // },
     material_composition: {
         type: "chart",
         name: "재료 구성",
     },
-    material_origin: {
-        type: "multi-chart",
-        name: "재료 원산지",
+    contain_harzardous: {
+        type: "text",
+        name: "위험물질 포함여부",
     },
+    // material_origin: {
+    //     type: "multi-chart",
+    //     name: "재료 원산지",
+    // },
     material_recycled: {
         type: "multi-chart",
         name: "재활용 원료 사용 비율",
     },
-    supply_chain: {
-        type: "trace",
-        name: "공급망 추적",
-    },
-    recycle_chain: {
-        type: "trace",
-        name: "용도 변경 및 재활용 이력 추적",
-    },
-    transaction_chain: {
-        type: "trace",
-        name: "거래 이력 추적",
-    },
+    // supply_chain: {
+    //     type: "trace",
+    //     name: "공급망 추적",
+    // },
+    // recycle_chain: {
+    //     type: "trace",
+    //     name: "용도 변경 및 재활용 이력 추적",
+    // },
+    // transaction_chain: {
+    //     type: "trace",
+    //     name: "거래 이력 추적",
+    // },
+    maintenance_history: {
+        type: "text",
+        name: "정비 이력"
+    }
 };
 
 const BatteryInformation = ({ battery_information_data }) => {
@@ -135,6 +164,7 @@ const BatteryInformation = ({ battery_information_data }) => {
     };
 
     const renderTab = (key, value) => {
+        console.log(key)
         if (elementInfo[key].type === "text") {
             return (
                 <TabInfo

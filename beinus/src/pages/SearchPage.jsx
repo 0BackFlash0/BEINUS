@@ -15,19 +15,23 @@ const tempInformation = [
     {
         model_name: "EV-BAT085",
         manufacture: "Exide Batteries Auditor",
-        factory: "Berlin",
+        // factory: "Berlin",
         category: "전기차",
         status: "Recycled",
-        weight: "400kg",
+        // weight: "400kg",
+        manufactured_date: "2024/09/19",
     },
     {
-        rated_capacity: "75 kWh",
+        // rated_capacity: "75 kWh",
         remaining_capacity: "60 kWh",
-        minimum_voltage: "3.0 V",
-        maximum_voltage: "4.3 V",
+        maximum_capacity: "100 kwh",
+        // minimum_voltage: "3.0 V",
+        // maximum_voltage: "4.3 V",
         normal_voltage: "3.7 V",
-        power_20: "120.00 kW",
-        power_80_20: "64.00 %",
+        // power_20: "120.00 kW",
+        // power_80_20: "64.00 %",
+        soc: "SOC",
+        soh: "SOH",
     },
     {
         material_composition: {
@@ -36,24 +40,28 @@ const tempInformation = [
             lithium: 40,
             lead: 11,
         },
-        material_origin: {
-            nickel: {
-                china: 95,
-                other: 5,
-            },
-            cobalt: {
-                china: 95,
-                other: 5,
-            },
-            lithium: {
-                china: 95,
-                other: 5,
-            },
-            lead: {
-                china: 95,
-                other: 5,
-            },
-        },
+        contain_harzardous: "없음",
+        // material_origin: {
+        //     nickel: {
+        //         china: 95,
+        //         other: 5,
+        //     },
+        //     cobalt: {
+        //         china: 95,
+        //         other: 5,
+        //     },
+        //     lithium: {
+        //         china: 95,
+        //         other: 5,
+        //     },
+        //     lead: {
+        //         china: 95,
+        //         other: 5,
+        //     },
+        // },
+        
+    },
+    {
         material_recycled: {
             nickel: {
                 pre_consumer: 17,
@@ -76,12 +84,13 @@ const tempInformation = [
                 primary: 76,
             },
         },
+        // supply_chain: "",
+        // recycle_chain: "",
+        // transaction_chain: "",
     },
     {
-        supply_chain: "",
-        recycle_chain: "",
-        transaction_chain: "",
-    },
+        maintenance_history: "없음",
+    }
 ];
 
 const SearchPage = () => {
