@@ -4,6 +4,7 @@ import PageTemplate from "../components/templates/PageTemplate";
 import Photo from "../components/atoms/Photo";
 import SearchingBar from "../components/molecules/SearchingBar";
 import IntroductionList from "../components/organisms/IntroductionList";
+import { useNavigate } from "react-router-dom";
 
 const introductions = [
     {
@@ -31,6 +32,7 @@ const StyledPageTemplate = styled(PageTemplate)`
 `;
 
 const MainPage = () => {
+    const navigate = useNavigate();
     // const bottomObserver = useRef(null);
     // const { data } = useInfiniteScroll(
     //     "product",
@@ -47,7 +49,7 @@ const MainPage = () => {
                     objectfit="cover"
                     width="600px"
                 />
-                <SearchingBar />
+                <SearchingBar onSearch={() => navigate("/search")} />
                 <IntroductionList introductions={introductions} />
             </StyledPageTemplate>
         </div>

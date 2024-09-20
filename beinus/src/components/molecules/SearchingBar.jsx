@@ -25,9 +25,7 @@ const SearchIcon = styled(Icon)`
     color: #3498db;
 `;
 
-const handleClick = () => console.log("search");
-
-const SearchingBar = ({ className = "" }) => {
+const SearchingBar = ({ className = "", onSearch }) => {
     return (
         <StyledSearchingContainer
             className={`searching-container ${className}`}
@@ -37,7 +35,7 @@ const SearchingBar = ({ className = "" }) => {
                 name="battery search"
                 placeholder="배터리 ID를 입력해주세요"
             ></StyledSearchingBar>
-            <SearchIcon icon="search" onClick={handleClick} />
+            <SearchIcon icon="search" onClick={(e) => onSearch(e)} />
         </StyledSearchingContainer>
     );
 };

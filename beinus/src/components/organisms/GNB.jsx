@@ -4,6 +4,7 @@ import Label from "../atoms/Label";
 import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
 import Line from "../atoms/Line";
+import Title from "../atoms/Title";
 import Icon from "../atoms/Icon";
 // import { useSelector, useDispatch } from "react-redux";
 // import { persistor } from "../../App";
@@ -27,12 +28,14 @@ const StyledNavigationBar = styled.div`
     justify-content: space-between;
     width: 100%;
     max-width: 1440px;
+    min-width: 720px;
     height: 100%;
     padding: 0 40px;
     background-color: white;
 `;
 
 const StyledLeftBar = styled.div`
+    height: 100%;
     flex-grow: 0;
     display: flex;
     flex-direction: row;
@@ -40,9 +43,19 @@ const StyledLeftBar = styled.div`
 `;
 
 const StyledRightBar = styled.div`
+    height: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
+`;
+
+const StyledMenuBar = styled.div`
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 30px;
 `;
 
 const GNB = ({
@@ -66,6 +79,15 @@ const GNB = ({
                             height="50px"
                         />
                     </Anchor>
+                    <StyledMenuBar>
+                        <Anchor to="/battery">
+                            <Title>배터리</Title>
+                        </Anchor>
+                        <Line is_horizontal={false} margin="20px" />
+                        <Anchor to="/material">
+                            <Title>원자재</Title>
+                        </Anchor>
+                    </StyledMenuBar>
                 </StyledLeftBar>
                 <StyledRightBar className={`Right-GNB`}>
                     <Anchor to="/login">

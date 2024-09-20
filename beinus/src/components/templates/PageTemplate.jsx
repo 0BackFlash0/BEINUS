@@ -11,6 +11,7 @@ const Screen = styled.div`
 const StyledPage = styled.div`
     width: 100%;
     max-width: 1440px;
+    min-width: 720px;
     display: flex;
     align-items: center;
     flex-direction: column;
