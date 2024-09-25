@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Icon from "../atoms/Icon";
 
 const StyledModalContainer = styled.div`
+    position: relative;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
+    /* padding: 20px; */
+    border-radius: 20px;
+    z-index: 3;
+    /* max-width: 500px; */
+    /* width: 100%; */
 `;
 
 const StyledBackdrop = styled.div`
     position: fixed;
-    z-index: 3;
+    z-index: 2;
     top: 0;
     left: 0;
     width: 100%;
@@ -20,6 +23,22 @@ const StyledBackdrop = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+const StyledClossButton = styled.button`
+    position: absolute;
+    display: flex;
+    z-index: 4;
+    align-items: center;
+    justify-content: center;
+    right: 0px;
+    top: 0px;
+    width: 50px;
+    height: 50px;
+    border-radius: 0px 20px 0px 0px;
+    background-color: #ff4f4f;
+
+    border-width: 0;
 `;
 
 const ModalTemplate = ({
@@ -33,6 +52,7 @@ const ModalTemplate = ({
 
     // 모달 닫기
     const closeModal = () => {
+        console.log("hello");
         setIsModalOpen(false);
     };
 
@@ -43,9 +63,14 @@ const ModalTemplate = ({
                     className={`modal ${className}`}
                     {...props}
                 >
-                    <h2>모달 제목</h2>
-                    <p>모달 내용이 여기에 들어갑니다.</p>
-                    <button onClick={closeModal}>모달 닫기</button>
+                    <StyledClossButton onClick={closeModal}>
+                        <Icon
+                            icon="close"
+                            color="white"
+                            weight="600"
+                            size="24pt"
+                        />
+                    </StyledClossButton>
                     {children}
                 </StyledModalContainer>
             </StyledBackdrop>

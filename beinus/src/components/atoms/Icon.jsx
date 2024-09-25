@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledIcon = styled.span`
     font-size: ${(props) => props.size || "24px"};
     color: ${(props) => props.color || "#5f6368"};
+    weight: ${(props) => props.weight || "400"};
 `;
 
 const Icon = ({
@@ -10,6 +11,7 @@ const Icon = ({
     className = "", // class
     size = "", // 크기
     color = "", // 색
+    weight = "", // weight
     ...props
 }) => {
     return (
@@ -17,6 +19,7 @@ const Icon = ({
             className={`material-symbols-outlined ${className}`}
             size={size}
             color={color}
+            weight={weight}
             {...props}
         >
             {icon}

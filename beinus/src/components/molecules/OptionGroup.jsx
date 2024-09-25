@@ -2,14 +2,14 @@ import Label from "../atoms/Label";
 import Subtitle from "../atoms/Subtitle";
 import styled from "styled-components";
 
-const StyledInputContainer = styled.div`
+const StyledOptionContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
     margin: 0px;
 `;
 
-const StyledInput = styled.input`
+const StyledOptionList = styled.select`
     width: 100%;
     font-size: 16pt;
     padding: 10px;
@@ -22,36 +22,36 @@ const StyledInput = styled.input`
         border-color: #383838;
     }
 
-    &::placeholder {
+    &::is_disabled {
         font-size: 14pt;
         color: #b3b3b3;
     }
 `;
 
-const InputGroup = ({
-    title, // Input 제목
+const OptionGroup = ({
+    title, // Option 제목
+    options,
     id, // id
-    name, // Input의 name
-    type = "text", // Input의 type
-    value, // Input의 value
-    placeholder, // Input의 placeholder
-    onChange, // Input의 onChange handler
+    name, // Option의 name
+    // value, // Option의 value
+    is_disabled, // Option의 is_disabled
+    selected, // 선행 선택자
+    onChange, // Option의 onChange handler
     valid, // 올바른지 여부 (설명 메시지 색 설정)
     description, // 설명 메세지
     className = "",
-    ...props
 }) => {
     const titleOptionalProps = { ...(id && { htmlFor: id }) };
     const inputOptionalProps = {
         ...(id && { id: id }),
         ...(name && { name: name }),
-        ...(value && { value: value }),
-        ...(placeholder && { placeholder: placeholder }),
+        // ...(value && { value: value }),
+        ...(is_disabled && "disabled"),
         ...(onChange && { onChange: onChange }),
     };
 
     return (
-        <StyledInputContainer className={`${className}`}>
+        <StyledOptionContainer className={`${className}`}>
             {title ? (
                 <Subtitle className="input-title" {...titleOptionalProps}>
                     {title}
@@ -59,17 +59,25 @@ const InputGroup = ({
             ) : (
                 ""
             )}
-            <StyledInput
-                className="input-input"
-                type={type}
-                {...inputOptionalProps}
-                {...props}
-            />
+            <StyledOptionList className="select" {...inputOptionalProps}>
+                {options.map((option) => (
+                    <option
+                        key={option.id}
+                        className="option"
+                        // onClick={() => {
+                        //     handleOpen();
+                        //     onClick(option);
+                        // }}
+                    >
+                        {option.name}
+                    </option>
+                ))}
+            </StyledOptionList>
             <Label className={`input-description`} valid={valid}>
                 {description ? `${description}` : <br />}
             </Label>
-        </StyledInputContainer>
+        </StyledOptionContainer>
     );
 };
 
-export default InputGroup;
+export default OptionGroup;

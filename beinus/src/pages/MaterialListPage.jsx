@@ -9,7 +9,7 @@ import Topic from "../components/atoms/Topic";
 import styled from "styled-components";
 import Anchor from "../components/atoms/Anchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
-import BatteryRegisterModal from "../components/organisms/BatteryRegisterModal";
+import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal";
 
 const column = [
     {
@@ -27,17 +27,17 @@ const column = [
         size: 70,
     },
     {
-        id: "model",
-        header: "모델",
+        id: "type",
+        header: "종류",
         accessorFn: (row) => {
-            return row.model;
+            return row.type;
         },
         size: 200,
     },
     {
-        id: "category",
-        header: "카테고리",
-        accessorFn: (row) => row.category,
+        id: "amount",
+        header: "수량",
+        accessorFn: (row) => row.amount,
         size: 200,
     },
     {
@@ -57,17 +57,17 @@ const column = [
 
 const data = [
     {
-        image: "./assets/battery_example.png",
+        image: "./assets/test.png",
         id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-        model: "M-41698615",
-        category: "전기차",
+        type: "니켈",
+        amount: "200",
         status: "NEW",
     },
     {
-        image: "./assets/battery_example.png",
+        image: "./assets/test.png",
         id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
-        model: "M-41698615",
-        category: "전기차",
+        type: "리튬",
+        amount: "200",
         status: "NEW",
     },
 ];
@@ -82,7 +82,7 @@ const StyledUpperContainer = styled.div`
     padding: 0 40px 0 20px;
 `;
 
-const BatteryListPage = () => {
+const MaterialListPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -100,18 +100,18 @@ const BatteryListPage = () => {
                 isModalOpen={isModalOpen}
                 setIsModalOpen={closeModal}
             >
-                <BatteryRegisterModal
+                <MaterialRegisterModal
                     onSuccess={closeModal}
                     onClose={closeModal}
                 />
             </ModalTemplate>
             <StyledUpperContainer>
-                <Topic>배터리 목록</Topic>
-                <Button onClick={openModal}>배터리 생성</Button>
+                <Topic>원자재 목록</Topic>
+                <Button onClick={openModal}>원자재 등록</Button>
             </StyledUpperContainer>
             <Table name="이름" data={data} columns={column} />
         </PageTemplate>
     );
 };
 
-export default BatteryListPage;
+export default MaterialListPage;

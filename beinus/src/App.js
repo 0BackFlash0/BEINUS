@@ -7,6 +7,8 @@ import RegisterPage from "./pages/RegisterPage";
 import ManagePage from "./pages/ManagePage";
 import SearchPage from "./pages/SearchPage";
 import BatteryListPage from "./pages/BatteryListPage";
+import MaterialListPage from "./pages/MaterialListPage";
+import MaterialDetailPage from "./pages/MaterialDetailPage";
 
 function App() {
     return (
@@ -21,6 +23,14 @@ function App() {
                     <Route
                         path="/battery"
                         element={<BatteryListPage />}
+                    ></Route>
+                    <Route
+                        path="/material"
+                        element={<MaterialListPage />}
+                    ></Route>
+                    <Route
+                        path="/material_detail"
+                        element={<MaterialDetailPage />}
                     ></Route>
                     {/* <Route path="/material" element={<MaterialListPage />}></Route> */}
                 </Routes>

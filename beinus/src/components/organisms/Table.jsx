@@ -19,7 +19,7 @@ const TableContainer = styled.div`
         border-bottom: 1px solid rgba(224, 224, 224, 1);
     }
 `;
-function Table({ name, data, columns, noDataMessage, useMinHeight }) {
+function Table({ data, columns, row }) {
     // const { useMinHeight = true, data, columns, noDataMessage } = props;
 
     const table = useReactTable({
