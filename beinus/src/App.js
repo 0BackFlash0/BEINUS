@@ -8,7 +8,7 @@ import ManagePage from "./pages/ManagePage";
 import SearchPage from "./pages/SearchPage";
 import BatteryListPage from "./pages/BatteryListPage";
 import MaterialListPage from "./pages/MaterialListPage";
-import MaterialDetailPage from "./pages/MaterialDetailPage";
+import MaterialDetailPopup from "./pages/MaterialDetailPopup";
 
 function App() {
     return (
@@ -30,7 +30,7 @@ function App() {
                     ></Route>
                     <Route
                         path="/material_detail"
-                        element={<MaterialDetailPage />}
+                        element={<MaterialDetailPopup />}
                     ></Route>
                     {/* <Route path="/material" element={<MaterialListPage />}></Route> */}
                 </Routes>

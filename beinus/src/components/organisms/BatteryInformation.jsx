@@ -5,6 +5,7 @@ import React from "react";
 import Line from "../atoms/Line";
 import TabChart from "../molecules/TabChart";
 import TabMultiChart from "../molecules/TabMultiChart";
+import Button from "../atoms/Button";
 
 const StyledBatteryInfoContainer = styled.div`
     width: 100%;
@@ -12,7 +13,7 @@ const StyledBatteryInfoContainer = styled.div`
     max-width: 1440px;
     margin: 30px 0 0 0;
     border-radius: 10px 10px 10px 10px;
-    border-width: 1px 1px 0 1px;
+    border-width: 1px;
     border-style: dashed;
 `;
 
@@ -24,6 +25,14 @@ const StyledTabContainer = styled.div`
     gap: 10px;
     background-color: #edffed;
 `;
+
+const StyledButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+`
 
 const tabBars = [
     {
@@ -156,38 +165,174 @@ const elementInfo = {
     }
 };
 
-const BatteryInformation = ({ battery_information_data }) => {
+const tabElements = [
+    {
+        icon: "./assets/test.png",
+        name: "배터리 정보",
+        key: "battery_info",
+        elements: [
+            {
+                key: "model_name",
+                type: "text",
+                name: "모델명",
+            },
+            {
+                key: "manufacture",
+                type: "text",
+                name: "제조사",
+            },
+            {
+                key: "category",
+                type: "text",
+                name: "카테고리",
+            },
+            {
+                key: "status",
+                type: "text",
+                name: "상태",
+            },
+            {
+                key: "manufactured_date",
+                type: "text",
+                name: "제조일자",
+            },
+        ]
+    },
+    {
+        icon: "./assets/test.png",
+        name: "성능",
+        key: "performance",
+        elements: [
+            {
+                key: "remaining_capacity",
+                type: "text",
+                name: "Remaining Capacity",
+            },
+            {
+                key: "maximum_capacity",
+                type: "text",
+                name: "Maximum Capacity",
+            },
+            {
+                key: "normal_voltage",
+                type: "text",
+                name: "Nominal Voltage",
+            },
+            {
+                key: "soc",
+                type: "text",
+                name: "State of Charge"
+            },
+            {
+                key: "soh",
+                type: "text",
+                name: "State of Health"
+            },
+        ]
+    },
+    {
+        icon: "./assets/test.png",
+        name: "재료",
+        key: "materials",
+        elements: [
+            {
+                key: "material_composition",
+                type: "chart",
+                name: "재료 구성",
+            },
+            {
+                key: "contain_harzardous",
+                type: "text",
+                name: "위험물질 포함여부",
+            },
+        ]
+    },
+    {
+        icon: "./assets/test.png",
+        name: "재활용",
+        key: "recycling",
+        elements: [
+            {
+                key: "material_recycled",
+                type: "multi-chart",
+                name: "재활용 원료 사용 비율",
+            },
+        ]
+    },
+    {
+        icon: "./assets/test.png",
+        name: "정비",
+        key: "maintenance",
+        elements: [
+            {
+                key: "maintain_buttons",
+                type: "buttons",
+                name: "정비 버튼",
+            },
+            {
+                key: "maintenance_history",
+                type: "text",
+                name: "정비 이력",
+            },
+        ]
+    }
+];
+
+
+const BatteryInformation = ({ battery_information_data,maintain_modal_state,analysis_modal_state,extrat_modal_state }) => {
+
     const [activeTab, setActiveTab] = React.useState(0);
+
+    const [maintainModal, setmaintainModal] = maintain_modal_state
+    const [analysisModal, setanalysisModal] = analysis_modal_state
+    const [extractModal, setExtractModal] = extrat_modal_state
 
     const tabClick = (index) => {
         setActiveTab(index);
     };
 
-    const renderTab = (key, value) => {
-        console.log(key)
-        if (elementInfo[key].type === "text") {
+    const renderTab = (element) => {
+        
+        if (element.type === "text") {
+            const value = battery_information_data[element.key]
             return (
                 <TabInfo
-                    key={key}
-                    infoname={elementInfo[key].name}
+                    key={element.key}
+                    infoname={element.name}
                     info={value}
                 />
             );
-        } else if (elementInfo[key].type === "chart") {
+        } else if (element.type === "chart") {
+            const value = battery_information_data[element.key]
             return (
                 <TabChart
-                    chartname={elementInfo[key].name}
+                    chartname={element.name}
                     data={encodeData(value)}
                 />
             );
-        } else if (elementInfo[key].type === "multi-chart") {
+        } else if (element.type === "multi-chart") {
+            const value = battery_information_data[element.key]
             return (
                 <TabMultiChart
-                    chartname={elementInfo[key].name}
+                    chartname={element.name}
                     datas={Object.entries(value).map(([key, value], index) => {
                         return { [key]: encodeData(value) };
                     })}
                 />
+            );
+        } else if (element.type === "buttons") {
+            return (
+                <StyledButtonContainer>
+                    <Button>
+                        배터리 정비
+                    </Button>
+                    <Button>
+                        재활용 여부 분석
+                    </Button>
+                    <Button>
+                        재활용 원자재 추출
+                    </Button>
+                </StyledButtonContainer>
             );
         }
     };
@@ -205,15 +350,15 @@ const BatteryInformation = ({ battery_information_data }) => {
     return (
         <StyledBatteryInfoContainer>
             <TabBar
-                tabs={tabBars}
+                tabs={tabElements}
                 onClick={tabClick}
                 actived={activeTab}
             ></TabBar>
             <StyledTabContainer>
-                {Object.entries(battery_information_data[activeTab]).map(
-                    ([key, value], index) => {
+                {tabElements[activeTab].elements.map(
+                    (element, index) => {
                         return (
-                            <React.Fragment key={key}>
+                            <React.Fragment key={element.key}>
                                 {index >= 1 && (
                                     <Line
                                         is_horizontal={true}
@@ -222,7 +367,7 @@ const BatteryInformation = ({ battery_information_data }) => {
                                         color="#059669"
                                     />
                                 )}
-                                {renderTab(key, value)}
+                                {renderTab(element)}
                             </React.Fragment>
                         );
                     }

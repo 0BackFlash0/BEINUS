@@ -7,9 +7,10 @@ import Photo from "../components/atoms/Photo";
 import Button from "../components/atoms/Button";
 import Topic from "../components/atoms/Topic";
 import styled from "styled-components";
-import Anchor from "../components/atoms/Anchor";
+import PopupAnchor from "../components/atoms/PopupAnchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal";
+
 
 const column = [
     {
@@ -50,7 +51,7 @@ const column = [
         id: "id",
         header: "ID",
         accessorFn: (row) => row.id,
-        cell: ({ getValue }) => <Anchor to={"/search"}>{getValue()}</Anchor>,
+        cell: ({ getValue }) => <PopupAnchor to={"/material_detail"} name={"원자재 상세 정보"} feature={"width=640,height=500"}>{getValue()}</PopupAnchor>,
         size: 600,
     },
 ];
