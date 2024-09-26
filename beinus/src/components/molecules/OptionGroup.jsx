@@ -33,19 +33,18 @@ const OptionGroup = ({
     options,
     id, // id
     name, // Option의 name
-    // value, // Option의 value
+    value, // Option의 value
     is_disabled, // Option의 is_disabled
-    selected, // 선행 선택자
     onChange, // Option의 onChange handler
     valid, // 올바른지 여부 (설명 메시지 색 설정)
     description, // 설명 메세지
     className = "",
 }) => {
     const titleOptionalProps = { ...(id && { htmlFor: id }) };
-    const inputOptionalProps = {
+    const optionOptionalProps = {
         ...(id && { id: id }),
         ...(name && { name: name }),
-        // ...(value && { value: value }),
+        ...(value && { value: value }),
         ...(is_disabled && "disabled"),
         ...(onChange && { onChange: onChange }),
     };
@@ -53,21 +52,18 @@ const OptionGroup = ({
     return (
         <StyledOptionContainer className={`${className}`}>
             {title ? (
-                <Subtitle className="input-title" {...titleOptionalProps}>
+                <Subtitle className="option-title" {...titleOptionalProps}>
                     {title}
                 </Subtitle>
             ) : (
                 ""
             )}
-            <StyledOptionList className="select" {...inputOptionalProps}>
+            <StyledOptionList className="select" {...optionOptionalProps}>
                 {options.map((option) => (
                     <option
-                        key={option.id}
+                        key={option.key}
+                        value={option.key}
                         className="option"
-                        // onClick={() => {
-                        //     handleOpen();
-                        //     onClick(option);
-                        // }}
                     >
                         {option.name}
                     </option>

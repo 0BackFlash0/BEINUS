@@ -4,7 +4,7 @@ import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 
-const StyledBatteryRegisterContainer = styled.div`
+const StyledBatteryExtractContainer = styled.div`
     position: relative;
     width: 480px;
     height: 640px;
@@ -42,38 +42,32 @@ const StyledSubtitle = styled(Subtitle)`
     margin-bottom: 10px;
 `;
 
-const BatteryRegisterModal = ({
+const BatteryExtractModal = ({
     className = "",
     onSuccess,
     onClose,
     ...props
 }) => {
     return (
-        <StyledBatteryRegisterContainer
-            className={`battery-register-modal ${className}`}
+        <StyledBatteryExtractContainer
+            className={`battery-extract-modal ${className}`}
             {...props}
         >
-            <StyledTopic>배터리 제조</StyledTopic>
+            <StyledTopic>배터리 정비</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledInputGroup type="text" title="모델" />
-                <StyledInputGroup type="text" title="카테고리" />
+                <StyledInputGroup type="text" title="정비자" />
+                <StyledInputGroup type="text" title="정비일자" />
             </StyledInputGroupContainer>
-            <StyledSubtitle>원자재 함량 </StyledSubtitle>
-            <StyledInputGroupContainer>
-                <StyledInputGroup type="text" title="니켈" />
-                <StyledInputGroup type="text" title="코발트" />
-                <StyledInputGroup type="text" title="리튬" />
-                <StyledInputGroup type="text" title="납" />
-            </StyledInputGroupContainer>
-            <StyledInputGroup type="text" title="상태" />
+            <StyledInputGroup type="text" title="정비결과" />
+            <StyledInputGroup type="text" title="특이사항" />
             <StyledButtonContainer>
                 <Button onClick={onSuccess}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
                     취소
                 </Button>
             </StyledButtonContainer>
-        </StyledBatteryRegisterContainer>
+        </StyledBatteryExtractContainer>
     );
 };
 
-export default BatteryRegisterModal;
+export default BatteryExtractModal;

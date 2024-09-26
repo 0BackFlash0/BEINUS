@@ -56,6 +56,7 @@ const StyledMenuBar = styled.div`
     flex-direction: row;
     align-items: center;
     margin-left: 30px;
+    gap: 15px;
 `;
 
 const GNB = ({
@@ -83,7 +84,7 @@ const GNB = ({
                         <Anchor to="/battery">
                             <Title>배터리</Title>
                         </Anchor>
-                        <Line is_horizontal={false} margin="20px" />
+                        {/* <Line is_horizontal={false} margin="20px" /> */}
                         <Anchor to="/material">
                             <Title>원자재</Title>
                         </Anchor>

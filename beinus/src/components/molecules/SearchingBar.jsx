@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import TextInput from "../atoms/TextInput";
 import Icon from "../atoms/Icon";
+import useInput from "../../hooks/useInput";
 
 const StyledSearchingContainer = styled.div`
     position: relative;
@@ -25,15 +26,25 @@ const SearchIcon = styled(Icon)`
     color: #3498db;
 `;
 
-const SearchingBar = ({ className = "", onSearch }) => {
+const SearchingBar = ({
+    id = "",
+    name = "",
+    className = "",
+    value = "",
+    onChange,
+    onSearch,
+}) => {
     return (
         <StyledSearchingContainer
             className={`searching-container ${className}`}
         >
             <StyledSearchingBar
                 className={`searching-input ${className}`}
-                name="battery search"
+                id={id}
+                name={name}
                 placeholder="배터리 ID를 입력해주세요"
+                value={value}
+                onChange={onChange}
             ></StyledSearchingBar>
             <SearchIcon icon="search" onClick={(e) => onSearch(e)} />
         </StyledSearchingContainer>

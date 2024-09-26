@@ -18,6 +18,7 @@ const StyledTextInput = styled.input`
 
 const TextInput = ({
     value = "", // 초기 값
+    id = "",
     name = "", // Input name
     placeholder = "", // Input의 placeholder
     onChange, // Input의 값이 바뀌었을 때의 handler

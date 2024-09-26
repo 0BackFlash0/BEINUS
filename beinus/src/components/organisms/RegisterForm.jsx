@@ -5,6 +5,7 @@ import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import useStates from "../../hooks/useStates";
 import { useNavigate } from "react-router-dom";
+import OptionGroup from "../molecules/OptionGroup";
 // import { emailValid, register } from "../../services/api";
 
 const StyledRegisterContainer = styled.div`
@@ -29,6 +30,10 @@ const StyledInputGroup = styled(InputGroup)`
     width: 100%;
 `;
 
+const StyledOptionGroup = styled(OptionGroup)`
+    width: 100%;
+`;
+
 const StyledCheckButton = styled(Button)`
     flex-shrink: 0;
     flex-grow: 0;
@@ -36,12 +41,39 @@ const StyledCheckButton = styled(Button)`
     margin: 0 20px 0 10px;
 `;
 
+const RoleTypes = [
+    {
+        key: "role1",
+        name: "원자재 공급업체",
+    },
+    {
+        key: "role2",
+        name: "배터리 제조업체",
+    },
+    {
+        key: "role3",
+        name: "전기차 제조업체",
+    },
+    {
+        key: "role4",
+        name: "배터리 검사업체",
+    },
+    {
+        key: "role5",
+        name: "재활용 업체",
+    },
+    {
+        key: "role6",
+        name: "검증업체",
+    },
+];
+
 const RegisterForm = ({
     className, // class
 }) => {
     const [value, handleOnChange] = useInput({
         username: null,
-        email: null,
+        role: null,
         password: null,
         passwordConfirm: null,
     });
@@ -128,7 +160,7 @@ const RegisterForm = ({
 
     return (
         <StyledRegisterContainer className={`${className}`}>
-            <StyledIDCheckContainer>
+            {/* <StyledIDCheckContainer>
                 <StyledInputGroup
                     id="email"
                     name="email"
@@ -163,17 +195,29 @@ const RegisterForm = ({
                 >
                     검사
                 </StyledCheckButton>
-            </StyledIDCheckContainer>
+            </StyledIDCheckContainer> */}
             <StyledInputGroup
                 id="username"
                 name="username"
                 type="text"
-                title="이름"
+                title="ID"
                 valid={valid.username}
                 value={value.username ? value.username : ""}
                 description={description.username}
+                placeholder="아이디를 입력해주세요."
+                className=""
+                onChange={(e) => {
+                    handleOnChange(e);
+                }}
+            />
+            <StyledOptionGroup
+                id="role"
+                name="role"
+                options={RoleTypes}
+                title="종류"
+                value={value.role ? value.role : ""}
                 placeholder="이름을 입력해주세요."
-                className="w-100"
+                className=""
                 onChange={(e) => {
                     handleOnChange(e);
                 }}
@@ -187,7 +231,6 @@ const RegisterForm = ({
                 value={value.password ? value.password : ""}
                 description={description.password}
                 placeholder="비밀번호를 입력해주세요. (영어, 숫자, 특수기호를 포함한 8~20자)"
-                className="w-100"
                 onChange={handleOnChange}
             />
             <StyledInputGroup
@@ -199,12 +242,11 @@ const RegisterForm = ({
                 value={value.passwordConfirm ? value.passwordConfirm : ""}
                 description={description.passwordConfirm}
                 placeholder="비밀번호를 재입력해주세요."
-                className="w-100"
                 onChange={handleOnChange}
             />
             <Button
-                className={"w-100 mt-2 py-2 border-0 bg-kakao"}
                 onClick={async function () {
+                    console.log(value);
                     // if (
                     //     valid.username &&
                     //     valid.email &&

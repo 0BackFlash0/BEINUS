@@ -32,7 +32,7 @@ const StyledButtonContainer = styled.div`
     justify-content: center;
     gap: 30px;
     width: 100%;
-`
+`;
 
 const tabBars = [
     {
@@ -59,7 +59,7 @@ const tabBars = [
         icon: "./assets/test.png",
         name: "정비",
         key: "maintenance",
-    }
+    },
 ];
 
 const elementInfo = {
@@ -117,11 +117,11 @@ const elementInfo = {
     },
     soc: {
         type: "text",
-        name: "State of Charge"
+        name: "State of Charge",
     },
     soh: {
         type: "text",
-        name: "State of Health"
+        name: "State of Health",
     },
     // power_20: {
     //     type: "text",
@@ -161,8 +161,8 @@ const elementInfo = {
     // },
     maintenance_history: {
         type: "text",
-        name: "정비 이력"
-    }
+        name: "정비 이력",
+    },
 };
 
 const tabElements = [
@@ -196,7 +196,7 @@ const tabElements = [
                 type: "text",
                 name: "제조일자",
             },
-        ]
+        ],
     },
     {
         icon: "./assets/test.png",
@@ -221,14 +221,14 @@ const tabElements = [
             {
                 key: "soc",
                 type: "text",
-                name: "State of Charge"
+                name: "State of Charge",
             },
             {
                 key: "soh",
                 type: "text",
-                name: "State of Health"
+                name: "State of Health",
             },
-        ]
+        ],
     },
     {
         icon: "./assets/test.png",
@@ -245,7 +245,7 @@ const tabElements = [
                 type: "text",
                 name: "위험물질 포함여부",
             },
-        ]
+        ],
     },
     {
         icon: "./assets/test.png",
@@ -257,7 +257,7 @@ const tabElements = [
                 type: "multi-chart",
                 name: "재활용 원료 사용 비율",
             },
-        ]
+        ],
     },
     {
         icon: "./assets/test.png",
@@ -274,27 +274,29 @@ const tabElements = [
                 type: "text",
                 name: "정비 이력",
             },
-        ]
-    }
+        ],
+    },
 ];
 
-
-const BatteryInformation = ({ battery_information_data,maintain_modal_state,analysis_modal_state,extrat_modal_state }) => {
-
+const BatteryInformation = ({
+    battery_information_data,
+    maintain_modal_state,
+    analysis_modal_state,
+    extract_modal_state,
+}) => {
     const [activeTab, setActiveTab] = React.useState(0);
 
-    const [maintainModal, setmaintainModal] = maintain_modal_state
-    const [analysisModal, setanalysisModal] = analysis_modal_state
-    const [extractModal, setExtractModal] = extrat_modal_state
+    const [maintainModal, setmaintainModal] = maintain_modal_state;
+    const [analysisModal, setanalysisModal] = analysis_modal_state;
+    const [extractModal, setExtractModal] = extract_modal_state;
 
     const tabClick = (index) => {
         setActiveTab(index);
     };
 
     const renderTab = (element) => {
-        
         if (element.type === "text") {
-            const value = battery_information_data[element.key]
+            const value = battery_information_data[element.key];
             return (
                 <TabInfo
                     key={element.key}
@@ -303,15 +305,12 @@ const BatteryInformation = ({ battery_information_data,maintain_modal_state,anal
                 />
             );
         } else if (element.type === "chart") {
-            const value = battery_information_data[element.key]
+            const value = battery_information_data[element.key];
             return (
-                <TabChart
-                    chartname={element.name}
-                    data={encodeData(value)}
-                />
+                <TabChart chartname={element.name} data={encodeData(value)} />
             );
         } else if (element.type === "multi-chart") {
-            const value = battery_information_data[element.key]
+            const value = battery_information_data[element.key];
             return (
                 <TabMultiChart
                     chartname={element.name}
@@ -323,13 +322,13 @@ const BatteryInformation = ({ battery_information_data,maintain_modal_state,anal
         } else if (element.type === "buttons") {
             return (
                 <StyledButtonContainer>
-                    <Button>
+                    <Button onClick={() => setmaintainModal(true)}>
                         배터리 정비
                     </Button>
-                    <Button>
+                    <Button onClick={() => setanalysisModal(true)}>
                         재활용 여부 분석
                     </Button>
-                    <Button>
+                    <Button onClick={() => setExtractModal(true)}>
                         재활용 원자재 추출
                     </Button>
                 </StyledButtonContainer>
@@ -355,23 +354,21 @@ const BatteryInformation = ({ battery_information_data,maintain_modal_state,anal
                 actived={activeTab}
             ></TabBar>
             <StyledTabContainer>
-                {tabElements[activeTab].elements.map(
-                    (element, index) => {
-                        return (
-                            <React.Fragment key={element.key}>
-                                {index >= 1 && (
-                                    <Line
-                                        is_horizontal={true}
-                                        borderstyle="dashed"
-                                        margin="1px"
-                                        color="#059669"
-                                    />
-                                )}
-                                {renderTab(element)}
-                            </React.Fragment>
-                        );
-                    }
-                )}
+                {tabElements[activeTab].elements.map((element, index) => {
+                    return (
+                        <React.Fragment key={element.key}>
+                            {index >= 1 && (
+                                <Line
+                                    is_horizontal={true}
+                                    borderstyle="dashed"
+                                    margin="1px"
+                                    color="#059669"
+                                />
+                            )}
+                            {renderTab(element)}
+                        </React.Fragment>
+                    );
+                })}
             </StyledTabContainer>
         </StyledBatteryInfoContainer>
     );

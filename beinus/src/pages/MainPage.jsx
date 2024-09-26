@@ -5,6 +5,8 @@ import Photo from "../components/atoms/Photo";
 import SearchingBar from "../components/molecules/SearchingBar";
 import IntroductionList from "../components/organisms/IntroductionList";
 import { useNavigate } from "react-router-dom";
+import useInput from "../hooks/useInput";
+import { checkBattery } from "../services/api";
 
 const introductions = [
     {
@@ -33,12 +35,26 @@ const StyledPageTemplate = styled(PageTemplate)`
 
 const MainPage = () => {
     const navigate = useNavigate();
-    // const bottomObserver = useRef(null);
-    // const { data } = useInfiniteScroll(
-    //     "product",
-    //     fetchProducts,
-    //     bottomObserver
-    // );
+
+    const [value, handleOnChange] = useInput({
+        battery_id: "",
+    });
+
+    const onSearch = async function () {
+        console.log(value.battery_id);
+        const batteryCheck = await checkBattery({
+            battery_id: value.battery_id,
+        })
+            .then((response) => {
+                return response.data;
+            })
+            .catch((response) => response.data);
+        console.log(batteryCheck);
+        if (batteryCheck.success) {
+            navigate(`/search/${batteryCheck.battery_id}`);
+        }
+    };
+
     return (
         <div>
             <GNB></GNB>
@@ -49,7 +65,13 @@ const MainPage = () => {
                     objectfit="cover"
                     width="600px"
                 />
-                <SearchingBar onSearch={() => navigate("/search")} />
+                <SearchingBar
+                    name="battery_id"
+                    id="battery_id"
+                    value={value.battery_id ? value.battery_id : ""}
+                    onChange={handleOnChange}
+                    onSearch={onSearch}
+                />
                 <IntroductionList introductions={introductions} />
             </StyledPageTemplate>
         </div>

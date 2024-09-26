@@ -19,7 +19,10 @@ function App() {
                     <Route path="/login" element={<LoginPage />}></Route>
                     <Route path="/register" element={<RegisterPage />}></Route>
                     <Route path="/manage" element={<ManagePage />}></Route>
-                    <Route path="/search" element={<SearchPage />}></Route>
+                    <Route
+                        path="/search/:battery_id/"
+                        element={<SearchPage />}
+                    ></Route>
                     <Route
                         path="/battery"
                         element={<BatteryListPage />}

@@ -3,8 +3,8 @@ import Label from "../atoms/Label";
 import InputGroup from "../molecules/InputGroup";
 import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
-// import { login } from "../../services/api";
-// import useInput from "../../hooks/useInput";
+import { login } from "../../services/api";
+import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 // import { useSelector, useDispatch } from "react-redux";
@@ -31,21 +31,13 @@ const StyledAnchor = styled(Anchor)`
 const LoginForm = ({
     className, // class
 }) => {
-    const LoginError = {
-        "이메일 형식으로 작성해주세요:email": "이메일 형식으로 작성해주세요.",
-        "영문, 숫자, 특수문자가 포함되어야하고 공백이 포함될 수 없습니다.:password":
-            "비밀번호는 영문, 숫자, 특수문자가 포함되어야하고 공백이 포함될 수 없습니다.",
-        "8에서 20자 이내여야 합니다.:password":
-            "비밀번호는 8에서 20자 이내여야 합니다.",
-        "인증되지 않았습니다": "존재하지 않는 아이디/비밀번호 입니다.",
-    };
+    const [value, handleOnChange] = useInput({
+        username: "",
+        password: "",
+    });
 
-    // const [value, handleOnChange] = useInput({
-    //     email: "",
-    //     password: "",
-    // });
-    const value = 0;
-    const handleOnChange = () => {};
+    // const value = 0;
+    // const handleOnChange = () => {};
 
     const [errorMsg, setErrorMsg] = React.useState("");
 
@@ -54,34 +46,39 @@ const LoginForm = ({
     // const dispatch = useDispatch();
 
     const handleLogin = async function () {
-        // const loginCheck = await login({
-        //     email: value.email,
-        //     password: value.password,
-        // })
-        //     .then((response) => {
-        //         localStorage.setItem("token", response.headers.authorization);
-        //         return response.data;
-        //     })
-        //     .catch((response) => response.data);
-        // if (loginCheck.success) {
-        //     navigate("/");
-        //     // dispatch(
-        //     //     userLogin({
-        //     //         email: value.email,
-        //     //         time: new Date().toString(),
-        //     //     })
-        //     // );
-        // } else {
-        //     setErrorMsg(LoginError[loginCheck.error.message]);
-        // }
+        console.log(value.username);
+        const loginCheck = await login({
+            username: value.username,
+            password: value.password,
+        })
+            .then((response) => {
+                localStorage.setItem("token", response.headers.authorization);
+                return response.data;
+            })
+            .catch((response) => response.data);
+        console.log(loginCheck);
+        if (loginCheck.success) {
+            navigate("/");
+            // dispatch(
+            //     userLogin({
+            //         email: value.email,
+            //         time: new Date().toString(),
+            //     })
+            // );
+        } else if (loginCheck.status === 401) {
+            setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
+        } else {
+            setErrorMsg("로그인 중 오류가 발생했습니다.");
+        }
     };
+
     return (
         <StyledLoginContainer className={`login-container ${className}`}>
             <StyledInputGroup
-                id="email"
-                name="email"
-                type="email"
-                value={value.email ? value.email : ""}
+                id="username"
+                name="username"
+                type="text"
+                value={value.username ? value.username : ""}
                 onChange={handleOnChange}
                 placeholder="아이디"
             />

@@ -6,72 +6,104 @@ import BatteryPassport from "../components/organisms/BatteryPassport";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import GNB from "../components/organisms/GNB";
 import PageTemplate from "../components/templates/PageTemplate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { searchBattery } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const tempPassport = {
-    id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-    model_number: "M-41698615",
-    serial_number: "992356610548948",
-    image: "./assets/battery_example.png",
-    QR: "./assets/QR.png",
+    id: "-",
+    model_number: "-",
+    serial_number: "-",
+    image: "-",
+    QR: "-",
 };
 
-const tempInformation = 
-    {
-        model_name: "EV-BAT085",
-        manufacture: "Exide Batteries Auditor",
-        // factory: "Berlin",
-        category: "전기차",
-        status: "Recycled",
-        // weight: "400kg",
-        manufactured_date: "2024/09/19",
-        // rated_capacity: "75 kWh",
-        remaining_capacity: "60 kWh",
-        maximum_capacity: "100 kwh",
-        // minimum_voltage: "3.0 V",
-        // maximum_voltage: "4.3 V",
-        normal_voltage: "3.7 V",
-        // power_20: "120.00 kW",
-        // power_80_20: "64.00 %",
-        soc: "SOC",
-        soh: "SOH",
-        material_composition: {
-            nickel: 33,
-            cobalt: 16,
-            lithium: 40,
-            lead: 11,
+const tempInformation = {
+    model_name: "-",
+    manufacture: "-",
+    category: "-",
+    status: "-",
+    manufactured_date: "-",
+    remaining_capacity: "-",
+    maximum_capacity: "-",
+    normal_voltage: "-",
+    soc: "-",
+    soh: "-H",
+    material_composition: {
+        nickel: 1,
+        cobalt: 1,
+        lithium: 1,
+        lead: 1,
+    },
+    contain_harzardous: "-",
+    material_recycled: {
+        nickel: {
+            pre_consumer: 1,
+            post_consumer: 1,
+            primary: 1,
         },
-        contain_harzardous: "없음",
-        material_recycled: {
-            nickel: {
-                pre_consumer: 17,
-                post_consumer: 7,
-                primary: 76,
-            },
-            cobalt: {
-                pre_consumer: 17,
-                post_consumer: 7,
-                primary: 76,
-            },
-            lithium: {
-                pre_consumer: 17,
-                post_consumer: 7,
-                primary: 76,
-            },
-            lead: {
-                pre_consumer: 17,
-                post_consumer: 7,
-                primary: 76,
-            },
+        cobalt: {
+            pre_consumer: 1,
+            post_consumer: 1,
+            primary: 1,
         },
-        maintenance_history: "없음",
-    };
+        lithium: {
+            pre_consumer: 1,
+            post_consumer: 1,
+            primary: 1,
+        },
+        lead: {
+            pre_consumer: 1,
+            post_consumer: 1,
+            primary: 1,
+        },
+    },
+    maintenance_history: "-",
+};
 
 const SearchPage = () => {
+    const navigate = useNavigate();
+
+    const { battery_id } = useParams();
+    const [data, setData] = useState({
+        passport: tempPassport,
+        information: tempInformation,
+    });
+    const [loading, setLoading] = useState(true);
 
     const [maintainModal, setMaintainModal] = useState(false);
     const [analysisModal, setAnalysisModal] = useState(false);
     const [extractModal, setExtractModal] = useState(false);
+
+    useEffect(() => {
+        // 데이터 fetch 요청
+        searchBattery({
+            battery_id: battery_id,
+        })
+            .then((response) => {
+                return response.data;
+            })
+            .then((data) => {
+                if (data.success) {
+                    setData({
+                        ...data,
+                        passport: data.passport,
+                        information: data.information,
+                    });
+                    setLoading(false);
+                } else {
+                    console.log("error");
+                }
+            })
+            .catch((response) => {
+                console.log(response);
+            });
+    }, []);
+
+    if (loading) {
+        return <></>;
+    }
 
     return (
         <>
@@ -104,9 +136,9 @@ const SearchPage = () => {
                 />
             </ModalTemplate>
             <PageTemplate className="register-page">
-                <BatteryPassport battery_passport_data={tempPassport} />
+                <BatteryPassport battery_passport_data={data.passport} />
                 <BatteryInformation
-                    battery_information_data={tempInformation}
+                    battery_information_data={data.information}
                     maintain_modal_state={[maintainModal, setMaintainModal]}
                     analysis_modal_state={[analysisModal, setAnalysisModal]}
                     extract_modal_state={[extractModal, setExtractModal]}
