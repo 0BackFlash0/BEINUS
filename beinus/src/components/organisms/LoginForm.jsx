@@ -3,7 +3,7 @@ import Label from "../atoms/Label";
 import InputGroup from "../molecules/InputGroup";
 import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
-import { login } from "../../services/api";
+import { getUser, login } from "../../services/api";
 import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -52,12 +52,15 @@ const LoginForm = ({
             password: value.password,
         })
             .then((response) => {
-                localStorage.setItem("token", response.headers.authorization);
-                return response.data;
+                console.log(response)
+                localStorage.setItem("token", response.data.token);
+
+                localStorage.setItem("org", response.data.token);
+                return response;
             })
             .catch((response) => response.data);
         console.log(loginCheck);
-        if (loginCheck.success) {
+        if (loginCheck.status === 200) {
             navigate("/");
             // dispatch(
             //     userLogin({
@@ -75,9 +78,9 @@ const LoginForm = ({
     return (
         <StyledLoginContainer className={`login-container ${className}`}>
             <StyledInputGroup
+                type="text"
                 id="username"
                 name="username"
-                type="text"
                 value={value.username ? value.username : ""}
                 onChange={handleOnChange}
                 placeholder="아이디"

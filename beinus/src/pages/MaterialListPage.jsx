@@ -10,6 +10,8 @@ import styled from "styled-components";
 import PopupAnchor from "../components/atoms/PopupAnchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal";
+import { getMaterialList } from "../services/api";
+import { useEffect } from "react";
 
 
 const column = [
@@ -56,23 +58,6 @@ const column = [
     },
 ];
 
-const data = [
-    {
-        image: "./assets/test.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-        type: "니켈",
-        amount: "200",
-        status: "NEW",
-    },
-    {
-        image: "./assets/test.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
-        type: "리튬",
-        amount: "200",
-        status: "NEW",
-    },
-];
-
 const StyledUpperContainer = styled.div`
     width: 100%;
     background-color: white;
@@ -84,6 +69,20 @@ const StyledUpperContainer = styled.div`
 `;
 
 const MaterialListPage = () => {
+
+    const [data, setData] = useState({
+        material_list: [
+            {
+                image: "-",
+                id: "-",
+                type: "-",
+                amount: "-",
+                status: "-",
+            }
+        ]
+    });
+    const [loading, setLoading] = useState(true);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -93,6 +92,31 @@ const MaterialListPage = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
+    useEffect(() => {
+        getMaterialList()
+            .then((response) => {
+                return response.data;
+            })
+            .then((data) => {
+                if (data.success) {
+                    setData({
+                        ...data,
+                        battery_list: data.battery_list,
+                    });
+                    setLoading(false);
+                } else {
+                    console.log("error");
+                }
+            })
+            .catch((response) => {
+                console.log(response);
+            });
+    }, []);
+
+    if (loading) {
+        return <></>;
+    }
 
     return (
         <PageTemplate className="battery-list-page">
@@ -110,7 +134,7 @@ const MaterialListPage = () => {
                 <Topic>원자재 목록</Topic>
                 <Button onClick={openModal}>원자재 등록</Button>
             </StyledUpperContainer>
-            <Table name="이름" data={data} columns={column} />
+            <Table name="이름" data={data.material_list} columns={column} />
         </PageTemplate>
     );
 };

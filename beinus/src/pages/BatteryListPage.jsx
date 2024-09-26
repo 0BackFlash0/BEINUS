@@ -10,6 +10,8 @@ import styled from "styled-components";
 import Anchor from "../components/atoms/Anchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import BatteryRegisterModal from "../components/organisms/BatteryRegisterModal";
+import { getBatteryList } from "../services/api";
+import { useEffect } from "react";
 
 const column = [
     {
@@ -50,27 +52,12 @@ const column = [
         id: "id",
         header: "ID",
         accessorFn: (row) => row.id,
-        cell: ({ getValue }) => <Anchor to={"/search"}>{getValue()}</Anchor>,
+        cell: ({ getValue }) => <Anchor to={`/search/${getValue()}`}>{getValue()}</Anchor>,
         size: 600,
     },
 ];
 
-const data = [
-    {
-        image: "./assets/battery_example.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-        model: "M-41698615",
-        category: "전기차",
-        status: "NEW",
-    },
-    {
-        image: "./assets/battery_example.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
-        model: "M-41698615",
-        category: "전기차",
-        status: "NEW",
-    },
-];
+
 
 const StyledUpperContainer = styled.div`
     width: 100%;
@@ -83,6 +70,20 @@ const StyledUpperContainer = styled.div`
 `;
 
 const BatteryListPage = () => {
+
+    const [data, setData] = useState({
+        battery_list: [
+            {
+                image: "-",
+                id: "-",
+                model: "-",
+                category: "-",
+                status: "-",
+            }
+        ]
+    });
+    const [loading, setLoading] = useState(true);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -92,6 +93,31 @@ const BatteryListPage = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
+    useEffect(() => {
+        getBatteryList()
+            .then((response) => {
+                return response.data;
+            })
+            .then((data) => {
+                if (data.success) {
+                    setData({
+                        ...data,
+                        battery_list: data.battery_list,
+                    });
+                    setLoading(false);
+                } else {
+                    console.log("error");
+                }
+            })
+            .catch((response) => {
+                console.log(response);
+            });
+    }, []);
+
+    if (loading) {
+        return <></>;
+    }
 
     return (
         <PageTemplate className="battery-list-page">
@@ -109,7 +135,7 @@ const BatteryListPage = () => {
                 <Topic>배터리 목록</Topic>
                 <Button onClick={openModal}>배터리 생성</Button>
             </StyledUpperContainer>
-            <Table name="이름" data={data} columns={column} />
+            <Table name="이름" data={data.battery_list} columns={column} />
         </PageTemplate>
     );
 };

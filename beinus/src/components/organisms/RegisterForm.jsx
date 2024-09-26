@@ -6,6 +6,7 @@ import useInput from "../../hooks/useInput";
 import useStates from "../../hooks/useStates";
 import { useNavigate } from "react-router-dom";
 import OptionGroup from "../molecules/OptionGroup";
+import { register } from "../../services/api";
 // import { emailValid, register } from "../../services/api";
 
 const StyledRegisterContainer = styled.div`
@@ -43,27 +44,31 @@ const StyledCheckButton = styled(Button)`
 
 const RoleTypes = [
     {
-        key: "role1",
+        key: "org1",
         name: "원자재 공급업체",
     },
     {
-        key: "role2",
+        key: "org2",
         name: "배터리 제조업체",
     },
     {
-        key: "role3",
+        key: "org3",
         name: "전기차 제조업체",
     },
     {
-        key: "role4",
+        key: "org4",
+        name: "배터리 정비업체",
+    },
+    {
+        key: "org5",
         name: "배터리 검사업체",
     },
     {
-        key: "role5",
+        key: "org6",
         name: "재활용 업체",
     },
     {
-        key: "role6",
+        key: "org7",
         name: "검증업체",
     },
 ];
@@ -72,10 +77,10 @@ const RegisterForm = ({
     className, // class
 }) => {
     const [value, handleOnChange] = useInput({
-        username: null,
-        role: null,
-        password: null,
-        passwordConfirm: null,
+        username: "",
+        org: "",
+        password: "",
+        // passwordConfirm: null,
     });
 
     const [description, setDescription] = useStates({
@@ -158,6 +163,32 @@ const RegisterForm = ({
         }
     }, [value.passwordConfirm, value.password]);
 
+    const handleRegister = async function () {
+        // console.log(value.username);
+        const loginCheck = await register({
+            username: value.username,
+            password: value.password,
+            org: value.org,
+        })
+            .then((response) => {
+                return response;
+            })
+            .catch((response) => response.data);
+        console.log(loginCheck);
+        if (loginCheck.status === 200) {
+            navigate("/login");
+            // dispatch(
+            //     userLogin({
+            //         email: value.email,
+            //         time: new Date().toString(),
+            //     })
+            // );
+        } else {
+            console.log("로그인 중 오류가 발생했습니다.");
+        }
+    };
+
+
     return (
         <StyledRegisterContainer className={`${className}`}>
             {/* <StyledIDCheckContainer>
@@ -211,8 +242,8 @@ const RegisterForm = ({
                 }}
             />
             <StyledOptionGroup
-                id="role"
-                name="role"
+                id="org"
+                name="org"
                 options={RoleTypes}
                 title="종류"
                 value={value.role ? value.role : ""}
@@ -247,6 +278,7 @@ const RegisterForm = ({
             <Button
                 onClick={async function () {
                     console.log(value);
+                    handleRegister();
                     // if (
                     //     valid.username &&
                     //     valid.email &&

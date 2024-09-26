@@ -53,8 +53,8 @@ const BatteryExtractModal = ({
             className={`battery-extract-modal ${className}`}
             {...props}
         >
-            <StyledTopic>배터리 정비</StyledTopic>
-            <StyledInputGroupContainer>
+            <StyledTopic>원자재 추출</StyledTopic>
+            {/* <StyledInputGroupContainer>
                 <StyledInputGroup type="text" title="정비자" />
                 <StyledInputGroup type="text" title="정비일자" />
             </StyledInputGroupContainer>
@@ -65,7 +65,7 @@ const BatteryExtractModal = ({
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
                     취소
                 </Button>
-            </StyledButtonContainer>
+            </StyledButtonContainer> */}
         </StyledBatteryExtractContainer>
     );
 };

@@ -4,11 +4,13 @@ import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import OptionGroup from "../molecules/OptionGroup";
+import useInput from "../../hooks/useInput";
+import { registerMaterial } from "../../services/api";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 560px;
+    height: 600px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -45,7 +47,7 @@ const StyledButtonContainer = styled.div`
     bottom: 30px;
 `;
 
-const MaterialTypes = [
+const MaterialOptions = [
     {
         key: "nickel",
         name: "니켈",
@@ -64,12 +66,48 @@ const MaterialTypes = [
     },
 ];
 
+const StatusOptions = [
+    {
+        key: "new",
+        name: "NEW",
+    },
+    {
+        key: "recycled",
+        name: "RECYCLED",
+    },
+];
+
 const MaterialRegisterModal = ({
     className = "",
     onSuccess,
     onClose,
     ...props
 }) => {
+
+    const [value, handleOnChange] = useInput({
+        type: "",
+        amount: "0",
+        vendor: "",
+        status: ""
+    });
+
+    const handleRegister = async function () {
+        const registerReq = await registerMaterial({
+            type: value.type,
+            amount: value.amount,
+            vendor: value.vendor,
+            status: value.status,
+        })
+            .then((response) => {
+                return response.data;
+            })
+            .catch((response) => response.data);
+        if (registerReq.success) {
+            console.log("success")
+            onClose()
+        } 
+    };
+
     return (
         <StyledBatteryRegisterContainer
             className={`battery-register-modal ${className}`}
@@ -77,13 +115,37 @@ const MaterialRegisterModal = ({
         >
             <StyledTopic>원자재 등록</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledOptionGroup options={MaterialTypes} title="종류" />
-                <StyledInputGroup type="number" title="수량" value="0" />
+                <StyledOptionGroup 
+                    options={MaterialOptions}
+                    id="type"
+                    name="type"
+                    value={value.type ? value.type : ""}
+                    onChange={handleOnChange}
+                    title="종류" />
+                <StyledInputGroup 
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    value={value.amount ? value.amount : ""}
+                    onChange={handleOnChange}
+                    title="수량"/>
             </StyledInputGroupContainer>
-            <StyledInputGroup type="text" title="공급업체" />
-            <StyledInputGroup type="text" title="상태" />
+            <StyledInputGroup 
+                type="text"
+                id="vendor"
+                name="vendor"
+                value={value.vendor ? value.vendor : ""}
+                onChange={handleOnChange} 
+                title="공급업체" />
+            <StyledOptionGroup 
+                options={StatusOptions}
+                id="status"
+                name="status"
+                value={value.status ? value.status : ""}
+                onChange={handleOnChange}
+                title="상태" />
             <StyledButtonContainer>
-                <Button onClick={onSuccess}>확인</Button>
+                <Button onClick={handleRegister}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
                     취소
                 </Button>

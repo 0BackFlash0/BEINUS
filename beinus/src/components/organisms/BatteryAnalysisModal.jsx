@@ -3,6 +3,9 @@ import InputGroup from "../molecules/InputGroup";
 import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
+import useInput from "../../hooks/useInput";
+import OptionGroup from "../molecules/OptionGroup";
+import { analysisBattery } from "../../services/api";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
@@ -15,6 +18,12 @@ const StyledBatteryRegisterContainer = styled.div`
 `;
 
 const StyledInputGroup = styled(InputGroup)`
+    width: 100%;
+    padding: 0 10px 0 0;
+    flex-grow: 1 0;
+`;
+
+const StyledOptionGroup = styled(OptionGroup)`
     width: 100%;
     padding: 0 10px 0 0;
     flex-grow: 1 0;
@@ -42,32 +51,89 @@ const StyledSubtitle = styled(Subtitle)`
     margin-bottom: 10px;
 `;
 
+const resultOptions = [
+    {
+        key: "success",
+        name: "재활용 가능",
+    },
+    {
+        key: "fail",
+        name: "재활용 불가능",
+    },
+    {
+        key: "hold",
+        name: "보류",
+    },
+];
+
 const BatteryAnalysisModal = ({
     className = "",
     onSuccess,
     onClose,
     ...props
 }) => {
+    const [value, handleOnChange] = useInput({
+        name: "",
+        date: "",
+        result: "",
+        others: ""
+    });
+
+    const handleAnalysis = async function () {
+        const analysisReq = await analysisBattery({
+            name: value.name,
+            date: value.date,
+            result: value.result,
+            others: value.others,
+        })
+            .then((response) => {
+                return response.data;
+            })
+            .catch((response) => response.data);
+        if (analysisReq.success) {
+            console.log("success")
+            onClose()
+        } 
+    };
+
     return (
         <StyledBatteryRegisterContainer
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledTopic>배터리 제조</StyledTopic>
+            <StyledTopic>재활용 여부 분석</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledInputGroup type="text" title="모델" />
-                <StyledInputGroup type="text" title="카테고리" />
+                <StyledInputGroup 
+                    type="text"     
+                    id="name"
+                    name="name"
+                    value={value.maintainer ? value.maintainer : ""}
+                    onChange={handleOnChange}
+                    title="분석자" />
+                <StyledInputGroup 
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={value.date ? value.date : ""}
+                    onChange={handleOnChange}
+                    title="분석일자" />
             </StyledInputGroupContainer>
-            <StyledSubtitle>원자재 함량 </StyledSubtitle>
-            <StyledInputGroupContainer>
-                <StyledInputGroup type="text" title="니켈" />
-                <StyledInputGroup type="text" title="코발트" />
-                <StyledInputGroup type="text" title="리튬" />
-                <StyledInputGroup type="text" title="납" />
-            </StyledInputGroupContainer>
-            <StyledInputGroup type="text" title="상태" />
+            <StyledOptionGroup 
+                options={resultOptions}
+                id="result"
+                name="result"
+                value={value.result ? value.result : ""}
+                onChange={handleOnChange}
+                title="분석결과" />
+            <StyledInputGroup 
+                type="text" 
+                id="others"
+                name="others"
+                value={value.others ? value.others : ""}
+                onChange={handleOnChange}
+                title="특이사항" />
             <StyledButtonContainer>
-                <Button onClick={onSuccess}>확인</Button>
+                <Button onClick={handleAnalysis}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
                     취소
                 </Button>

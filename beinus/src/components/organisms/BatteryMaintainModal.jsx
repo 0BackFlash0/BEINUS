@@ -3,6 +3,9 @@ import InputGroup from "../molecules/InputGroup";
 import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
+import OptionGroup from "../molecules/OptionGroup";
+import useInput from "../../hooks/useInput";
+import { maintainBattery } from "../../services/api";
 
 const StyledBatteryExtractContainer = styled.div`
     position: relative;
@@ -15,6 +18,12 @@ const StyledBatteryExtractContainer = styled.div`
 `;
 
 const StyledInputGroup = styled(InputGroup)`
+    width: 100%;
+    padding: 0 10px 0 0;
+    flex-grow: 1 0;
+`;
+
+const StyledOptionGroup = styled(OptionGroup)`
     width: 100%;
     padding: 0 10px 0 0;
     flex-grow: 1 0;
@@ -42,12 +51,51 @@ const StyledSubtitle = styled(Subtitle)`
     margin-bottom: 10px;
 `;
 
+const resultOptions = [
+    {
+        key: "success",
+        name: "이상 없음",
+    },
+    {
+        key: "fail",
+        name: "이상 있음",
+    },
+    {
+        key: "hold",
+        name: "보류",
+    },
+];
+
 const BatteryMaintainModal = ({
     className = "",
     onSuccess,
     onClose,
     ...props
 }) => {
+    const [value, handleOnChange] = useInput({
+        name: "",
+        date: "",
+        result: "",
+        others: ""
+    });
+
+    const handleMaintain = async function () {
+        const maintainReq = await maintainBattery({
+            name: value.name,
+            date: value.date,
+            result: value.result,
+            others: value.others,
+        })
+            .then((response) => {
+                return response.data;
+            })
+            .catch((response) => response.data);
+        if (maintainReq.success) {
+            console.log("success")
+            onClose()
+        } 
+    };
+
     return (
         <StyledBatteryExtractContainer
             className={`battery-register-modal ${className}`}
@@ -55,13 +103,37 @@ const BatteryMaintainModal = ({
         >
             <StyledTopic>배터리 정비</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledInputGroup type="text" title="정비자" />
-                <StyledInputGroup type="text" title="정비일자" />
+                <StyledInputGroup 
+                    type="text"     
+                    id="name"
+                    name="name"
+                    value={value.maintainer ? value.maintainer : ""}
+                    onChange={handleOnChange}
+                    title="정비자" />
+                <StyledInputGroup 
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={value.date ? value.date : ""}
+                    onChange={handleOnChange}
+                    title="정비일자" />
             </StyledInputGroupContainer>
-            <StyledInputGroup type="text" title="정비결과" />
-            <StyledInputGroup type="text" title="특이사항" />
+            <StyledOptionGroup 
+                options={resultOptions}
+                id="result"
+                name="result"
+                value={value.result ? value.result : ""}
+                onChange={handleOnChange}
+                title="정비결과" />
+            <StyledInputGroup 
+                type="text" 
+                id="others"
+                name="others"
+                value={value.others ? value.others : ""}
+                onChange={handleOnChange}
+                title="특이사항" />
             <StyledButtonContainer>
-                <Button onClick={onSuccess}>확인</Button>
+                <Button onClick={handleMaintain}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
                     취소
                 </Button>

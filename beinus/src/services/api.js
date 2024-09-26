@@ -10,13 +10,24 @@ export const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
+    const org = getUser()
+    console.log(token)
+    console.log(org)
     // console.log(token);
     if (token && token !== "undefined") {
         console.log(token);
         config.headers["Authorization"] = `Bearer ${token}`;
-        config.headers["access"] = `${token}`;
+        // config.headers["access"] = `${token}`;
     } else {
         console.log("no token");
+    }
+
+    if (org && org !== "undefined") {
+        console.log(org);
+        config.headers["org"] = `${org}`;
+        // config.headers["access"] = `${token}`;
+    } else {
+        console.log("no org");
     }
     return config;
 });
@@ -31,14 +42,18 @@ instance.interceptors.response.use(
     }
 );
 
-// export const register = (data) => {
-//     const { email, password, username } = data;
-//     return instance.post("/join", {
-//         email: email,
-//         password: password,
-//         username: username,
-//     });
-// };
+const getUser = (data) => {
+    return instance.post("/", {})
+}
+
+export const register = (data) => {
+    const { password, username, org } = data;
+    return instance.post("/join", {
+        username: username,
+        password: password,
+        org: org,
+    });
+};
 
 export const login = (data) => {
     const { username, password } = data;
@@ -107,13 +122,119 @@ export const searchBattery = (data) => {
                 data: {
                     success: false,
                     battery_id: battery_id,
-
                     message: "Battery search failed",
                 },
             });
         }, 100);
     });
 };
+
+export const registerBattery = (data) => {
+    const { 
+        model,
+        category,
+        nickel,
+        cobalt,
+        lithium,
+        lead,
+        status } = data;
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                data: {
+                    success: true,
+                    message: "Battery register success",
+                },
+            });
+        }, 100);
+    });
+}
+
+export const registerMaterial = (data) => {
+    const { 
+        type,
+        amount,
+        vendor,
+        status} = data;
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: {
+                        success: true,
+                        message: "Material register success",
+                    },
+                });
+            }, 100);
+        });
+}
+
+export const maintainBattery = (data) => {
+    const { 
+        name,
+        date,
+        result,
+        others} = data;
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                data: {
+                    success: true,
+                    message: "Battery maintain success",
+                },
+            });
+        }, 100);
+    });
+}
+
+export const analysisBattery = (data) => {
+    const { 
+        name,
+        date,
+        result,
+        others} = data;
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                data: {
+                    success: true,
+                    message: "Battery analysis success",
+                },
+            });
+        }, 100);
+    });
+}
+
+export const getBatteryList = (data) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                data: {
+                    success: true,
+                    battery_list: tempBatteries,
+                    message: "Battery list success",
+                },
+            });
+        }, 100);
+    });
+}
+
+export const getMaterialList = (data) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                data: {
+                    success: true,
+                    material_list: tempMaterials,
+                    message: "Battery list success",
+                },
+            });
+        }, 100);
+    });
+}
 
 const tempPassport = {
     id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
@@ -165,3 +286,37 @@ const tempInformation = {
     },
     maintenance_history: "없음",
 };
+
+const tempBatteries = [
+    {
+        image: "./assets/battery_example.png",
+        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
+        model: "M-41698615",
+        category: "전기차",
+        status: "NEW",
+    },
+    {
+        image: "./assets/battery_example.png",
+        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
+        model: "M-41698615",
+        category: "전기차",
+        status: "NEW",
+    },
+];
+
+const tempMaterials = [
+    {
+        image: "./assets/test.png",
+        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
+        type: "니켈",
+        amount: "200",
+        status: "NEW",
+    },
+    {
+        image: "./assets/test.png",
+        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
+        type: "리튬",
+        amount: "200",
+        status: "NEW",
+    },
+];
