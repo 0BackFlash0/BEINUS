@@ -102,9 +102,8 @@ const MaterialListPage = () => {
     useEffect(() => {
         getMaterialList()
             .then((response) => {
-                return response.data;
-            })
-            .then((data) => {
+                data = response.data;
+
                 if (data.success) {
                     setData({
                         ...data,
@@ -114,6 +113,8 @@ const MaterialListPage = () => {
                 } else {
                     console.log("error");
                 }
+
+                return data;
             })
             .catch((response) => {
                 console.log(response);

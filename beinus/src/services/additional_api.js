@@ -2,7 +2,7 @@ import axios from "axios";
 import { getUser } from "./base_api";
 
 export const instance = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:3000/",
     timeout: 1000,
     headers: {
         "Content-Type": "application/json",
@@ -21,14 +21,18 @@ instance.interceptors.request.use(async function (config) {
         console.log("no token");
     }
 
-    const user_data = await getUser().then((response) => response.data);
-    console.log(user_data);
-    if (user_data && user_data !== "undefined") {
-        console.log(user_data.role);
-        config.headers["org"] = `${user_data.role}`;
-    } else {
-        console.log("no org");
-    }
+    config.headers["org"] = "org1";
+
+    // const user_data = await getUser().then((response) => response.data);
+    // console.log(user_data);
+    // const user_data =
+
+    // if (user_data && user_data !== "undefined") {
+    //     console.log(user_data.role);
+    //     config.headers["org"] = `${user_data.role}`;
+    // } else {
+    //     console.log("no org");
+    // }
     return config;
 });
 
@@ -38,6 +42,7 @@ instance.interceptors.response.use(
     },
     (error) => {
         // localStorage.removeItem("token");
+        console.log(error.response);
         return error.response;
     }
 );
@@ -127,11 +132,11 @@ export const registerBattery = (data) => {
 export const registerRawMaterial = (data) => {
     const { type, amount, vendor } = data;
 
-    // return instance.post("/registerRawMaterial", {
-    //     supplierID: vendor,
-    //     name: type,
-    //     quantity: amount,
-    // });
+    return instance.post("/registerRawMaterial", {
+        supplierID: vendor,
+        name: type,
+        quantity: amount,
+    });
 
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -149,8 +154,7 @@ export const registerRawMaterial = (data) => {
 
 export const queryRawMaterial = (data) => {
     const { material_id } = data;
-    // return instance.get(`/queryRawMaterial/${material_id}`, {
-    // });
+    return instance.get(`/queryRawMaterial/${material_id}`, {});
 
     return new Promise((resolve) => {
         setTimeout(() => {
