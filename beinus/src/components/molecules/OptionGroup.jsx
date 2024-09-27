@@ -37,6 +37,7 @@ const OptionGroup = ({
     is_disabled, // Option의 is_disabled
     onChange, // Option의 onChange handler
     valid, // 올바른지 여부 (설명 메시지 색 설정)
+    is_description = true,
     description, // 설명 메세지
     className = "",
 }) => {
@@ -69,9 +70,13 @@ const OptionGroup = ({
                     </option>
                 ))}
             </StyledOptionList>
-            <Label className={`input-description`} valid={valid}>
-                {description ? `${description}` : <br />}
-            </Label>
+            {is_description ? (
+                <Label className={`input-description`} valid={valid}>
+                    {description ? `${description}` : <br />}
+                </Label>
+            ) : (
+                ""
+            )}
         </StyledOptionContainer>
     );
 };

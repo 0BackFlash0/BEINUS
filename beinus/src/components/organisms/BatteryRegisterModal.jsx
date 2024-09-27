@@ -6,15 +6,52 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import { registerBattery } from "../../services/additional_api";
+import { useState } from "react";
+import MaterialOption from "./MaterialOption";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
-    width: 480px;
-    height: 640px;
+    width: 900px;
+    height: 720px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
     align-items: start;
+`;
+
+const StyledBatteryInfoContainer = styled.div`
+    flex-grow: 3;
+    flex-basis: 0;
+    /* width: 100%; */
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    overflow: auto;
+`;
+
+const StyledMaterialListContainer = styled.div`
+    flex-grow: 4;
+    flex-basis: 0;
+    /* width: 100%; */
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    overflow: auto;
+`;
+
+const StyledColumnGroupContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+`;
+
+const StyledRowGroupContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 `;
 
 const StyledInputGroup = styled(InputGroup)`
@@ -33,9 +70,18 @@ const StyledTopic = styled(Topic)`
     margin-bottom: 60px;
 `;
 
-const StyledInputGroupContainer = styled.div`
-    display: flex;
-    flex-direction: row;
+const StyledAddButton = styled.button`
+    width: 100%;
+    border-style: none;
+    border-radius: 5px;
+    font-size: 16pt;
+    font-weight: 900;
+    background-color: #ececec;
+    color: #6d6d6d;
+
+    &:hover {
+        background-color: #d1d1d1;
+    }
 `;
 
 const StyledButtonContainer = styled.div`
@@ -51,27 +97,23 @@ const StyledSubtitle = styled(Subtitle)`
     margin-bottom: 10px;
 `;
 
-const BatteryOptions = [
+const HarzardousOptions = [
     {
-        key: "electric_car",
-        name: "전기차",
+        key: "yes",
+        name: "포함",
     },
     {
-        key: "normal",
-        name: "일반",
+        key: "no",
+        name: "미포함",
     },
 ];
 
-const StatusOptions = [
-    {
-        key: "new",
-        name: "NEW",
-    },
-    {
-        key: "recycled",
-        name: "RECYCLED",
-    },
-];
+const tempMaterial = {
+    type: "nickel",
+    status: "new",
+    materialID: "",
+    amount: "0",
+};
 
 const BatteryRegisterModal = ({
     className = "",
@@ -80,14 +122,45 @@ const BatteryRegisterModal = ({
     ...props
 }) => {
     const [value, handleOnChange] = useInput({
-        model: "",
         category: "",
-        nickel: "0",
-        cobalt: "0",
-        lithium: "0",
-        lead: "0",
-        status: "",
+        weight: "0",
+        isHardardous: "yes",
+        capacity: "0",
+        lifecycle: "0",
+        soc: "0",
+        soh: "0",
+        materialList: [tempMaterial],
     });
+
+    // const handleOnChangeList = (e) => {
+    // const temp_list = [];
+    // const { name, value } = e.target;
+    // setInputValue({ ...inputValue, [name]: value });
+    // };
+
+    const addMaterial = () => {
+        const changeEvent = {
+            target: {
+                name: "materialList",
+                value: [...value.materialList, tempMaterial],
+            },
+        };
+        handleOnChange(changeEvent);
+    };
+
+    const handleOnChangeMaterial = (e, index) => {
+        const { name, targetValue } = e.target;
+
+        const changeEvent = {
+            target: {
+                name: "materialList",
+                value: value.materialList.map((item, idx) =>
+                    idx === index ? { ...item, [name]: targetValue } : item
+                ),
+            },
+        };
+        handleOnChange(changeEvent);
+    };
 
     const handleRegister = async function () {
         const registerReq = await registerBattery({
@@ -115,73 +188,97 @@ const BatteryRegisterModal = ({
             {...props}
         >
             <StyledTopic>배터리 제조</StyledTopic>
-            <StyledInputGroupContainer>
-                <StyledInputGroup
-                    type="text"
-                    id="model"
-                    name="model"
-                    value={value.model ? value.model : ""}
-                    onChange={handleOnChange}
-                    title="모델"
-                />
-                <StyledOptionGroup
-                    options={BatteryOptions}
-                    id="category"
-                    name="category"
-                    value={value.category ? value.category : ""}
-                    onChange={handleOnChange}
-                    title="카테고리"
-                />
-            </StyledInputGroupContainer>
-            <StyledSubtitle>원자재 함량 </StyledSubtitle>
-            <StyledInputGroupContainer>
-                <StyledInputGroup
-                    type="number"
-                    id="nickel"
-                    name="nickel"
-                    value={value.nickel ? value.nickel : ""}
-                    onChange={handleOnChange}
-                    title="니켈"
-                />
-                <StyledInputGroup
-                    type="number"
-                    id="cobalt"
-                    name="cobalt"
-                    value={value.cobalt ? value.cobalt : ""}
-                    onChange={handleOnChange}
-                    title="코발트"
-                />
-                <StyledInputGroup
-                    type="number"
-                    id="lithium"
-                    name="lithium"
-                    value={value.lithium ? value.lithium : ""}
-                    onChange={handleOnChange}
-                    title="리튬"
-                />
-                <StyledInputGroup
-                    type="number"
-                    id="lead"
-                    name="lead"
-                    value={value.lead ? value.lead : ""}
-                    onChange={handleOnChange}
-                    title="납"
-                />
-            </StyledInputGroupContainer>
-            <StyledOptionGroup
-                options={StatusOptions}
-                id="status"
-                name="status"
-                value={value.status ? value.status : ""}
-                onChange={handleOnChange}
-                title="상태"
-            />
-            <StyledButtonContainer>
-                <Button onClick={handleRegister}>확인</Button>
-                <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
-                    취소
-                </Button>
-            </StyledButtonContainer>
+
+            <StyledRowGroupContainer>
+                <StyledBatteryInfoContainer>
+                    <StyledRowGroupContainer>
+                        <StyledInputGroup
+                            type="text"
+                            id="category"
+                            name="category"
+                            value={value.category ? value.category : ""}
+                            onChange={handleOnChange}
+                            title="카테고리"
+                        />
+
+                        <StyledInputGroup
+                            type="text"
+                            id="voltage"
+                            name="voltage"
+                            value={value.voltage ? value.voltage : ""}
+                            onChange={handleOnChange}
+                            title="전압"
+                        />
+                    </StyledRowGroupContainer>
+                    <StyledRowGroupContainer>
+                        <StyledInputGroup
+                            type="text"
+                            id="weight"
+                            name="weight"
+                            value={value.weight ? value.weight : ""}
+                            onChange={handleOnChange}
+                            title="무게(kg)"
+                        />
+                        <StyledOptionGroup
+                            options={HarzardousOptions}
+                            id="isHazrardous"
+                            name="isHazrardous"
+                            value={value.isHazrardous ? value.isHazrardous : ""}
+                            onChange={handleOnChange}
+                            title="위험물질 여부"
+                        />
+                    </StyledRowGroupContainer>
+
+                    <StyledRowGroupContainer>
+                        <StyledInputGroup
+                            type="text"
+                            id="capacity"
+                            name="capacity"
+                            value={value.capacity ? value.capacity : ""}
+                            onChange={handleOnChange}
+                            title="용량"
+                        />
+                        <StyledInputGroup
+                            type="text"
+                            id="lifecycle"
+                            name="lifecycle"
+                            value={value.lifecycle ? value.lifecycle : ""}
+                            onChange={handleOnChange}
+                            title="생명주기"
+                        />
+                    </StyledRowGroupContainer>
+                </StyledBatteryInfoContainer>
+                <StyledMaterialListContainer>
+                    <StyledSubtitle>원자재 목록</StyledSubtitle>
+
+                    {value.materialList
+                        ? value.materialList.map((element, idx) => {
+                              return (
+                                  <MaterialOption
+                                      typeValue={element.type}
+                                      statusValue={element.status}
+                                      materialIDValue={element.materialID}
+                                      numberValue={element.number}
+                                      onChange={(e) =>
+                                          handleOnChangeMaterial(e, idx)
+                                      }
+                                  />
+                              );
+                          })
+                        : ""}
+                    <StyledAddButton onClick={addMaterial}>+</StyledAddButton>
+                </StyledMaterialListContainer>
+                <StyledButtonContainer>
+                    <Button onClick={handleRegister}>확인</Button>
+                    <Button
+                        onClick={onClose}
+                        color={"red"}
+                        hover_color={"#c50000"}
+                    >
+                        취소
+                    </Button>
+                </StyledButtonContainer>
+            </StyledRowGroupContainer>
         </StyledBatteryRegisterContainer>
     );
 };

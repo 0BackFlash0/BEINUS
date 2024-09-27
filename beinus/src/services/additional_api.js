@@ -132,11 +132,11 @@ export const registerBattery = (data) => {
 export const registerRawMaterial = (data) => {
     const { type, amount, vendor } = data;
 
-    return instance.post("/registerRawMaterial", {
-        supplierID: vendor,
-        name: type,
-        quantity: amount,
-    });
+    // return instance.post("/registerRawMaterial", {
+    //     supplierID: vendor,
+    //     name: type,
+    //     quantity: amount,
+    // });
 
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -154,7 +154,7 @@ export const registerRawMaterial = (data) => {
 
 export const queryRawMaterial = (data) => {
     const { material_id } = data;
-    return instance.get(`/queryRawMaterial/${material_id}`, {});
+    // return instance.get(`/queryRawMaterial/${material_id}`, {});
 
     return new Promise((resolve) => {
         setTimeout(() => {

@@ -102,12 +102,12 @@ const MaterialListPage = () => {
     useEffect(() => {
         getMaterialList()
             .then((response) => {
-                data = response.data;
+                const response_data = response.data;
 
-                if (data.success) {
+                if (response_data.success) {
                     setData({
                         ...data,
-                        battery_list: data.battery_list,
+                        battery_list: response_data.battery_list,
                     });
                     setLoading(false);
                 } else {
