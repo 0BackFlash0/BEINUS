@@ -5,7 +5,7 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import OptionGroup from "../molecules/OptionGroup";
-import { analysisBattery } from "../../services/api";
+import { analysisBattery } from "../../services/additional_api";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
@@ -74,9 +74,9 @@ const BatteryAnalysisModal = ({
 }) => {
     const [value, handleOnChange] = useInput({
         name: "",
-        date: "",
-        result: "",
-        others: ""
+        date: new Date().toISOString().substring(0, 10),
+        result: "success",
+        others: "",
     });
 
     const handleAnalysis = async function () {
@@ -91,9 +91,9 @@ const BatteryAnalysisModal = ({
             })
             .catch((response) => response.data);
         if (analysisReq.success) {
-            console.log("success")
-            onClose()
-        } 
+            console.log("success");
+            onClose();
+        }
     };
 
     return (
@@ -103,35 +103,39 @@ const BatteryAnalysisModal = ({
         >
             <StyledTopic>재활용 여부 분석</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledInputGroup 
-                    type="text"     
+                <StyledInputGroup
+                    type="text"
                     id="name"
                     name="name"
                     value={value.maintainer ? value.maintainer : ""}
                     onChange={handleOnChange}
-                    title="분석자" />
-                <StyledInputGroup 
+                    title="분석자"
+                />
+                <StyledInputGroup
                     type="date"
                     id="date"
                     name="date"
                     value={value.date ? value.date : ""}
                     onChange={handleOnChange}
-                    title="분석일자" />
+                    title="분석일자"
+                />
             </StyledInputGroupContainer>
-            <StyledOptionGroup 
+            <StyledOptionGroup
                 options={resultOptions}
                 id="result"
                 name="result"
                 value={value.result ? value.result : ""}
                 onChange={handleOnChange}
-                title="분석결과" />
-            <StyledInputGroup 
-                type="text" 
+                title="분석결과"
+            />
+            <StyledInputGroup
+                type="text"
                 id="others"
                 name="others"
                 value={value.others ? value.others : ""}
                 onChange={handleOnChange}
-                title="특이사항" />
+                title="특이사항"
+            />
             <StyledButtonContainer>
                 <Button onClick={handleAnalysis}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>

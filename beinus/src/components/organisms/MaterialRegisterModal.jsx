@@ -5,12 +5,13 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import OptionGroup from "../molecules/OptionGroup";
 import useInput from "../../hooks/useInput";
-import { registerMaterial } from "../../services/api";
+import { registerRawMaterial } from "../../services/additional_api";
+import { useCaution } from "../../hooks/useCaution";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 600px;
+    height: 480px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -66,46 +67,49 @@ const MaterialOptions = [
     },
 ];
 
-const StatusOptions = [
-    {
-        key: "new",
-        name: "NEW",
-    },
-    {
-        key: "recycled",
-        name: "RECYCLED",
-    },
-];
-
 const MaterialRegisterModal = ({
     className = "",
     onSuccess,
     onClose,
     ...props
 }) => {
+    const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
-        type: "",
+        type: "nickel",
         amount: "0",
         vendor: "",
-        status: ""
     });
 
     const handleRegister = async function () {
-        const registerReq = await registerMaterial({
+        if (!checkValue()) {
+            showCaution("모든 값을 입력해주세요.");
+            return;
+        }
+
+        const registerReq = await registerRawMaterial({
             type: value.type,
             amount: value.amount,
             vendor: value.vendor,
-            status: value.status,
         })
             .then((response) => {
-                return response.data;
+                const data = response;
+                console.log(response);
+                if (response.status === 200) {
+                    showCaution(
+                        `ID가 발급되었습니다. <br> ID : ${response.data.materialID}`
+                    );
+                    onClose();
+                } else {
+                    showCaution("에러가 발생했습니다.");
+                }
+                return data;
             })
             .catch((response) => response.data);
-        if (registerReq.success) {
-            console.log("success")
-            onClose()
-        } 
+    };
+
+    const checkValue = () => {
+        return value.type && value.amount > 0 && value.vendor;
     };
 
     return (
@@ -115,35 +119,31 @@ const MaterialRegisterModal = ({
         >
             <StyledTopic>원자재 등록</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledOptionGroup 
+                <StyledOptionGroup
                     options={MaterialOptions}
                     id="type"
                     name="type"
                     value={value.type ? value.type : ""}
                     onChange={handleOnChange}
-                    title="종류" />
-                <StyledInputGroup 
+                    title="종류"
+                />
+                <StyledInputGroup
                     type="number"
                     id="amount"
                     name="amount"
                     value={value.amount ? value.amount : ""}
                     onChange={handleOnChange}
-                    title="수량"/>
+                    title="수량"
+                />
             </StyledInputGroupContainer>
-            <StyledInputGroup 
+            <StyledInputGroup
                 type="text"
                 id="vendor"
                 name="vendor"
                 value={value.vendor ? value.vendor : ""}
-                onChange={handleOnChange} 
-                title="공급업체" />
-            <StyledOptionGroup 
-                options={StatusOptions}
-                id="status"
-                name="status"
-                value={value.status ? value.status : ""}
                 onChange={handleOnChange}
-                title="상태" />
+                title="공급업체"
+            />
             <StyledButtonContainer>
                 <Button onClick={handleRegister}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>

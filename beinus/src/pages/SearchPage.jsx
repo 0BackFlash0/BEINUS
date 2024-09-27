@@ -8,7 +8,7 @@ import GNB from "../components/organisms/GNB";
 import PageTemplate from "../components/templates/PageTemplate";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { searchBattery } from "../services/api";
+import { searchBattery } from "../services/additional_api";
 import { useNavigate } from "react-router-dom";
 
 const tempPassport = {

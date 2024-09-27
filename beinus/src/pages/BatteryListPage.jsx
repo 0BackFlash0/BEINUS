@@ -10,7 +10,7 @@ import styled from "styled-components";
 import Anchor from "../components/atoms/Anchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import BatteryRegisterModal from "../components/organisms/BatteryRegisterModal";
-import { getBatteryList } from "../services/api";
+import { getBatteryList } from "../services/additional_api";
 import { useEffect } from "react";
 
 const column = [
@@ -52,12 +52,12 @@ const column = [
         id: "id",
         header: "ID",
         accessorFn: (row) => row.id,
-        cell: ({ getValue }) => <Anchor to={`/search/${getValue()}`}>{getValue()}</Anchor>,
+        cell: ({ getValue }) => (
+            <Anchor to={`/search/${getValue()}`}>{getValue()}</Anchor>
+        ),
         size: 600,
     },
 ];
-
-
 
 const StyledUpperContainer = styled.div`
     width: 100%;
@@ -70,7 +70,6 @@ const StyledUpperContainer = styled.div`
 `;
 
 const BatteryListPage = () => {
-
     const [data, setData] = useState({
         battery_list: [
             {
@@ -79,8 +78,8 @@ const BatteryListPage = () => {
                 model: "-",
                 category: "-",
                 status: "-",
-            }
-        ]
+            },
+        ],
     });
     const [loading, setLoading] = useState(true);
 

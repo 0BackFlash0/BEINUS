@@ -6,7 +6,7 @@ import SearchingBar from "../components/molecules/SearchingBar";
 import IntroductionList from "../components/organisms/IntroductionList";
 import { useNavigate } from "react-router-dom";
 import useInput from "../hooks/useInput";
-import { checkBattery } from "../services/api";
+import { checkBattery } from "../services/additional_api";
 
 const introductions = [
     {

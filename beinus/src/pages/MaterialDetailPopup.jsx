@@ -5,8 +5,11 @@ import Subtitle from "../components/atoms/Subtitle";
 import Button from "../components/atoms/Button";
 import TabInfo from "../components/molecules/TabInfo";
 import Photo from "../components/atoms/Photo";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { queryRawMaterial } from "../services/additional_api";
 
-const StyledBatteryDetailContainer = styled.div`
+const StyledMaterialDetailContainer = styled.div`
     position: relative;
     width: 640px;
     height: 480px;
@@ -27,36 +30,90 @@ const StyledTabInfo = styled(TabInfo)`
     width: 100%;
     padding: 0 10px 0 0;
     flex-grow: 1 0;
-`
+`;
 
 const StyledPhoto = styled(Photo)`
     margin: 20px 10px;
-`
+`;
 
-const MaterialDetailPopup = ({
-    className = "",
-    onSuccess,
-    onClose,
-    ...props
-}) => {
+const tempMaterial = {
+    materialID: "-",
+    supplierID: "-",
+    name: "-",
+    quantity: 0,
+    status: "-",
+    available: "-",
+    verifiedBy: "-",
+    timestamp: "-",
+};
+
+const MaterialDetailPopup = ({ className = "", ...props }) => {
+    const { material_id } = useParams();
+    const [data, setData] = useState({
+        materialID: "-",
+        supplierID: "-",
+        name: "-",
+        quantity: 0,
+        status: "-",
+        available: "-",
+        verifiedBy: "-",
+        timestamp: "-",
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        queryRawMaterial({
+            material_id: material_id,
+        })
+            .then((response) => {
+                console.log(response);
+                return response.data;
+            })
+            .then((data) => {
+                if (data.success) {
+                    setData({
+                        ...data,
+                        ...data.material_data,
+                    });
+                    setLoading(false);
+                } else {
+                    console.log("error");
+                }
+            })
+            .catch((response) => {
+                console.log(response);
+            });
+    }, []);
+
+    if (loading) {
+        return <></>;
+    }
+
     return (
-        <StyledBatteryDetailContainer
+        <StyledMaterialDetailContainer
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledPhoto src="./assets/test.png" alt="테스트"/>
+            <StyledPhoto src="./assets/test.png" alt="테스트" />
             <StyledInfoContainer>
-                <StyledTabInfo infoname="원자재 ID" info="ABCD"/>
+                <StyledTabInfo infoname="원자재 ID" info={data.materialID} />
             </StyledInfoContainer>
             <StyledInfoContainer>
-                <StyledTabInfo infoname="종류" info="니켈"/>
-                <StyledTabInfo infoname="상태" info="NEW"/>
+                <StyledTabInfo infoname="공급자 ID" info={data.supplierID} />
             </StyledInfoContainer>
             <StyledInfoContainer>
-                <StyledTabInfo infoname="검증여부" info="NO"/>
-                <StyledTabInfo infoname="공급일자" info="2024/09/24"/>
+                <StyledTabInfo infoname="종류" info={data.name} />
+                <StyledTabInfo infoname="수량" info={data.quantity} />
             </StyledInfoContainer>
-        </StyledBatteryDetailContainer>
+            <StyledInfoContainer>
+                <StyledTabInfo infoname="상태" info={data.status} />
+                <StyledTabInfo infoname="사용가능" info={data.available} />
+            </StyledInfoContainer>
+            <StyledInfoContainer>
+                <StyledTabInfo infoname="검증자" info={data.verifiedBy} />
+                <StyledTabInfo infoname="공급일자" info={data.timestamp} />
+            </StyledInfoContainer>
+        </StyledMaterialDetailContainer>
     );
 };
 

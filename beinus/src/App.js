@@ -32,7 +32,7 @@ function App() {
                         element={<MaterialListPage />}
                     ></Route>
                     <Route
-                        path="/material_detail"
+                        path="/material_detail/:battery_id/"
                         element={<MaterialDetailPopup />}
                     ></Route>
                     {/* <Route path="/material" element={<MaterialListPage />}></Route> */}

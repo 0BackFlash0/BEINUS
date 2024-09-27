@@ -3,7 +3,7 @@ import Label from "../atoms/Label";
 import InputGroup from "../molecules/InputGroup";
 import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
-import { getUser, login } from "../../services/api";
+import { login } from "../../services/base_api";
 import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -52,10 +52,8 @@ const LoginForm = ({
             password: value.password,
         })
             .then((response) => {
-                console.log(response)
+                console.log(response);
                 localStorage.setItem("token", response.data.token);
-
-                localStorage.setItem("org", response.data.token);
                 return response;
             })
             .catch((response) => response.data);

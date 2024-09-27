@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getUser } from "./base_api";
 
 export const instance = axios.create({
     baseURL: "http://localhost:8080/api",
@@ -8,11 +9,9 @@ export const instance = axios.create({
     },
 });
 
-instance.interceptors.request.use((config) => {
+instance.interceptors.request.use(async function (config) {
     const token = localStorage.getItem("token");
-    const org = getUser()
-    console.log(token)
-    console.log(org)
+    console.log(token);
     // console.log(token);
     if (token && token !== "undefined") {
         console.log(token);
@@ -22,10 +21,11 @@ instance.interceptors.request.use((config) => {
         console.log("no token");
     }
 
-    if (org && org !== "undefined") {
-        console.log(org);
-        config.headers["org"] = `${org}`;
-        // config.headers["access"] = `${token}`;
+    const user_data = await getUser().then((response) => response.data);
+    console.log(user_data);
+    if (user_data && user_data !== "undefined") {
+        console.log(user_data.role);
+        config.headers["org"] = `${user_data.role}`;
     } else {
         console.log("no org");
     }
@@ -41,27 +41,6 @@ instance.interceptors.response.use(
         return error.response;
     }
 );
-
-const getUser = (data) => {
-    return instance.post("/", {})
-}
-
-export const register = (data) => {
-    const { password, username, org } = data;
-    return instance.post("/join", {
-        username: username,
-        password: password,
-        org: org,
-    });
-};
-
-export const login = (data) => {
-    const { username, password } = data;
-    return instance.post("/login", {
-        username: username,
-        password: password,
-    });
-};
 
 export const checkBattery = (data) => {
     const { battery_id } = data;
@@ -95,8 +74,9 @@ export const checkBattery = (data) => {
     });
 };
 
-export const searchBattery = (data) => {
+export const searchBattery = async function (data) {
     const { battery_id } = data;
+    // const temp = instance.get("/");
 
     if (
         battery_id === "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162"
@@ -130,14 +110,7 @@ export const searchBattery = (data) => {
 };
 
 export const registerBattery = (data) => {
-    const { 
-        model,
-        category,
-        nickel,
-        cobalt,
-        lithium,
-        lead,
-        status } = data;
+    const { model, category, nickel, cobalt, lithium, lead, status } = data;
 
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -149,33 +122,51 @@ export const registerBattery = (data) => {
             });
         }, 100);
     });
-}
+};
 
-export const registerMaterial = (data) => {
-    const { 
-        type,
-        amount,
-        vendor,
-        status} = data;
+export const registerRawMaterial = (data) => {
+    const { type, amount, vendor } = data;
 
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    data: {
-                        success: true,
-                        message: "Material register success",
-                    },
-                });
-            }, 100);
-        });
-}
+    // return instance.post("/registerRawMaterial", {
+    //     supplierID: vendor,
+    //     name: type,
+    //     quantity: amount,
+    // });
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    success: true,
+                    materialID: "temp",
+                    message: "Material register success",
+                },
+            });
+        }, 100);
+    });
+};
+
+export const queryRawMaterial = (data) => {
+    const { material_id } = data;
+    // return instance.get(`/queryRawMaterial/${material_id}`, {
+    // });
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    success: true,
+                    material_data: tempMaterial,
+                },
+            });
+        }, 100);
+    });
+};
 
 export const maintainBattery = (data) => {
-    const { 
-        name,
-        date,
-        result,
-        others} = data;
+    const { name, date, result, others } = data;
 
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -187,14 +178,10 @@ export const maintainBattery = (data) => {
             });
         }, 100);
     });
-}
+};
 
 export const analysisBattery = (data) => {
-    const { 
-        name,
-        date,
-        result,
-        others} = data;
+    const { name, date, result, others } = data;
 
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -206,7 +193,7 @@ export const analysisBattery = (data) => {
             });
         }, 100);
     });
-}
+};
 
 export const getBatteryList = (data) => {
     return new Promise((resolve) => {
@@ -220,7 +207,7 @@ export const getBatteryList = (data) => {
             });
         }, 100);
     });
-}
+};
 
 export const getMaterialList = (data) => {
     return new Promise((resolve) => {
@@ -234,7 +221,7 @@ export const getMaterialList = (data) => {
             });
         }, 100);
     });
-}
+};
 
 const tempPassport = {
     id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
@@ -320,3 +307,14 @@ const tempMaterials = [
         status: "NEW",
     },
 ];
+
+const tempMaterial = {
+    materialID: "MATERIAL-1234567890123456789",
+    supplierID: "SUPPLIER-001",
+    name: "Lithium",
+    quantity: 100,
+    status: "NEW",
+    available: "Available",
+    verifiedBy: "",
+    timestamp: "2024-09-25T06:41:00Z",
+};

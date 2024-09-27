@@ -6,7 +6,7 @@ import useInput from "../../hooks/useInput";
 import useStates from "../../hooks/useStates";
 import { useNavigate } from "react-router-dom";
 import OptionGroup from "../molecules/OptionGroup";
-import { register } from "../../services/api";
+import { register } from "../../services/base_api";
 // import { emailValid, register } from "../../services/api";
 
 const StyledRegisterContainer = styled.div`
@@ -78,7 +78,7 @@ const RegisterForm = ({
 }) => {
     const [value, handleOnChange] = useInput({
         username: "",
-        org: "",
+        org: "org1",
         password: "",
         // passwordConfirm: null,
     });
@@ -187,7 +187,6 @@ const RegisterForm = ({
             console.log("로그인 중 오류가 발생했습니다.");
         }
     };
-
 
     return (
         <StyledRegisterContainer className={`${className}`}>

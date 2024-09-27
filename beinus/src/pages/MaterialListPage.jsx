@@ -10,9 +10,8 @@ import styled from "styled-components";
 import PopupAnchor from "../components/atoms/PopupAnchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal";
-import { getMaterialList } from "../services/api";
+import { getMaterialList } from "../services/additional_api";
 import { useEffect } from "react";
-
 
 const column = [
     {
@@ -53,7 +52,15 @@ const column = [
         id: "id",
         header: "ID",
         accessorFn: (row) => row.id,
-        cell: ({ getValue }) => <PopupAnchor to={"/material_detail"} name={"원자재 상세 정보"} feature={"width=640,height=500"}>{getValue()}</PopupAnchor>,
+        cell: ({ getValue }) => (
+            <PopupAnchor
+                to={`/material_detail/${getValue()}`}
+                name={"원자재 상세 정보"}
+                feature={"width=640,height=640"}
+            >
+                {getValue()}
+            </PopupAnchor>
+        ),
         size: 600,
     },
 ];
@@ -69,7 +76,6 @@ const StyledUpperContainer = styled.div`
 `;
 
 const MaterialListPage = () => {
-
     const [data, setData] = useState({
         material_list: [
             {
@@ -78,8 +84,8 @@ const MaterialListPage = () => {
                 type: "-",
                 amount: "-",
                 status: "-",
-            }
-        ]
+            },
+        ],
     });
     const [loading, setLoading] = useState(true);
 

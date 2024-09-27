@@ -5,7 +5,7 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import OptionGroup from "../molecules/OptionGroup";
 import useInput from "../../hooks/useInput";
-import { maintainBattery } from "../../services/api";
+import { maintainBattery } from "../../services/additional_api";
 
 const StyledBatteryExtractContainer = styled.div`
     position: relative;
@@ -74,9 +74,9 @@ const BatteryMaintainModal = ({
 }) => {
     const [value, handleOnChange] = useInput({
         name: "",
-        date: "",
-        result: "",
-        others: ""
+        date: new Date().toISOString().substring(0, 10),
+        result: "success",
+        others: "",
     });
 
     const handleMaintain = async function () {
@@ -91,9 +91,9 @@ const BatteryMaintainModal = ({
             })
             .catch((response) => response.data);
         if (maintainReq.success) {
-            console.log("success")
-            onClose()
-        } 
+            console.log("success");
+            onClose();
+        }
     };
 
     return (
@@ -103,35 +103,39 @@ const BatteryMaintainModal = ({
         >
             <StyledTopic>배터리 정비</StyledTopic>
             <StyledInputGroupContainer>
-                <StyledInputGroup 
-                    type="text"     
+                <StyledInputGroup
+                    type="text"
                     id="name"
                     name="name"
                     value={value.maintainer ? value.maintainer : ""}
                     onChange={handleOnChange}
-                    title="정비자" />
-                <StyledInputGroup 
+                    title="정비자"
+                />
+                <StyledInputGroup
                     type="date"
                     id="date"
                     name="date"
                     value={value.date ? value.date : ""}
                     onChange={handleOnChange}
-                    title="정비일자" />
+                    title="정비일자"
+                />
             </StyledInputGroupContainer>
-            <StyledOptionGroup 
+            <StyledOptionGroup
                 options={resultOptions}
                 id="result"
                 name="result"
                 value={value.result ? value.result : ""}
                 onChange={handleOnChange}
-                title="정비결과" />
-            <StyledInputGroup 
-                type="text" 
+                title="정비결과"
+            />
+            <StyledInputGroup
+                type="text"
                 id="others"
                 name="others"
                 value={value.others ? value.others : ""}
                 onChange={handleOnChange}
-                title="특이사항" />
+                title="특이사항"
+            />
             <StyledButtonContainer>
                 <Button onClick={handleMaintain}>확인</Button>
                 <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
