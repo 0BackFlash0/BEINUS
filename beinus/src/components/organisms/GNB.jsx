@@ -6,9 +6,10 @@ import Anchor from "../atoms/Anchor";
 import Line from "../atoms/Line";
 import Title from "../atoms/Title";
 import Icon from "../atoms/Icon";
-// import { useSelector, useDispatch } from "react-redux";
-// import { persistor } from "../../App";
+import { useSelector, useDispatch } from "react-redux";
+import { persistor } from "../../";
 import Photo from "../atoms/Photo";
+import { userLogout } from "../../store/userSlice";
 
 const StyledNavationContainer = styled.div`
     position: fixed;
@@ -62,12 +63,12 @@ const StyledMenuBar = styled.div`
 const GNB = ({
     className = "", // class
 }) => {
-    // const user = useSelector((state) => state.user);
-    // const dispatch = useDispatch();
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
-    // const puerge = async () => {
-    //     await persistor.purge();
-    // };
+    const puerge = async () => {
+        await persistor.purge();
+    };
     return (
         <StyledNavationContainer>
             <StyledNavigationBar className={`GNB ${className}`}>
@@ -94,25 +95,27 @@ const GNB = ({
                     <Anchor to="/login">
                         <Icon className="fs-1" icon="login" size="40px" />
                     </Anchor>
-                    {/* {user.isLogin ? (
-                    <>
-                        <Label className="d-block pe-2">{user.user}님 </Label>
-                        <Button
-                            className="bg-transparent"
-                            onClick={async () => {
-                                // dispatch(userLogout());
-                                // setTimeout(() => puerge(), 200);
-                                // localStorage.removeItem("token");
-                            }}
-                        >
-                            로그아웃
-                        </Button>
-                    </>
-                ) : (
-                    <Anchor className="fw-bold" to="/login">
-                        로그인
-                    </Anchor>
-                )} */}
+                    {user.isLogin ? (
+                        <>
+                            <Label className="d-block pe-2">
+                                {user.user}님{" "}
+                            </Label>
+                            <Button
+                                className="bg-transparent"
+                                onClick={async () => {
+                                    dispatch(userLogout());
+                                    setTimeout(() => puerge(), 200);
+                                    localStorage.removeItem("token");
+                                }}
+                            >
+                                로그아웃
+                            </Button>
+                        </>
+                    ) : (
+                        <Anchor className="fw-bold" to="/login">
+                            로그인
+                        </Anchor>
+                    )}
                 </StyledRightBar>
             </StyledNavigationBar>
         </StyledNavationContainer>

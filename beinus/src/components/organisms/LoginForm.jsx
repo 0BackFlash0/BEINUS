@@ -7,8 +7,8 @@ import { login } from "../../services/base_api";
 import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-// import { useSelector, useDispatch } from "react-redux";
-// import { userLogin } from "../../store/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { userLogin } from "../../store/userSlice";
 
 const StyledLoginContainer = styled.div`
     width: 580px;
@@ -42,8 +42,8 @@ const LoginForm = ({
     const [errorMsg, setErrorMsg] = React.useState("");
 
     const navigate = useNavigate();
-    // const user = useSelector((state) => state.user);
-    // const dispatch = useDispatch();
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const handleLogin = async function () {
         console.log(value.username);
@@ -60,12 +60,12 @@ const LoginForm = ({
         console.log(loginCheck);
         if (loginCheck.status === 200) {
             navigate("/");
-            // dispatch(
-            //     userLogin({
-            //         email: value.email,
-            //         time: new Date().toString(),
-            //     })
-            // );
+            dispatch(
+                userLogin({
+                    email: value.email,
+                    time: new Date().toString(),
+                })
+            );
         } else if (loginCheck.status === 401) {
             setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
         } else {

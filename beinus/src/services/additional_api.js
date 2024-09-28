@@ -85,20 +85,18 @@ export const queryBatteryDetails = async function (data) {
     const { batteryID } = data;
     // const temp = instance.get(`/queryBatteryDetails/${batteryID}`);
 
-    if (batteryID === "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162") {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    status: 200,
-                    data: {
-                        batteryID: batteryID,
-                        passport: tempPassport,
-                        information: tempInformation,
-                    },
-                });
-            }, 100);
-        });
-    }
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    batteryID: batteryID,
+                    passport: tempPassport,
+                    information: tempInformation,
+                },
+            });
+        }, 100);
+    });
 
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -141,6 +139,8 @@ export const registerBattery = (data) => {
         materialList,
     } = data;
 
+    // console.log(body);
+
     const body = {
         category: category,
         voltage: voltage,
@@ -156,6 +156,8 @@ export const registerBattery = (data) => {
             };
         }),
     };
+
+    console.log(body);
 
     // return instance.post("/registerBattery", body);
 

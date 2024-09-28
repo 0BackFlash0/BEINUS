@@ -151,7 +151,9 @@ const BatteryRegisterModal = ({
     };
 
     const handleOnChangeMaterial = (e, index) => {
-        const { name, targetValue } = e.target;
+        const { name, value: targetValue } = e.target;
+
+        console.log(e);
 
         const changeEvent = {
             target: {
@@ -169,6 +171,8 @@ const BatteryRegisterModal = ({
         //     showCaution("모든 값을 입력해주세요.");
         //     return;
         // }
+
+        console.log(value);
 
         await registerBattery({
             category: value.category,
@@ -266,6 +270,7 @@ const BatteryRegisterModal = ({
 
                     {value.materialList
                         ? value.materialList.map((element, idx) => {
+                              console.log(element);
                               return (
                                   <RegisterMaterialOption
                                       key={idx}
