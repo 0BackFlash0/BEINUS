@@ -42,8 +42,8 @@ const StyledClossButton = styled.button`
 `;
 
 const ModalTemplate = ({
-    isModalOpen,
-    setIsModalOpen,
+    ismodalopen,
+    set_ismodalopen,
     children,
     className = "",
     ...props
@@ -53,11 +53,11 @@ const ModalTemplate = ({
     // 모달 닫기
     const closeModal = () => {
         console.log("hello");
-        setIsModalOpen(false);
+        set_ismodalopen(false);
     };
 
     return (
-        isModalOpen && (
+        ismodalopen && (
             <StyledBackdrop className="modal-backdrop">
                 <StyledModalContainer
                     className={`modal ${className}`}

@@ -10,8 +10,9 @@ import styled from "styled-components";
 import PopupAnchor from "../components/atoms/PopupAnchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal";
-import { getMaterialList } from "../services/additional_api";
+import { queryAllRawMaterials } from "../services/additional_api";
 import { useEffect } from "react";
+import { useCaution } from "../hooks/useCaution";
 
 const column = [
     {
@@ -76,6 +77,8 @@ const StyledUpperContainer = styled.div`
 `;
 
 const MaterialListPage = () => {
+    const { showCaution } = useCaution();
+
     const [data, setData] = useState({
         material_list: [
             {
@@ -91,32 +94,31 @@ const MaterialListPage = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
     useEffect(() => {
-        getMaterialList()
+        queryAllRawMaterials()
             .then((response) => {
-                const response_data = response.data;
-
-                if (response_data.success) {
+                if (response.status === 200) {
                     setData({
                         ...data,
-                        battery_list: response_data.battery_list,
+                        material_list: response.data.map((element) => {
+                            return {
+                                id: element.materialID,
+                                type: element.name,
+                                amount: element.quantity,
+                                status: element.status,
+                            };
+                        }),
                     });
+                    console.log(response.data);
                     setLoading(false);
                 } else {
-                    console.log("error");
+                    showCaution("알수없는 에러가 발생했습니다.");
                 }
 
                 return data;
             })
             .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
                 console.log(response);
             });
     }, []);
@@ -129,17 +131,19 @@ const MaterialListPage = () => {
         <PageTemplate className="battery-list-page">
             <GNB />
             <ModalTemplate
-                isModalOpen={isModalOpen}
-                setIsModalOpen={closeModal}
+                ismodalopen={isModalOpen}
+                set_ismodalopen={setIsModalOpen}
             >
                 <MaterialRegisterModal
-                    onSuccess={closeModal}
-                    onClose={closeModal}
+                    on_success={() => setIsModalOpen(false)}
+                    on_close={() => setIsModalOpen(false)}
                 />
             </ModalTemplate>
             <StyledUpperContainer>
                 <Topic>원자재 목록</Topic>
-                <Button onClick={openModal}>원자재 등록</Button>
+                <Button onClick={() => setIsModalOpen(true)}>
+                    원자재 등록
+                </Button>
             </StyledUpperContainer>
             <Table name="이름" data={data.material_list} columns={column} />
         </PageTemplate>

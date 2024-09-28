@@ -69,8 +69,8 @@ const MaterialOptions = [
 
 const MaterialRegisterModal = ({
     className = "",
-    onSuccess,
-    onClose,
+    on_success,
+    on_close,
     ...props
 }) => {
     const { showCaution } = useCaution();
@@ -87,25 +87,24 @@ const MaterialRegisterModal = ({
             return;
         }
 
-        const registerReq = await registerRawMaterial({
+        await registerRawMaterial({
             type: value.type,
             amount: value.amount,
             vendor: value.vendor,
         })
             .then((response) => {
-                const data = response;
-                console.log(response);
                 if (response.status === 200) {
                     showCaution(
-                        `ID가 발급되었습니다. <br> ID : ${response.data.materialID}`
+                        `원자재 ID가 발급되었습니다. \n ID : ${response.data.materialID}`
                     );
-                    onClose();
+                    on_close();
                 } else {
-                    showCaution("에러가 발생했습니다.");
+                    showCaution("알수없는 에러가 발생했습니다.");
                 }
-                return data;
             })
-            .catch((response) => response.data);
+            .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            });
     };
 
     const checkValue = () => {
@@ -146,7 +145,11 @@ const MaterialRegisterModal = ({
             />
             <StyledButtonContainer>
                 <Button onClick={handleRegister}>확인</Button>
-                <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
+                <Button
+                    onClick={on_close}
+                    color={"red"}
+                    hover_color={"#c50000"}
+                >
                     취소
                 </Button>
             </StyledButtonContainer>

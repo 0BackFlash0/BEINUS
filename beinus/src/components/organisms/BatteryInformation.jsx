@@ -280,14 +280,16 @@ const tabElements = [
 
 const BatteryInformation = ({
     battery_information_data,
+    on_request_maintenence,
+    on_request_analysis,
     maintain_modal_state,
     analysis_modal_state,
     extract_modal_state,
 }) => {
     const [activeTab, setActiveTab] = React.useState(0);
 
-    const [maintainModal, setmaintainModal] = maintain_modal_state;
-    const [analysisModal, setanalysisModal] = analysis_modal_state;
+    const [maintainModal, setMaintainModal] = maintain_modal_state;
+    const [analysisModal, setAnalysisModal] = analysis_modal_state;
     const [extractModal, setExtractModal] = extract_modal_state;
 
     const tabClick = (index) => {
@@ -322,14 +324,16 @@ const BatteryInformation = ({
         } else if (element.type === "buttons") {
             return (
                 <StyledButtonContainer>
-                    <Button onClick={() => setmaintainModal(true)}>
+                    <Button onClick={on_request_maintenence}>정비 요청</Button>
+                    <Button onClick={() => setMaintainModal(true)}>
                         배터리 정비
                     </Button>
-                    <Button onClick={() => setanalysisModal(true)}>
-                        재활용 여부 분석
+                    <Button onClick={on_request_analysis}>정비 요청</Button>
+                    <Button onClick={() => setAnalysisModal(true)}>
+                        재활용 분석
                     </Button>
                     <Button onClick={() => setExtractModal(true)}>
-                        재활용 원자재 추출
+                        원자재 추출
                     </Button>
                 </StyledButtonContainer>
             );

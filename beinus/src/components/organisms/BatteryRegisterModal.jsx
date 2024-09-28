@@ -7,7 +7,8 @@ import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import { registerBattery } from "../../services/additional_api";
 import { useState } from "react";
-import MaterialOption from "./MaterialOption";
+import RegisterMaterialOption from "./RegisterMaterialOption";
+import { useCaution } from "../../hooks/useCaution";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
@@ -110,25 +111,26 @@ const HarzardousOptions = [
 
 const tempMaterial = {
     type: "nickel",
-    status: "new",
+    // status: "new",
     materialID: "",
     amount: "0",
 };
 
 const BatteryRegisterModal = ({
     className = "",
-    onSuccess,
-    onClose,
+    on_success,
+    on_close,
     ...props
 }) => {
+    const { showCaution } = useCaution();
+
     const [value, handleOnChange] = useInput({
         category: "",
+        voltage: "",
         weight: "0",
         isHardardous: "yes",
         capacity: "0",
         lifecycle: "0",
-        soc: "0",
-        soh: "0",
         materialList: [tempMaterial],
     });
 
@@ -163,23 +165,34 @@ const BatteryRegisterModal = ({
     };
 
     const handleRegister = async function () {
-        const registerReq = await registerBattery({
-            model: value.model,
+        // if (!checkValue()) {
+        //     showCaution("모든 값을 입력해주세요.");
+        //     return;
+        // }
+
+        await registerBattery({
             category: value.category,
-            nickel: value.nickel,
-            cobalt: value.cobalt,
-            lithium: value.lithium,
-            lead: value.lead,
-            status: value.status,
+            voltage: value.voltage,
+            weight: value.weight,
+            isHardardous: value.isHardardous,
+            capacity: value.capacity,
+            lifecycle: value.lifecycle,
+            materialList: value.materialList,
         })
             .then((response) => {
-                return response.data;
+                // return response.data;
+                if (response.status === 200) {
+                    showCaution(
+                        `배터리 ID가 발급되었습니다. \n ID: ${response.data.batteryID}`,
+                        on_close
+                    );
+                } else {
+                    showCaution("알수없는 에러가 발생했습니다.");
+                }
             })
-            .catch((response) => response.data);
-        if (registerReq.success) {
-            console.log("success");
-            onClose();
-        }
+            .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            });
     };
 
     return (
@@ -254,11 +267,12 @@ const BatteryRegisterModal = ({
                     {value.materialList
                         ? value.materialList.map((element, idx) => {
                               return (
-                                  <MaterialOption
+                                  <RegisterMaterialOption
+                                      key={idx}
                                       typeValue={element.type}
-                                      statusValue={element.status}
+                                      //   statusValue={element.status}
                                       materialIDValue={element.materialID}
-                                      numberValue={element.number}
+                                      amountValue={element.amount}
                                       onChange={(e) =>
                                           handleOnChangeMaterial(e, idx)
                                       }
@@ -271,7 +285,7 @@ const BatteryRegisterModal = ({
                 <StyledButtonContainer>
                     <Button onClick={handleRegister}>확인</Button>
                     <Button
-                        onClick={onClose}
+                        onClick={on_close}
                         color={"red"}
                         hover_color={"#c50000"}
                     >

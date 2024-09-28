@@ -48,7 +48,7 @@ const tempMaterial = {
 };
 
 const MaterialDetailPopup = ({ className = "", ...props }) => {
-    const { material_id } = useParams();
+    const { materialID } = useParams();
     const [data, setData] = useState({
         materialID: "-",
         supplierID: "-",
@@ -63,7 +63,7 @@ const MaterialDetailPopup = ({ className = "", ...props }) => {
 
     useEffect(() => {
         queryRawMaterial({
-            material_id: material_id,
+            materialID: materialID,
         })
             .then((response) => {
                 console.log(response);

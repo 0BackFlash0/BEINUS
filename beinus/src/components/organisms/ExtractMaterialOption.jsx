@@ -29,23 +29,6 @@ const StyledOptionGroup = styled(OptionGroup)`
     flex-grow: 1 0;
 `;
 
-const StyledTopic = styled(Topic)`
-    margin-bottom: 60px;
-`;
-
-const StyledButtonContainer = styled.div`
-    width: 100%;
-    position: absolute;
-    display: flex;
-    justify-content: space-around;
-    right: 0;
-    bottom: 30px;
-`;
-
-const StyledSubtitle = styled(Subtitle)`
-    margin-bottom: 10px;
-`;
-
 const MaterialOptions = [
     {
         key: "nickel",
@@ -76,12 +59,11 @@ const StatusOptions = [
     },
 ];
 
-const MaterialOption = ({
+const ExtractMaterialOption = ({
     className = "",
-    typeValue = "",
-    statusValue = "",
-    materialIDValue = "",
-    numberValue = "",
+    type_value = "",
+    // statusValue = "",
+    amount_value = "",
     onChange = () => {},
     ...props
 }) => {
@@ -94,35 +76,26 @@ const MaterialOption = ({
                 options={MaterialOptions}
                 id="type"
                 name="type"
-                value={typeValue ? typeValue : ""}
+                value={type_value ? type_value : ""}
                 onChange={onChange}
                 title="종류"
                 is_description={false}
             />
 
-            <StyledOptionGroup
+            {/* <StyledOptionGroup
                 options={StatusOptions}
                 id="status"
                 name="status"
                 value={statusValue ? statusValue : ""}
                 onChange={onChange}
-                title="종류"
+                title="상태"
                 is_description={false}
-            />
-            <StyledInputGroup
-                type="text"
-                id="materialID"
-                name="materialID"
-                value={materialIDValue ? materialIDValue : ""}
-                onChange={onChange}
-                title="원자재 ID"
-                is_description={false}
-            />
+            /> */}
             <StyledInputGroup
                 type="number"
-                id="number"
-                name="number"
-                value={numberValue ? numberValue : ""}
+                id="amount"
+                name="amount"
+                value={amount_value ? amount_value : ""}
                 onChange={onChange}
                 title="개수"
                 is_description={false}
@@ -131,4 +104,4 @@ const MaterialOption = ({
     );
 };
 
-export default MaterialOption;
+export default ExtractMaterialOption;

@@ -20,7 +20,7 @@ function App() {
                     <Route path="/register" element={<RegisterPage />}></Route>
                     <Route path="/manage" element={<ManagePage />}></Route>
                     <Route
-                        path="/search/:battery_id/"
+                        path="/search/:batteryID/"
                         element={<SearchPage />}
                     ></Route>
                     <Route
@@ -32,7 +32,7 @@ function App() {
                         element={<MaterialListPage />}
                     ></Route>
                     <Route
-                        path="/material_detail/:battery_id/"
+                        path="/material_detail/:materialID/"
                         element={<MaterialDetailPopup />}
                     ></Route>
                     {/* <Route path="/material" element={<MaterialListPage />}></Route> */}

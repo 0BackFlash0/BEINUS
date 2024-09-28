@@ -56,6 +56,7 @@ export const checkBattery = (data) => {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({
+                    status: 200,
                     data: {
                         success: true,
                         battery_id: battery_id,
@@ -69,6 +70,7 @@ export const checkBattery = (data) => {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
+                status: 200,
                 data: {
                     success: false,
                     battery_id: battery_id,
@@ -79,22 +81,19 @@ export const checkBattery = (data) => {
     });
 };
 
-export const searchBattery = async function (data) {
-    const { battery_id } = data;
-    // const temp = instance.get("/");
+export const queryBatteryDetails = async function (data) {
+    const { batteryID } = data;
+    // const temp = instance.get(`/queryBatteryDetails/${batteryID}`);
 
-    if (
-        battery_id === "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162"
-    ) {
+    if (batteryID === "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162") {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({
+                    status: 200,
                     data: {
-                        success: true,
-                        battery_id: battery_id,
+                        batteryID: batteryID,
                         passport: tempPassport,
                         information: tempInformation,
-                        message: "Battery search successful",
                     },
                 });
             }, 100);
@@ -106,7 +105,7 @@ export const searchBattery = async function (data) {
             resolve({
                 data: {
                     success: false,
-                    battery_id: battery_id,
+                    battery_id: batteryID,
                     message: "Battery search failed",
                 },
             });
@@ -114,15 +113,58 @@ export const searchBattery = async function (data) {
     });
 };
 
-export const registerBattery = (data) => {
-    const { model, category, nickel, cobalt, lithium, lead, status } = data;
+export const queryRawMaterial = (data) => {
+    const { material_id } = data;
+    // return instance.get(`/queryRawMaterial/${material_id}`, {});
 
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
+                status: 200,
                 data: {
                     success: true,
-                    message: "Battery register success",
+                    material_data: tempMaterial,
+                },
+            });
+        }, 100);
+    });
+};
+
+export const registerBattery = (data) => {
+    const {
+        category,
+        voltage,
+        weight,
+        isHardardous,
+        capacity,
+        lifecycle,
+        materialList,
+    } = data;
+
+    const body = {
+        category: category,
+        voltage: voltage,
+        weight: weight,
+        isHardardous: isHardardous,
+        capacity: capacity,
+        totalLifeCycle: lifecycle,
+        materialList: materialList.map((element, idx) => {
+            return {
+                materialID: element.materialID,
+                materialType: element.type,
+                quantity: element.amount,
+            };
+        }),
+    };
+
+    // return instance.post("/registerBattery", body);
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    batteryID: "BATTERY-1234567890123456789",
                 },
             });
         }, 100);
@@ -152,32 +194,82 @@ export const registerRawMaterial = (data) => {
     });
 };
 
-export const queryRawMaterial = (data) => {
-    const { material_id } = data;
-    // return instance.get(`/queryRawMaterial/${material_id}`, {});
+export const requestMaintenance = (data) => {
+    const { batteryID } = data;
+
+    // return instance.post("/requestMaintenance", {
+    //     batteryID: batteryID
+    // });
 
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
                 status: 200,
                 data: {
-                    success: true,
-                    material_data: tempMaterial,
+                    message: "request Maintenance success",
                 },
             });
         }, 100);
     });
 };
 
-export const maintainBattery = (data) => {
-    const { name, date, result, others } = data;
+export const addMaintenanceLog = (data) => {
+    const { batteryID, name, date, result, others } = data;
+
+    // return instance.post("/addMaintenanceLog", {
+    //     batteryID: batteryID,
+    //     company: name,
+    //     info: result,
+    //     maintenanceDate: date,
+    // });
 
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
+                status: 200,
                 data: {
-                    success: true,
-                    message: "Battery maintain success",
+                    message: "Maintenance log added",
+                },
+            });
+        }, 100);
+    });
+};
+
+export const requestAnalysis = (data) => {
+    const { batteryID } = data;
+
+    // return instance.post("/requestAnalysis", {
+    //     batteryID: batteryID
+    // });
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    message: "request Analysis success",
+                },
+            });
+        }, 100);
+    });
+};
+
+export const addAnalysisLog = (data) => {
+    const { batteryID, name, date, result, others } = data;
+
+    // return instance.post("/addAnalysisLog", {
+    //     batteryID: batteryID,
+    //     company: name,
+    //     info: result,
+    //     maintenanceDate: date,
+    // });
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    message: "Analysis log added",
                 },
             });
         }, 100);
@@ -199,7 +291,38 @@ export const analysisBattery = (data) => {
     });
 };
 
-export const getBatteryList = (data) => {
+export const extractMaterials = (data) => {
+    const { batteryID, materialList } = data;
+
+    const body = {
+        batteryID: batteryID,
+        materialList: materialList.map((element, idx) => {
+            return {
+                materialType: element.type,
+                quantity: element.amount,
+            };
+        }),
+    };
+
+    console.log(body);
+
+    // return instance.post("/extractMaterials", body);
+
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                status: 200,
+                data: {
+                    batteryID: "BATTERY-1234567890123456789",
+                },
+            });
+        }, 100);
+    });
+};
+
+export const queryAllBatteries = () => {
+    // return instance.get(`/queryAllBatteries/`, {});
+
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
@@ -213,15 +336,14 @@ export const getBatteryList = (data) => {
     });
 };
 
-export const getMaterialList = (data) => {
+export const queryAllRawMaterials = () => {
+    // return instance.get(`/queryAllRawMaterials/`, {});
+
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve({
-                data: {
-                    success: true,
-                    material_list: tempMaterials,
-                    message: "Battery list success",
-                },
+                status: 200,
+                data: tempMaterials,
             });
         }, 100);
     });
@@ -280,35 +402,78 @@ const tempInformation = {
 
 const tempBatteries = [
     {
-        image: "./assets/battery_example.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-        model: "M-41698615",
-        category: "전기차",
-        status: "NEW",
+        batteryID: "BATTERY-123456789",
+        rawMaterials: {
+            material1: {
+                materialID: "MATERIAL-1234",
+                materialType: "Lithium",
+                quantity: 50,
+            },
+            material2: {
+                materialID: "MATERIAL-5678",
+                materialType: "Cobalt",
+                quantity: 30,
+            },
+        },
+        manufactureDate: "2024-09-25T06:41:00.045634219Z",
+        status: "ORIGINAL",
+        Verified: "NOT VERIFIED",
+        capacity: 5000,
+        soc: 80,
+        soh: 90,
+        soce: 100,
+        totalLifeCycle: 1000,
+        remainingLifeCycle: 900,
+        maintenanceLogs: [],
+        accidentLogs: [],
+        maintenanceRequest: false,
+        analysisRequest: false,
+        recycleAvailability: false,
     },
     {
-        image: "./assets/battery_example.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
-        model: "M-41698615",
-        category: "전기차",
-        status: "NEW",
+        batteryID: "BATTERY-987654321",
+        rawMaterials: {
+            material1: {
+                materialID: "MATERIAL-4321",
+                materialType: "Nickel",
+                quantity: 20,
+            },
+        },
+        manufactureDate: "2024-09-24T05:41:00.045634219Z",
+        status: "RECYCLED",
+        Verified: "VERIFIED",
+        capacity: 3000,
+        soc: 60,
+        soh: 70,
+        soce: 100,
+        totalLifeCycle: 800,
+        remainingLifeCycle: 400,
+        maintenanceLogs: ["Maintenance on 2024-09-23: SOC decreased by 10%"],
+        accidentLogs: [],
+        maintenanceRequest: false,
+        analysisRequest: true,
+        recycleAvailability: true,
     },
 ];
 
 const tempMaterials = [
     {
-        image: "./assets/test.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-        type: "니켈",
-        amount: "200",
+        materialID: "MATERIAL-1234567890123456789",
+        supplierID: "SUPPLIER-001",
+        name: "Lithium",
+        quantity: 100,
         status: "NEW",
+        available: "Available",
+        timestamp: "2024-09-25T06:41:00Z",
     },
     {
-        image: "./assets/test.png",
-        id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-163",
-        type: "리튬",
-        amount: "200",
-        status: "NEW",
+        materialID: "MATERIAL-9876543210987654321",
+        supplierID: "",
+        name: "Nickel",
+        quantity: 50,
+        status: "Recycled",
+        available: "Available",
+        timestamp: "2024-09-25T06:42:00Z",
     },
 ];
 

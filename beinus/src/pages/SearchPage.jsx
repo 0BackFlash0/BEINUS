@@ -8,8 +8,13 @@ import GNB from "../components/organisms/GNB";
 import PageTemplate from "../components/templates/PageTemplate";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { searchBattery } from "../services/additional_api";
+import {
+    queryBatteryDetails,
+    requestAnalysis,
+    requestMaintenance,
+} from "../services/additional_api";
 import { useNavigate } from "react-router-dom";
+import { useCaution } from "../hooks/useCaution";
 
 const tempPassport = {
     id: "-",
@@ -64,8 +69,9 @@ const tempInformation = {
 
 const SearchPage = () => {
     const navigate = useNavigate();
+    const { showCaution } = useCaution();
 
-    const { battery_id } = useParams();
+    const { batteryID } = useParams();
     const [data, setData] = useState({
         passport: tempPassport,
         information: tempInformation,
@@ -78,28 +84,57 @@ const SearchPage = () => {
 
     useEffect(() => {
         // 데이터 fetch 요청
-        searchBattery({
-            battery_id: battery_id,
+        queryBatteryDetails({
+            batteryID: batteryID,
         })
             .then((response) => {
-                return response.data;
-            })
-            .then((data) => {
-                if (data.success) {
+                if (response.status === 200) {
                     setData({
                         ...data,
-                        passport: data.passport,
-                        information: data.information,
+                        passport: response.data.passport,
+                        information: response.data.information,
                     });
                     setLoading(false);
                 } else {
-                    console.log("error");
+                    showCaution("알수없는 에러가 발생했습니다.");
                 }
             })
             .catch((response) => {
-                console.log(response);
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
             });
     }, []);
+
+    const handleRequestMaintenance = () => {
+        requestMaintenance({
+            batteryID: batteryID,
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    showCaution(`유지보수 요청 성공. \n ID: ${batteryID}`);
+                } else {
+                    showCaution("알수없는 에러가 발생했습니다.");
+                }
+            })
+            .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            });
+    };
+
+    const handleRequestAnalysis = () => {
+        requestAnalysis({
+            batteryID: batteryID,
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    showCaution(`분석 요청 성공. \n ID: ${batteryID}`);
+                } else {
+                    showCaution("알수없는 에러가 발생했습니다.");
+                }
+            })
+            .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            });
+    };
 
     if (loading) {
         return <></>;
@@ -109,36 +144,41 @@ const SearchPage = () => {
         <>
             <GNB></GNB>
             <ModalTemplate
-                isModalOpen={maintainModal}
-                setIsModalOpen={setMaintainModal}
+                ismodalopen={maintainModal}
+                set_ismodalopen={setMaintainModal}
             >
                 <BatteryMaintainModal
-                    onSuccess={() => setMaintainModal(false)}
-                    onClose={() => setMaintainModal(false)}
+                    battery_id={batteryID}
+                    on_success={() => setMaintainModal(false)}
+                    on_close={() => setMaintainModal(false)}
                 />
             </ModalTemplate>
             <ModalTemplate
-                isModalOpen={analysisModal}
-                setIsModalOpen={setAnalysisModal}
+                ismodalopen={analysisModal}
+                set_ismodalopen={setAnalysisModal}
             >
                 <BatteryAnalysisModal
-                    onSuccess={() => setAnalysisModal(false)}
-                    onClose={() => setAnalysisModal(false)}
+                    battery_id={batteryID}
+                    on_success={() => setAnalysisModal(false)}
+                    on_close={() => setAnalysisModal(false)}
                 />
             </ModalTemplate>
             <ModalTemplate
-                isModalOpen={extractModal}
-                setIsModalOpen={setExtractModal}
+                ismodalopen={extractModal}
+                set_ismodalopen={setExtractModal}
             >
                 <BatteryExtractModal
-                    onSuccess={() => setExtractModal(false)}
-                    onClose={() => setExtractModal(false)}
+                    battery_id={batteryID}
+                    on_success={() => setExtractModal(false)}
+                    on_close={() => setExtractModal(false)}
                 />
             </ModalTemplate>
             <PageTemplate className="register-page">
                 <BatteryPassport battery_passport_data={data.passport} />
                 <BatteryInformation
                     battery_information_data={data.information}
+                    on_request_maintenence={handleRequestMaintenance}
+                    on_request_analysis={handleRequestAnalysis}
                     maintain_modal_state={[maintainModal, setMaintainModal]}
                     analysis_modal_state={[analysisModal, setAnalysisModal]}
                     extract_modal_state={[extractModal, setExtractModal]}

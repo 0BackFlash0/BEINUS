@@ -38,17 +38,19 @@ export const getUser = (data) => {
 
 export const register = (data) => {
     const { password, username, org } = data;
-    return instance.post("/join", {
+    const body = {
         username: username,
         password: password,
         org: org,
-    });
+    };
+    return instance.post("/join", body);
 };
 
 export const login = (data) => {
     const { username, password } = data;
-    return instance.post("/login", {
+    const body = {
         username: username,
         password: password,
-    });
+    };
+    return instance.post("/login", body);
 };

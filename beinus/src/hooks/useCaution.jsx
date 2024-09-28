@@ -19,6 +19,7 @@ const StyledBackdrop = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 `;
 
 const StyledCautionContainer = styled.div`
@@ -38,13 +39,28 @@ const StyledCautionContainer = styled.div`
 // ModalProvider: 모달 상태를 관리하는 컴포넌트
 export const ModalProvider = ({ children }) => {
     const [modalContent, setModalContent] = useState(null);
+    const [modalCloseEvent, setModalCloseEvent] = useState(null);
 
-    const showCaution = (content) => {
-        setModalContent(content);
+    const showCaution = (content, event = null) => {
+        setModalContent(
+            content.split("\n").map((line, idx) => {
+                return (
+                    <span key={idx}>
+                        {line}
+                        <br />
+                    </span>
+                );
+            })
+        );
+        setModalCloseEvent(() => event);
     };
 
     const hideCaution = () => {
         setModalContent(null);
+        if (modalCloseEvent) {
+            modalCloseEvent();
+            setModalCloseEvent(null);
+        }
     };
 
     return (

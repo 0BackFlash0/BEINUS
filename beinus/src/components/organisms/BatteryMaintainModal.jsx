@@ -5,7 +5,8 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import OptionGroup from "../molecules/OptionGroup";
 import useInput from "../../hooks/useInput";
-import { maintainBattery } from "../../services/additional_api";
+import { addMaintenanceLog } from "../../services/additional_api";
+import { useCaution } from "../../hooks/useCaution";
 
 const StyledBatteryExtractContainer = styled.div`
     position: relative;
@@ -68,10 +69,13 @@ const resultOptions = [
 
 const BatteryMaintainModal = ({
     className = "",
-    onSuccess,
-    onClose,
+    battery_id,
+    on_success,
+    on_close,
     ...props
 }) => {
+    const { showCaution } = useCaution();
+
     const [value, handleOnChange] = useInput({
         name: "",
         date: new Date().toISOString().substring(0, 10),
@@ -80,20 +84,26 @@ const BatteryMaintainModal = ({
     });
 
     const handleMaintain = async function () {
-        const maintainReq = await maintainBattery({
+        await addMaintenanceLog({
+            batteryID: battery_id,
             name: value.name,
             date: value.date,
             result: value.result,
             others: value.others,
         })
             .then((response) => {
-                return response.data;
+                if (response.status === 200) {
+                    showCaution(
+                        `배터리 정비에 성공했습니다. \n ID: ${battery_id}`,
+                        on_close
+                    );
+                } else {
+                    showCaution("알수없는 에러가 발생했습니다.");
+                }
             })
-            .catch((response) => response.data);
-        if (maintainReq.success) {
-            console.log("success");
-            onClose();
-        }
+            .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            });
     };
 
     return (
@@ -138,7 +148,11 @@ const BatteryMaintainModal = ({
             />
             <StyledButtonContainer>
                 <Button onClick={handleMaintain}>확인</Button>
-                <Button onClick={onClose} color={"red"} hover_color={"#c50000"}>
+                <Button
+                    onClick={on_close}
+                    color={"red"}
+                    hover_color={"#c50000"}
+                >
                     취소
                 </Button>
             </StyledButtonContainer>

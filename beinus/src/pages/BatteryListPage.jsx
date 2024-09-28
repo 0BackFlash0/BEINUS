@@ -10,7 +10,7 @@ import styled from "styled-components";
 import Anchor from "../components/atoms/Anchor";
 import ModalTemplate from "../components/templates/ModelTemplate";
 import BatteryRegisterModal from "../components/organisms/BatteryRegisterModal";
-import { getBatteryList } from "../services/additional_api";
+import { queryAllBatteries } from "../services/additional_api";
 import { useEffect } from "react";
 
 const column = [
@@ -49,9 +49,9 @@ const column = [
         size: 200,
     },
     {
-        id: "id",
+        id: "batteryID",
         header: "ID",
-        accessorFn: (row) => row.id,
+        accessorFn: (row) => row.batteryID,
         cell: ({ getValue }) => (
             <Anchor to={`/search/${getValue()}`}>{getValue()}</Anchor>
         ),
@@ -85,16 +85,8 @@ const BatteryListPage = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
     useEffect(() => {
-        getBatteryList()
+        queryAllBatteries()
             .then((response) => {
                 return response.data;
             })
@@ -122,17 +114,19 @@ const BatteryListPage = () => {
         <PageTemplate className="battery-list-page">
             <GNB />
             <ModalTemplate
-                isModalOpen={isModalOpen}
-                setIsModalOpen={closeModal}
+                ismodalopen={isModalOpen}
+                set_ismodalopen={() => setIsModalOpen(true)}
             >
                 <BatteryRegisterModal
-                    onSuccess={closeModal}
-                    onClose={closeModal}
+                    on_success={() => setIsModalOpen(false)}
+                    on_close={() => setIsModalOpen(false)}
                 />
             </ModalTemplate>
             <StyledUpperContainer>
                 <Topic>배터리 목록</Topic>
-                <Button onClick={openModal}>배터리 생성</Button>
+                <Button onClick={() => setIsModalOpen(true)}>
+                    배터리 생성
+                </Button>
             </StyledUpperContainer>
             <Table name="이름" data={data.battery_list} columns={column} />
         </PageTemplate>
