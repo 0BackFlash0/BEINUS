@@ -153,8 +153,6 @@ const BatteryRegisterModal = ({
     const handleOnChangeMaterial = (e, index) => {
         const { name, value: targetValue } = e.target;
 
-        console.log(e);
-
         const changeEvent = {
             target: {
                 name: "materialList",

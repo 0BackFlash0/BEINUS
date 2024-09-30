@@ -4,20 +4,19 @@ import Label from "../atoms/Label";
 import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
 import Line from "../atoms/Line";
+import Title from "../atoms/Title";
 import Icon from "../atoms/Icon";
 import { useSelector, useDispatch } from "react-redux";
 import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
-import Subtitle from "../atoms/Subtitle";
-import Menu from "../molecules/Menu";
 
 const StyledNavationContainer = styled.div`
     position: fixed;
     z-index: 1;
     top: 0;
-    width: 240px;
-    height: 100%;
+    width: 100%;
+    height: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,42 +24,39 @@ const StyledNavationContainer = styled.div`
 
 const StyledNavigationBar = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    /* justify-content: space-between; */
+    justify-content: space-between;
     width: 100%;
+    max-width: 1440px;
+    min-width: 720px;
     height: 100%;
-    /* max-width: 1440px; */
-    /* min-width: 720px; */
-    padding: 20px 0px;
-    background-color: #f7f7f5;
+    padding: 0 40px;
+    background-color: white;
 `;
 
-const StyledUpperBar = styled.div`
-    flex-grow: 1;
-    width: 100%;
+const StyledLeftBar = styled.div`
     height: 100%;
-    padding: 20px 10px 0 10px;
     flex-grow: 0;
     display: flex;
-    flex-direction: column;
-    align-items: start;
+    flex-direction: row;
+    align-items: center;
 `;
 
-const StyledLowerBar = styled.div`
-    width: 100%;
+const StyledRightBar = styled.div`
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: start;
+    flex-direction: row;
+    align-items: center;
 `;
 
 const StyledMenuBar = styled.div`
     height: 100%;
     padding: 10px;
     display: flex;
-    flex-direction: column;
-    align-items: start;
-    /* margin-left: 30px; */
+    flex-direction: row;
+    align-items: center;
+    margin-left: 30px;
     gap: 15px;
 `;
 
@@ -76,30 +72,30 @@ const GNB = ({
     return (
         <StyledNavationContainer>
             <StyledNavigationBar className={`GNB ${className}`}>
-                <Anchor to="/">
-                    <Photo
-                        src="/assets/logo.png"
-                        alt="로고"
-                        objectfit="cover"
-                        width="220px"
-                    />
-                </Anchor>
-                <StyledUpperBar className={`Left-GNB`}>
+                <StyledLeftBar className={`Left-GNB`}>
+                    <Anchor to="/">
+                        <Photo
+                            src="/assets/logo.png"
+                            alt="로고"
+                            objectfit="cover"
+                            height="50px"
+                        />
+                    </Anchor>
                     <StyledMenuBar>
                         <Anchor to="/battery">
-                            <Subtitle>배터리</Subtitle>
+                            <Title>배터리</Title>
                         </Anchor>
                         {/* <Line is_horizontal={false} margin="20px" /> */}
                         <Anchor to="/material">
-                            <Subtitle>원자재</Subtitle>
+                            <Title>원자재</Title>
                         </Anchor>
                     </StyledMenuBar>
-                </StyledUpperBar>
-                <StyledLowerBar className={`Right-GNB`}>
+                </StyledLeftBar>
+                <StyledRightBar className={`Right-GNB`}>
                     <Anchor to="/login">
-                        <Menu icon="login">로그인</Menu>
+                        <Icon className="fs-1" icon="login" size="40px" />
                     </Anchor>
-                    {/* {user.isLogin ? (
+                    {user.isLogin ? (
                         <>
                             <Label className="d-block pe-2">
                                 {user.user}님{" "}
@@ -119,8 +115,8 @@ const GNB = ({
                         <Anchor className="fw-bold" to="/login">
                             로그인
                         </Anchor>
-                    )} */}
-                </StyledLowerBar>
+                    )}
+                </StyledRightBar>
             </StyledNavigationBar>
         </StyledNavationContainer>
     );
