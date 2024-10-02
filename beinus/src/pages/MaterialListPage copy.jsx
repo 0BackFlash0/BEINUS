@@ -13,9 +13,6 @@ import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal
 import { queryAllMaterials } from "../services/additional_api";
 import { useEffect } from "react";
 import { useCaution } from "../hooks/useCaution";
-import { useNavigate } from "react-router-dom";
-import SearchingBar from "../components/molecules/SearchingBar";
-import MaterialCard from "../components/molecules/MaterialCard";
 import MaterialSideBar from "../components/organisms/MaterialSideBar";
 
 const column = [
@@ -80,28 +77,8 @@ const StyledUpperContainer = styled.div`
     padding: 0 40px 0 20px;
 `;
 
-const StyledContentContainer = styled.div`
-    padding: 10px 30px;
-    margin-left: 240px;
-    width: calc(100% - 240px);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-`;
-
-const StyledListContainer = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-`;
-
 const MaterialListPage = () => {
     const { showCaution } = useCaution();
-    const navigate = useNavigate();
 
     const [data, setData] = useState({
         material_list: [
@@ -121,34 +98,17 @@ const MaterialListPage = () => {
     useEffect(() => {
         queryAllMaterials()
             .then((response) => {
-                console.log(response);
                 if (response.status === 200) {
                     setData({
                         ...data,
-                        material_list: [
-                            ...response.data.newMaterials.map((element) => {
-                                return {
-                                    id: element.materialID,
-                                    type: element.name,
-                                    amount: element.quantity,
-                                    verified: element.verified,
-                                    isRecycled: element.status,
-                                    date: element.timestamp.slice(0, 10),
-                                };
-                            }),
-                            ...response.data.recycledMaterials.map(
-                                (element) => {
-                                    return {
-                                        id: element.materialID,
-                                        type: element.name,
-                                        amount: element.quantity,
-                                        verified: element.verified,
-                                        isRecycled: element.status,
-                                        date: element.timestamp.slice(0, 10),
-                                    };
-                                }
-                            ),
-                        ],
+                        material_list: response.data.map((element) => {
+                            return {
+                                id: element.materialID,
+                                type: element.name,
+                                amount: element.quantity,
+                                status: element.status,
+                            };
+                        }),
                     });
                     console.log(response.data);
                     setLoading(false);
@@ -157,21 +117,10 @@ const MaterialListPage = () => {
                 }
             })
             .catch((response) => {
-                // showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
                 console.log(response);
             });
     }, []);
-
-    const openPopup = (batteryID) => {
-        const popupWindow = window.open(
-            `/material_detail/${batteryID}`,
-            "원자재 상세 정보",
-            "width=640,height=640"
-        );
-        if (popupWindow) {
-            popupWindow.focus();
-        }
-    };
 
     if (loading) {
         return <></>;
@@ -190,26 +139,13 @@ const MaterialListPage = () => {
                 />
             </ModalTemplate>
             <MaterialSideBar handle_modal={setIsModalOpen} />
-            <StyledContentContainer>
-                <SearchingBar />
-                <StyledListContainer>
-                    {data.material_list.map((element, idx) => {
-                        console.log(data.material_list);
-                        return (
-                            <MaterialCard
-                                key={idx}
-                                id={element.id}
-                                type={element.type}
-                                verified={element.verified}
-                                isRecycled={element.isRecycled}
-                                amount={element.amount}
-                                date={element.date}
-                                onClick={() => openPopup(element.id)}
-                            />
-                        );
-                    })}
-                </StyledListContainer>
-            </StyledContentContainer>
+            <StyledUpperContainer>
+                <Topic>원자재 목록</Topic>
+                <Button onClick={() => setIsModalOpen(true)}>
+                    원자재 등록
+                </Button>
+            </StyledUpperContainer>
+            <Table name="이름" data={data.material_list} columns={column} />
         </PageTemplate>
     );
 };

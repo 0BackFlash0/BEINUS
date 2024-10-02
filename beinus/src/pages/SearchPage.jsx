@@ -73,8 +73,7 @@ const SearchPage = () => {
 
     const { batteryID } = useParams();
     const [data, setData] = useState({
-        passport: tempPassport,
-        information: tempInformation,
+        details: tempInformation,
     });
     const [loading, setLoading] = useState(true);
 
@@ -88,11 +87,11 @@ const SearchPage = () => {
             batteryID: batteryID,
         })
             .then((response) => {
+                console.log(response);
                 if (response.status === 200) {
                     setData({
                         ...data,
-                        passport: response.data.passport,
-                        information: response.data.information,
+                        details: response.data.batteryDetails,
                     });
                     setLoading(false);
                 } else {
@@ -174,9 +173,9 @@ const SearchPage = () => {
                 />
             </ModalTemplate>
             <PageTemplate className="register-page">
-                <BatteryPassport battery_passport_data={data.passport} />
+                {/* <BatteryPassport battery_passport_data={data.passport} /> */}
                 <BatteryInformation
-                    battery_information_data={data.information}
+                    battery_information_data={data.details}
                     on_request_maintenence={handleRequestMaintenance}
                     on_request_analysis={handleRequestAnalysis}
                     maintain_modal_state={[maintainModal, setMaintainModal]}

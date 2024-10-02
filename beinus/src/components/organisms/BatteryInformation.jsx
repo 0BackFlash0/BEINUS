@@ -172,14 +172,24 @@ const tabElements = [
         key: "battery_info",
         elements: [
             {
-                key: "model_name",
+                key: "batteryID",
                 type: "text",
-                name: "모델명",
+                name: "배터리 ID",
             },
             {
-                key: "manufacture",
+                key: "PassportID",
+                type: "text",
+                name: "여권 ID",
+            },
+            {
+                key: "ManufacturerName",
                 type: "text",
                 name: "제조사",
+            },
+            {
+                key: "location",
+                type: "text",
+                name: "제조위치",
             },
             {
                 key: "category",
@@ -192,7 +202,12 @@ const tabElements = [
                 name: "상태",
             },
             {
-                key: "manufactured_date",
+                key: "weight",
+                type: "text",
+                name: "무게",
+            },
+            {
+                key: "manufactureDate",
                 type: "text",
                 name: "제조일자",
             },
@@ -204,17 +219,12 @@ const tabElements = [
         key: "performance",
         elements: [
             {
-                key: "remaining_capacity",
+                key: "capacity",
                 type: "text",
-                name: "Remaining Capacity",
+                name: "Capacity",
             },
             {
-                key: "maximum_capacity",
-                type: "text",
-                name: "Maximum Capacity",
-            },
-            {
-                key: "normal_voltage",
+                key: "voltage",
                 type: "text",
                 name: "Nominal Voltage",
             },
@@ -223,10 +233,26 @@ const tabElements = [
                 type: "text",
                 name: "State of Charge",
             },
+
+            {
+                key: "soce",
+                type: "text",
+                name: "State of Charge ",
+            },
             {
                 key: "soh",
                 type: "text",
                 name: "State of Health",
+            },
+            {
+                key: "totalLifeCycle",
+                type: "text",
+                name: "Total Life Cycle",
+            },
+            {
+                key: "remainingLifeCycle",
+                type: "text",
+                name: "Remaining Life Cycle",
             },
         ],
     },
@@ -235,15 +261,15 @@ const tabElements = [
         name: "재료",
         key: "materials",
         elements: [
+            // {
+            //     key: "material_composition",
+            //     type: "chart",
+            //     name: "재료 구성",
+            // },
             {
-                key: "material_composition",
-                type: "chart",
-                name: "재료 구성",
-            },
-            {
-                key: "contain_harzardous",
+                key: "containsHazardous",
                 type: "text",
-                name: "위험물질 포함여부",
+                name: "위험물질",
             },
         ],
     },
@@ -252,11 +278,11 @@ const tabElements = [
         name: "재활용",
         key: "recycling",
         elements: [
-            {
-                key: "material_recycled",
-                type: "multi-chart",
-                name: "재활용 원료 사용 비율",
-            },
+            // {
+            //     key: "material_recycled",
+            //     type: "multi-chart",
+            //     name: "재활용 원료 사용 비율",
+            // },
         ],
     },
     {
@@ -269,11 +295,11 @@ const tabElements = [
                 type: "buttons",
                 name: "정비 버튼",
             },
-            {
-                key: "maintenance_history",
-                type: "text",
-                name: "정비 이력",
-            },
+            // {
+            //     key: "maintenance_history",
+            //     type: "text",
+            //     name: "정비 이력",
+            // },
         ],
     },
 ];
@@ -328,17 +354,27 @@ const BatteryInformation = ({
                     <Button onClick={() => setMaintainModal(true)}>
                         배터리 정비
                     </Button>
-                    <Button onClick={on_request_analysis}>정비 요청</Button>
+                    <Button onClick={on_request_analysis}>분석 요청</Button>
                     <Button onClick={() => setAnalysisModal(true)}>
                         재활용 분석
                     </Button>
                     <Button onClick={() => setExtractModal(true)}>
-                        원자재 추출
+                        배터리 재활용
                     </Button>
                 </StyledButtonContainer>
             );
         }
     };
+
+    // const encodeData = (original_data) => {
+    //     return Object.entries(original_data).map(([key, value], index) => {
+    //         return {
+    //             id: key,
+    //             label: key,
+    //             value: value,
+    //         };
+    //     });
+    // };
 
     const encodeData = (original_data) => {
         return Object.entries(original_data).map(([key, value], index) => {

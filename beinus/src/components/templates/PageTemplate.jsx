@@ -6,16 +6,19 @@ const Screen = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 70px 0 0 0;
 `;
 
 const StyledPage = styled.div`
+    /* margin-left: 240px; */
+    /* width: calc(100%-240px); */
     width: 100%;
-    max-width: 1440px;
-    min-width: 720px;
+    /* max-width: 1440px; */
+    /* min-width: 720px; */
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 150px 40px 0 40px;
+    /* padding: 150px 40px 0 40px; */
 `;
 
 const PageTemplate = ({

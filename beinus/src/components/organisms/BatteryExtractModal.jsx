@@ -12,7 +12,7 @@ import { extractMaterials } from "../../services/additional_api";
 const StyledBatteryExtractContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 640px;
+    height: 480px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -77,7 +77,10 @@ const BatteryExtractModal = ({
     const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
-        materialList: [tempMaterial],
+        nickel: "0",
+        cobalt: "0",
+        manganese: "0",
+        lithium: "0",
     });
 
     const addMaterial = () => {
@@ -113,7 +116,10 @@ const BatteryExtractModal = ({
 
         await extractMaterials({
             batteryID: battery_id,
-            materialList: value.materialList,
+            nickel: value.nickel,
+            cobalt: value.cobalt,
+            lithium: value.lithium,
+            manganese: value.manganese,
         })
             .then((response) => {
                 // return response.data;
@@ -137,7 +143,46 @@ const BatteryExtractModal = ({
             {...props}
         >
             <StyledTopic>원자재 추출</StyledTopic>
-            {value.materialList
+            <StyledInputGroupContainer>
+                <StyledInputGroup
+                    type="number"
+                    id="nickel"
+                    name="nickel"
+                    value={value.nickel ? value.nickel : ""}
+                    onChange={handleOnChange}
+                    title="니켈"
+                />
+
+                <StyledInputGroup
+                    type="number"
+                    id="lithium"
+                    name="lithium"
+                    value={value.lithium ? value.lithium : ""}
+                    onChange={handleOnChange}
+                    title="리튬"
+                />
+            </StyledInputGroupContainer>
+
+            <StyledInputGroupContainer>
+                <StyledInputGroup
+                    type="number"
+                    id="cobalt"
+                    name="cobalt"
+                    value={value.cobalt ? value.cobalt : ""}
+                    onChange={handleOnChange}
+                    title="코발트"
+                />
+
+                <StyledInputGroup
+                    type="number"
+                    id="manganese"
+                    name="manganese"
+                    value={value.manganese ? value.manganese : ""}
+                    onChange={handleOnChange}
+                    title="망간"
+                />
+            </StyledInputGroupContainer>
+            {/* {value.materialList
                 ? value.materialList.map((element, idx) => {
                       return (
                           <ExtractMaterialOption
@@ -150,7 +195,8 @@ const BatteryExtractModal = ({
                       );
                   })
                 : ""}
-            <StyledAddButton onClick={addMaterial}>+</StyledAddButton>
+            <StyledAddButton onClick={addMaterial}>+</StyledAddButton> */}
+
             <StyledButtonContainer>
                 <Button onClick={handleExtract}>확인</Button>
                 <Button

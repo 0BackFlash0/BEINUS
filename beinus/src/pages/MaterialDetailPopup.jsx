@@ -7,7 +7,7 @@ import TabInfo from "../components/molecules/TabInfo";
 import Photo from "../components/atoms/Photo";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { queryRawMaterial } from "../services/additional_api";
+import { queryMaterial } from "../services/additional_api";
 
 const StyledMaterialDetailContainer = styled.div`
     position: relative;
@@ -56,24 +56,21 @@ const MaterialDetailPopup = ({ className = "", ...props }) => {
         quantity: 0,
         status: "-",
         available: "-",
-        verifiedBy: "-",
+        verified: "-",
         timestamp: "-",
     });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        queryRawMaterial({
+        queryMaterial({
             materialID: materialID,
         })
             .then((response) => {
-                console.log(response);
-                return response.data;
-            })
-            .then((data) => {
-                if (data.success) {
+                if (response.status === 200) {
+                    console.log(response);
                     setData({
                         ...data,
-                        ...data.material_data,
+                        ...response.data.rawMaterial,
                     });
                     setLoading(false);
                 } else {
@@ -110,7 +107,7 @@ const MaterialDetailPopup = ({ className = "", ...props }) => {
                 <StyledTabInfo infoname="사용가능" info={data.available} />
             </StyledInfoContainer>
             <StyledInfoContainer>
-                <StyledTabInfo infoname="검증자" info={data.verifiedBy} />
+                <StyledTabInfo infoname="검증자" info={data.verified} />
                 <StyledTabInfo infoname="공급일자" info={data.timestamp} />
             </StyledInfoContainer>
         </StyledMaterialDetailContainer>

@@ -4,13 +4,18 @@ import Photo from "../atoms/Photo";
 
 const StyledMenuContainer = styled.div`
     width: 100%;
+    padding: 5px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 8px;
+
+    cursor: pointer;
 `;
 
 const StyledHead = styled.h5`
     margin: 1px 6px;
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: 600;
     color: #666666;
 `;
@@ -24,7 +29,7 @@ const Menu = ({
 }) => {
     return (
         <StyledMenuContainer>
-            {icon ? <Icon icon={icon}></Icon> : ""}
+            {icon ? <Icon icon={icon} size="16pt"></Icon> : ""}
             {src ? <Photo src={src} alt={src} /> : ""}
             <StyledHead className={`menu ${className}`} {...props}>
                 {children}

@@ -77,10 +77,11 @@ const BatteryMaintainModal = ({
     const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
-        name: "",
+        name: "정비회사",
         date: new Date().toISOString().substring(0, 10),
-        result: "success",
-        others: "",
+        info: "",
+        soc: "0",
+        soh: "0",
     });
 
     const handleMaintain = async function () {
@@ -88,8 +89,9 @@ const BatteryMaintainModal = ({
             batteryID: battery_id,
             name: value.name,
             date: value.date,
-            result: value.result,
-            others: value.others,
+            info: value.info,
+            soc: value.soc,
+            soh: value.soh,
         })
             .then((response) => {
                 if (response.status === 200) {
@@ -117,9 +119,9 @@ const BatteryMaintainModal = ({
                     type="text"
                     id="name"
                     name="name"
-                    value={value.maintainer ? value.maintainer : ""}
+                    value={value.name ? value.name : ""}
                     onChange={handleOnChange}
-                    title="정비자"
+                    title="정비업체"
                 />
                 <StyledInputGroup
                     type="date"
@@ -130,22 +132,32 @@ const BatteryMaintainModal = ({
                     title="정비일자"
                 />
             </StyledInputGroupContainer>
-            <StyledOptionGroup
-                options={resultOptions}
-                id="result"
-                name="result"
-                value={value.result ? value.result : ""}
-                onChange={handleOnChange}
-                title="정비결과"
-            />
             <StyledInputGroup
                 type="text"
                 id="others"
                 name="others"
-                value={value.others ? value.others : ""}
+                value={value.info ? value.info : ""}
                 onChange={handleOnChange}
-                title="특이사항"
+                title="정비 내용"
             />
+            <StyledInputGroupContainer>
+                <StyledInputGroup
+                    type="number"
+                    id="soc"
+                    name="soc"
+                    value={value.soc ? value.soc : ""}
+                    onChange={handleOnChange}
+                    title="SoC"
+                />
+                <StyledInputGroup
+                    type="number"
+                    id="soh"
+                    name="soh"
+                    value={value.soh ? value.soh : ""}
+                    onChange={handleOnChange}
+                    title="SoH"
+                />
+            </StyledInputGroupContainer>
             <StyledButtonContainer>
                 <Button onClick={handleMaintain}>확인</Button>
                 <Button

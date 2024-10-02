@@ -5,9 +5,9 @@ import useInput from "../../hooks/useInput";
 
 const StyledSearchingContainer = styled.div`
     position: relative;
-    width: 70%;
-    min-width: 720px;
-    margin: 50px 0 80px 0;
+    width: 100%;
+    /* min-width: 720px; */
+    margin: 20px 0 20px 0;
 `;
 
 const StyledSearchingBar = styled(TextInput)`

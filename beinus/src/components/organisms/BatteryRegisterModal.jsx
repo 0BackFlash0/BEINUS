@@ -5,7 +5,7 @@ import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
-import { registerBattery } from "../../services/additional_api";
+import { createBattery } from "../../services/additional_api";
 import { useState } from "react";
 import RegisterMaterialOption from "./RegisterMaterialOption";
 import { useCaution } from "../../hooks/useCaution";
@@ -172,7 +172,7 @@ const BatteryRegisterModal = ({
 
         console.log(value);
 
-        await registerBattery({
+        await createBattery({
             category: value.category,
             voltage: value.voltage,
             weight: value.weight,

@@ -12,6 +12,11 @@ import ModalTemplate from "../components/templates/ModelTemplate";
 import BatteryRegisterModal from "../components/organisms/BatteryRegisterModal";
 import { queryAllBatteries } from "../services/additional_api";
 import { useEffect } from "react";
+import BatterySideBar from "../components/organisms/BatterySideBar";
+import { useCaution } from "../hooks/useCaution";
+import BatteryCard from "../components/molecules/BatteryCard";
+import SearchingBar from "../components/molecules/SearchingBar";
+import { useNavigate } from "react-router-dom";
 
 const column = [
     {
@@ -69,15 +74,39 @@ const StyledUpperContainer = styled.div`
     padding: 0 40px 0 20px;
 `;
 
+const StyledContentContainer = styled.div`
+    padding: 10px 30px;
+    margin-left: 240px;
+    width: calc(100% - 240px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+`;
+
+const StyledListContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+`;
+
 const BatteryListPage = () => {
+    const { showCaution } = useCaution();
+    const navigate = useNavigate();
+
     const [data, setData] = useState({
         battery_list: [
             {
-                image: "-",
-                id: "-",
-                model: "-",
-                category: "-",
+                id: "-", // 배터리 id
+                category: "-", // 배터리 type
                 status: "-",
+                verified: false, // 검증 여부
+                isRequestMaintain: false, // 유지보수 요청 여부
+                isRequestAnalysis: false, // 분석 요청 여부
+                date: "-", // 등록 일자
             },
         ],
     });
@@ -88,20 +117,30 @@ const BatteryListPage = () => {
     useEffect(() => {
         queryAllBatteries()
             .then((response) => {
-                return response.data;
-            })
-            .then((data) => {
-                if (data.success) {
+                if (response.status === 200) {
                     setData({
                         ...data,
-                        battery_list: data.battery_list,
+                        battery_list: response.data.map((element, idx) => {
+                            console.log(element);
+                            return {
+                                id: element.batteryID,
+                                category: element.category,
+                                status: element.status,
+                                verified: element.Verified,
+                                isRequestMaintain: element.maintenanceRequest,
+                                isRequestAnalysis: element.analysisRequest,
+                                date: element.manufactureDate.slice(0, 10),
+                            };
+                        }),
                     });
+                    console.log(response);
                     setLoading(false);
                 } else {
-                    console.log("error");
+                    showCaution("알수없는 에러가 발생했습니다.");
                 }
             })
             .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
                 console.log(response);
             });
     }, []);
@@ -122,13 +161,30 @@ const BatteryListPage = () => {
                     on_close={() => setIsModalOpen(false)}
                 />
             </ModalTemplate>
-            <StyledUpperContainer>
-                <Topic>배터리 목록</Topic>
-                <Button onClick={() => setIsModalOpen(true)}>
-                    배터리 생성
-                </Button>
-            </StyledUpperContainer>
-            <Table name="이름" data={data.battery_list} columns={column} />
+            <BatterySideBar handle_modal={setIsModalOpen} />
+            <StyledContentContainer>
+                <SearchingBar />
+                <StyledListContainer>
+                    {data.battery_list.map((element, idx) => {
+                        console.log(data.battery_list);
+                        return (
+                            <BatteryCard
+                                key={idx}
+                                id={element.id}
+                                category={element.category}
+                                status={element.status}
+                                verified={element.verified}
+                                isRequestAnalysis={element.isRequestAnalysis}
+                                isRequestMaintain={element.isRequestMaintain}
+                                date={element.date}
+                                onClick={() =>
+                                    navigate(`/search/${element.id}`)
+                                }
+                            />
+                        );
+                    })}
+                </StyledListContainer>
+            </StyledContentContainer>
         </PageTemplate>
     );
 };

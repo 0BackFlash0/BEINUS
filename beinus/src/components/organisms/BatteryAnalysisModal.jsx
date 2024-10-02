@@ -5,13 +5,13 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import OptionGroup from "../molecules/OptionGroup";
-import { addAnalysisLog } from "../../services/additional_api";
+import { setRecycleAvailability } from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 640px;
+    height: 360px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -54,16 +54,12 @@ const StyledSubtitle = styled(Subtitle)`
 
 const resultOptions = [
     {
-        key: "success",
+        key: "true",
         name: "재활용 가능",
     },
     {
-        key: "fail",
+        key: "false",
         name: "재활용 불가능",
-    },
-    {
-        key: "hold",
-        name: "보류",
     },
 ];
 
@@ -77,19 +73,13 @@ const BatteryAnalysisModal = ({
     const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
-        name: "",
-        date: new Date().toISOString().substring(0, 10),
-        result: "success",
-        others: "",
+        recycleAvailability: "true",
     });
 
     const handleAnalysis = async function () {
-        await addAnalysisLog({
+        await setRecycleAvailability({
             batteryID: battery_id,
-            name: value.name,
-            date: value.date,
-            result: value.result,
-            others: value.others,
+            recycleAvailability: value.recycleAvailability,
         })
             .then((response) => {
                 if (response.status === 200) {
@@ -112,39 +102,15 @@ const BatteryAnalysisModal = ({
             {...props}
         >
             <StyledTopic>재활용 여부 분석</StyledTopic>
-            <StyledInputGroupContainer>
-                <StyledInputGroup
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={value.maintainer ? value.maintainer : ""}
-                    onChange={handleOnChange}
-                    title="분석자"
-                />
-                <StyledInputGroup
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={value.date ? value.date : ""}
-                    onChange={handleOnChange}
-                    title="분석일자"
-                />
-            </StyledInputGroupContainer>
             <StyledOptionGroup
                 options={resultOptions}
-                id="result"
-                name="result"
-                value={value.result ? value.result : ""}
+                id="recycleAvailability"
+                name="recycleAvailability"
+                value={
+                    value.recycleAvailability ? value.recycleAvailability : ""
+                }
                 onChange={handleOnChange}
                 title="분석결과"
-            />
-            <StyledInputGroup
-                type="text"
-                id="others"
-                name="others"
-                value={value.others ? value.others : ""}
-                onChange={handleOnChange}
-                title="특이사항"
             />
             <StyledButtonContainer>
                 <Button onClick={handleAnalysis}>확인</Button>

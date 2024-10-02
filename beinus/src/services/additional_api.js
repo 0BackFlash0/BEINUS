@@ -1,38 +1,42 @@
 import axios from "axios";
 import { getUser } from "./base_api";
 
+const TEST = "org2";
+
 export const instance = axios.create({
     baseURL: "http://localhost:3000/",
-    timeout: 1000,
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
 instance.interceptors.request.use(async function (config) {
+    if (TEST) {
+        config.headers["org"] = TEST;
+        return config;
+    }
+
     const token = localStorage.getItem("token");
     console.log(token);
-    // console.log(token);
+
     if (token && token !== "undefined") {
         console.log(token);
         config.headers["Authorization"] = `Bearer ${token}`;
-        // config.headers["access"] = `${token}`;
     } else {
         console.log("no token");
     }
 
-    config.headers["org"] = "org1";
+    const user_data = await getUser().then((response) => response.data);
+    console.log(user_data);
 
-    // const user_data = await getUser().then((response) => response.data);
-    // console.log(user_data);
-    // const user_data =
+    if (user_data && user_data !== "undefined") {
+        console.log(user_data.role);
+        config.headers["org"] = `${user_data.role}`;
+    } else {
+        console.log("no org");
+    }
 
-    // if (user_data && user_data !== "undefined") {
-    //     console.log(user_data.role);
-    //     config.headers["org"] = `${user_data.role}`;
-    // } else {
-    //     console.log("no org");
-    // }
     return config;
 });
 
@@ -50,9 +54,7 @@ instance.interceptors.response.use(
 export const checkBattery = (data) => {
     const { battery_id } = data;
 
-    if (
-        battery_id === "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162"
-    ) {
+    if (TEST) {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({
@@ -66,426 +68,645 @@ export const checkBattery = (data) => {
             }, 100);
         });
     }
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    success: false,
-                    battery_id: battery_id,
-                    message: "Battery check failed",
-                },
-            });
-        }, 100);
-    });
 };
 
 export const queryBatteryDetails = async function (data) {
     const { batteryID } = data;
-    // const temp = instance.get(`/queryBatteryDetails/${batteryID}`);
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    batteryID: batteryID,
-                    passport: tempPassport,
-                    information: tempInformation,
-                },
-            });
-        }, 100);
-    });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        ...tempBattery,
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                data: {
-                    success: false,
-                    battery_id: batteryID,
-                    message: "Battery search failed",
-                },
-            });
-        }, 100);
-    });
+    return instance.get(`/queryBatteryDetails/${batteryID}`);
 };
 
-export const queryRawMaterial = (data) => {
+export const queryMaterial = (data) => {
     const { material_id } = data;
-    // return instance.get(`/queryRawMaterial/${material_id}`, {});
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    success: true,
-                    material_data: tempMaterial,
-                },
-            });
-        }, 100);
-    });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        ...tempMaterial,
+                    },
+                });
+            }, 100);
+        });
+    }
+
+    return instance.get(`/queryMaterial/${material_id}`, {});
 };
 
-export const registerBattery = (data) => {
-    const {
-        category,
-        voltage,
-        weight,
-        isHardardous,
-        capacity,
-        lifecycle,
-        materialList,
-    } = data;
-
-    // console.log(body);
+export const createBattery = (data) => {
+    const { category, voltage, weight, capacity, lifecycle, materialList } =
+        data;
 
     const body = {
         category: category,
         voltage: voltage,
         weight: weight,
-        isHardardous: isHardardous,
         capacity: capacity,
         totalLifeCycle: lifecycle,
-        materialList: materialList.map((element, idx) => {
-            return {
-                materialID: element.materialID,
-                materialType: element.type,
-                quantity: element.amount,
-            };
-        }),
+        rawMaterialsJSON: JSON.stringify(
+            materialList.reduce((acc, element, idx) => {
+                return {
+                    ...acc,
+                    [`material${idx + 1}`]: {
+                        materialID: element.materialID,
+                        materialType: element.type,
+                        quantity: parseInt(element.amount),
+                    },
+                };
+            }, {})
+        ),
     };
 
-    console.log(body);
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "Battery created successfully",
+                        batteryID: "BATTERY-1727677381828333336",
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    // return instance.post("/registerBattery", body);
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    batteryID: "BATTERY-1234567890123456789",
-                },
-            });
-        }, 100);
-    });
+    return instance.post("/createBattery", body);
 };
 
 export const registerRawMaterial = (data) => {
     const { type, amount, vendor } = data;
 
-    // return instance.post("/registerRawMaterial", {
-    //     supplierID: vendor,
-    //     name: type,
-    //     quantity: amount,
-    // });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        result: "MATERIAL-1727427388013513753",
+                        message: "Raw material registered successfully",
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    success: true,
-                    materialID: "temp",
-                    message: "Material register success",
-                },
-            });
-        }, 100);
+    return instance.post("/registerRawMaterial", {
+        supplierID: vendor,
+        name: type,
+        quantity: amount,
     });
 };
 
 export const requestMaintenance = (data) => {
     const { batteryID } = data;
 
-    // return instance.post("/requestMaintenance", {
-    //     batteryID: batteryID
-    // });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "request Maintenance success",
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    message: "request Maintenance success",
-                },
-            });
-        }, 100);
+    return instance.post("/requestMaintenance", {
+        batteryID: batteryID,
     });
 };
 
 export const addMaintenanceLog = (data) => {
-    const { batteryID, name, date, result, others } = data;
+    const { batteryID, name, date, info, soc, soh } = data;
 
-    // return instance.post("/addMaintenanceLog", {
-    //     batteryID: batteryID,
-    //     company: name,
-    //     info: result,
-    //     maintenanceDate: date,
-    // });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "Maintenance log added",
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    message: "Maintenance log added",
-                },
-            });
-        }, 100);
+    return instance.post("/addMaintenanceLog", {
+        batteryID: batteryID,
+        company: name,
+        info: info,
+        maintenanceDate: date,
+        soc: soc,
+        soh: soh,
     });
 };
 
 export const requestAnalysis = (data) => {
     const { batteryID } = data;
 
-    // return instance.post("/requestAnalysis", {
-    //     batteryID: batteryID
-    // });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "Analysis request created successfully.",
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    message: "request Analysis success",
-                },
-            });
-        }, 100);
+    return instance.post("/requestAnalysis", {
+        batteryID: batteryID,
     });
 };
 
-export const addAnalysisLog = (data) => {
-    const { batteryID, name, date, result, others } = data;
+export const setRecycleAvailability = (data) => {
+    const { batteryID, recycleAvailability } = data;
 
-    // return instance.post("/addAnalysisLog", {
-    //     batteryID: batteryID,
-    //     company: name,
-    //     info: result,
-    //     maintenanceDate: date,
-    // });
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "Recycle availability set successfully",
+                        result: "true",
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    message: "Analysis log added",
-                },
-            });
-        }, 100);
-    });
-};
-
-export const analysisBattery = (data) => {
-    const { name, date, result, others } = data;
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                data: {
-                    success: true,
-                    message: "Battery analysis success",
-                },
-            });
-        }, 100);
+    return instance.post("/setRecycleAvailability", {
+        batteryID: batteryID,
+        recycleAvailability: recycleAvailability,
     });
 };
 
 export const extractMaterials = (data) => {
-    const { batteryID, materialList } = data;
+    const { batteryID, nickel, cobalt, lithium, manganese } = data;
 
     const body = {
         batteryID: batteryID,
-        materialList: materialList.map((element, idx) => {
-            return {
-                materialType: element.type,
-                quantity: element.amount,
-            };
-        }),
+        extractedQuantities: {
+            Nickel: nickel,
+            Cobalt: cobalt,
+            Lithium: lithium,
+            Manganese: manganese,
+        },
     };
 
-    console.log(body);
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "Materials extracted successfully",
+                        extractedMaterials: {
+                            Lithium: {
+                                materialID: "MATERIAL-1727678473629837236",
+                                quantity: 10,
+                                status: "Recycled",
+                            },
+                            Cobalt: {
+                                materialID: "MATERIAL-1727678473629841234",
+                                quantity: 10,
+                                status: "Recycled",
+                            },
+                            Manganese: {
+                                materialID: "MATERIAL-1727678473629847890",
+                                quantity: 10,
+                                status: "Recycled",
+                            },
+                            Nickel: {
+                                materialID: "MATERIAL-1727678473629854321",
+                                quantity: 10,
+                                status: "Recycled",
+                            },
+                        },
+                    },
+                });
+            }, 100);
+        });
+    }
 
-    // return instance.post("/extractMaterials", body);
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: {
-                    batteryID: "BATTERY-1234567890123456789",
-                },
-            });
-        }, 100);
-    });
+    return instance.post("/extractMaterials", body);
 };
 
 export const queryAllBatteries = () => {
-    // return instance.get(`/queryAllBatteries/`, {});
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: tempBatteries,
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                data: {
-                    success: true,
-                    battery_list: tempBatteries,
-                    message: "Battery list success",
-                },
-            });
-        }, 100);
-    });
+    return instance.get(`/queryAllBatteries/`, {});
 };
 
-export const queryAllRawMaterials = () => {
-    // return instance.get(`/queryAllRawMaterials/`, {});
+export const queryAllMaterials = () => {
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: tempMaterials,
+                });
+            }, 100);
+        });
+    }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                status: 200,
-                data: tempMaterials,
-            });
-        }, 100);
-    });
+    return instance.get(`/queryAllMaterials`, {});
 };
 
-const tempPassport = {
-    id: "did:web:acme.battery.pass:0226151e-949c-d067-8ef3-162",
-    model_number: "M-41698615",
-    serial_number: "992356610548948",
-    image: "./assets/battery_example.png",
-    QR: "./assets/QR.png",
-};
-
-const tempInformation = {
-    model_name: "EV-BAT085",
-    manufacture: "Exide Batteries Auditor",
-    category: "전기차",
-    status: "Recycled",
-    manufactured_date: "2024/09/19",
-    remaining_capacity: "60 kWh",
-    maximum_capacity: "100 kwh",
-    normal_voltage: "3.7 V",
-    soc: "SOC",
-    soh: "SOH",
-    material_composition: {
-        nickel: 33,
-        cobalt: 16,
-        lithium: 40,
-        lead: 11,
+const tempMaterial = {
+    rawMaterial: {
+        materialID: "MATERIAL-1727677520318430428",
+        supplierID: "Supplier1",
+        name: "Lithium",
+        quantity: 10045,
+        status: "NEW",
+        available: "Available",
+        verified: "Verified",
+        timestamp: "2024-09-30T06:25:20Z",
     },
-    contain_harzardous: "없음",
-    material_recycled: {
-        nickel: {
-            pre_consumer: 17,
-            post_consumer: 7,
-            primary: 76,
-        },
-        cobalt: {
-            pre_consumer: 17,
-            post_consumer: 7,
-            primary: 76,
-        },
-        lithium: {
-            pre_consumer: 17,
-            post_consumer: 7,
-            primary: 76,
-        },
-        lead: {
-            pre_consumer: 17,
-            post_consumer: 7,
-            primary: 76,
-        },
-    },
-    maintenance_history: "없음",
 };
 
-const tempBatteries = [
-    {
-        batteryID: "BATTERY-123456789",
+const tempMaterials = {
+    newMaterials: [
+        {
+            materialID: "MATERIAL-1727677344651572222",
+            supplierID: "SUPPLIER-001",
+            name: "Lithium",
+            quantity: 100,
+            status: "NEW",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677344653635347",
+            supplierID: "SUPPLIER-001",
+            name: "Cobalt",
+            quantity: 150,
+            status: "NEW",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677344653637389",
+            supplierID: "SUPPLIER-001",
+            name: "Manganese",
+            quantity: 70,
+            status: "NEW",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677344653638055",
+            supplierID: "SUPPLIER-001",
+            name: "Nickel",
+            quantity: 200,
+            status: "NEW",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677472710218836",
+            supplierID: "Supplier1",
+            name: "Lithium",
+            quantity: 100,
+            status: "NEW",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:24:32Z",
+        },
+        {
+            materialID: "MATERIAL-1727677520318430428",
+            supplierID: "Supplier1",
+            name: "Lithium",
+            quantity: 10045,
+            status: "NEW",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:25:20Z",
+        },
+    ],
+    recycledMaterials: [
+        {
+            materialID: "MATERIAL-1727677344653638889",
+            supplierID: "SUPPLIER-001",
+            name: "Nickel",
+            quantity: 50,
+            status: "Recycled",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677344653639472",
+            supplierID: "SUPPLIER-001",
+            name: "Manganese",
+            quantity: 40,
+            status: "Recycled",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677344653639972",
+            supplierID: "SUPPLIER-001",
+            name: "Lithium",
+            quantity: 30,
+            status: "Recycled",
+            available: "Available",
+            verified: "Verified",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+        {
+            materialID: "MATERIAL-1727677344653640430",
+            supplierID: "SUPPLIER-001",
+            name: "Cobalt",
+            quantity: 30,
+            status: "Recycled",
+            available: "Available",
+            verified: "",
+            timestamp: "2024-09-30T06:22:24Z",
+        },
+    ],
+};
+
+const tempBattery = {
+    batteryDetails: {
+        batteryID: "BATTERY-1727677381828333336",
+        PassportID: "b8b6c09e-4068-4a6a-8413-eabaed172324",
         rawMaterials: {
             material1: {
-                materialID: "MATERIAL-1234",
+                materialID: "MATERIAL-1727674198320274960",
                 materialType: "Lithium",
-                quantity: 50,
+                quantity: 70,
+                Status: "NEW",
             },
             material2: {
-                materialID: "MATERIAL-5678",
+                materialID: "MATERIAL-1727674198320280043",
                 materialType: "Cobalt",
-                quantity: 30,
+                quantity: 100,
+                Status: "NEW",
+            },
+            material3: {
+                materialID: "MATERIAL-1727674198320280876",
+                materialType: "Manganese",
+                quantity: 50,
+                Status: "NEW",
+            },
+            material4: {
+                materialID: "MATERIAL-1727674198320281293",
+                materialType: "Nickel",
+                quantity: 90,
+                Status: "NEW",
+            },
+            material5: {
+                materialID: "MATERIAL-1727674198320283001",
+                materialType: "Lithium",
+                quantity: 10,
+                Status: "Recycled",
+            },
+            material6: {
+                materialID: "MATERIAL-1727674198320283751",
+                materialType: "Cobalt",
+                quantity: 20,
+                Status: "Recycled",
+            },
+            material7: {
+                materialID: "MATERIAL-1727674198320282460",
+                materialType: "Manganese",
+                quantity: 20,
+                Status: "Recycled",
+            },
+            material8: {
+                materialID: "MATERIAL-1727674198320282043",
+                materialType: "Nickel",
+                quantity: 40,
+                Status: "Recycled",
             },
         },
-        manufactureDate: "2024-09-25T06:41:00.045634219Z",
+        manufactureDate: "2024-09-30T06:23:01.828408169Z",
+        ManufacturerName: "",
+        location: "",
+        category: "Electric Vehicle Battery",
+        weight: 500.5,
         status: "ORIGINAL",
-        Verified: "NOT VERIFIED",
-        capacity: 5000,
-        soc: 80,
-        soh: 90,
+        Verified: "VERIFIED",
+        capacity: 3000,
+        voltage: 300.6,
+        soc: 100,
+        soh: 100,
         soce: 100,
         totalLifeCycle: 1000,
-        remainingLifeCycle: 900,
+        remainingLifeCycle: 1000,
         maintenanceLogs: [],
         accidentLogs: [],
         maintenanceRequest: false,
         analysisRequest: false,
+        containsHazardous: "Cadmium, Lithium, Nickel, Lead",
         recycleAvailability: false,
+        recyclingRatesByMaterial: {
+            Cobalt: 16.666666666666664,
+            Lithium: 12.5,
+            Manganese: 28.57142857142857,
+            Nickel: 30.76923076923077,
+        },
     },
+};
+
+const tempBatteries = [
     {
-        batteryID: "BATTERY-987654321",
+        batteryID: "BATTERY-1727677381828333336",
+        PassportID: "b8b6c09e-4068-4a6a-8413-eabaed172324",
         rawMaterials: {
             material1: {
-                materialID: "MATERIAL-4321",
+                materialID: "MATERIAL-1727674198320274960",
+                materialType: "Lithium",
+                quantity: 70,
+                Status: "NEW",
+            },
+            material2: {
+                materialID: "MATERIAL-1727674198320280043",
+                materialType: "Cobalt",
+                quantity: 100,
+                Status: "NEW",
+            },
+            material3: {
+                materialID: "MATERIAL-1727674198320280876",
+                materialType: "Manganese",
+                quantity: 50,
+                Status: "NEW",
+            },
+            material4: {
+                materialID: "MATERIAL-1727674198320281293",
                 materialType: "Nickel",
+                quantity: 90,
+                Status: "NEW",
+            },
+            material5: {
+                materialID: "MATERIAL-1727674198320283001",
+                materialType: "Lithium",
+                quantity: 10,
+                Status: "Recycled",
+            },
+            material6: {
+                materialID: "MATERIAL-1727674198320283751",
+                materialType: "Cobalt",
                 quantity: 20,
+                Status: "Recycled",
+            },
+            material7: {
+                materialID: "MATERIAL-1727674198320282460",
+                materialType: "Manganese",
+                quantity: 20,
+                Status: "Recycled",
+            },
+            material8: {
+                materialID: "MATERIAL-1727674198320282043",
+                materialType: "Nickel",
+                quantity: 40,
+                Status: "Recycled",
             },
         },
-        manufactureDate: "2024-09-24T05:41:00.045634219Z",
-        status: "RECYCLED",
+        manufactureDate: "2024-09-30T06:23:01.828408169Z",
+        ManufacturerName: "",
+        location: "",
+        category: "Electric Vehicle Battery",
+        weight: 500.5,
+        status: "Disassembled",
         Verified: "VERIFIED",
         capacity: 3000,
-        soc: 60,
-        soh: 70,
+        voltage: 0,
+        soc: 100,
+        soh: 100,
         soce: 100,
-        totalLifeCycle: 800,
-        remainingLifeCycle: 400,
-        maintenanceLogs: ["Maintenance on 2024-09-23: SOC decreased by 10%"],
+        totalLifeCycle: 1000,
+        remainingLifeCycle: 1000,
+        maintenanceLogs: [],
         accidentLogs: [],
-        maintenanceRequest: false,
+        maintenanceRequest: true,
         analysisRequest: true,
+        containsHazardous: "",
         recycleAvailability: true,
-    },
-];
-
-const tempMaterials = [
-    {
-        materialID: "MATERIAL-1234567890123456789",
-        supplierID: "SUPPLIER-001",
-        name: "Lithium",
-        quantity: 100,
-        status: "NEW",
-        available: "Available",
-        timestamp: "2024-09-25T06:41:00Z",
+        recyclingRatesByMaterial: {
+            Cobalt: 16.666666666666664,
+            Lithium: 12.5,
+            Manganese: 28.57142857142857,
+            Nickel: 30.76923076923077,
+        },
     },
     {
-        materialID: "MATERIAL-9876543210987654321",
-        supplierID: "",
-        name: "Nickel",
-        quantity: 50,
-        status: "Recycled",
-        available: "Available",
-        timestamp: "2024-09-25T06:42:00Z",
+        batteryID: "BATTERY-1727677381828333336",
+        PassportID: "b8b6c09e-4068-4a6a-8413-eabaed172324",
+        rawMaterials: {
+            material1: {
+                materialID: "MATERIAL-1727674198320274960",
+                materialType: "Lithium",
+                quantity: 70,
+                Status: "NEW",
+            },
+            material2: {
+                materialID: "MATERIAL-1727674198320280043",
+                materialType: "Cobalt",
+                quantity: 100,
+                Status: "NEW",
+            },
+            material3: {
+                materialID: "MATERIAL-1727674198320280876",
+                materialType: "Manganese",
+                quantity: 50,
+                Status: "NEW",
+            },
+            material4: {
+                materialID: "MATERIAL-1727674198320281293",
+                materialType: "Nickel",
+                quantity: 90,
+                Status: "NEW",
+            },
+            material5: {
+                materialID: "MATERIAL-1727674198320283001",
+                materialType: "Lithium",
+                quantity: 10,
+                Status: "Recycled",
+            },
+            material6: {
+                materialID: "MATERIAL-1727674198320283751",
+                materialType: "Cobalt",
+                quantity: 20,
+                Status: "Recycled",
+            },
+            material7: {
+                materialID: "MATERIAL-1727674198320282460",
+                materialType: "Manganese",
+                quantity: 20,
+                Status: "Recycled",
+            },
+            material8: {
+                materialID: "MATERIAL-1727674198320282043",
+                materialType: "Nickel",
+                quantity: 40,
+                Status: "Recycled",
+            },
+        },
+        manufactureDate: "2024-09-30T06:23:01.828408169Z",
+        ManufacturerName: "",
+        location: "",
+        category: "Electric Vehicle Battery",
+        weight: 500.5,
+        status: "Disassembled",
+        Verified: "VERIFIED",
+        capacity: 3000,
+        voltage: 0,
+        soc: 100,
+        soh: 100,
+        soce: 100,
+        totalLifeCycle: 1000,
+        remainingLifeCycle: 1000,
+        maintenanceLogs: [],
+        accidentLogs: [],
+        maintenanceRequest: true,
+        analysisRequest: true,
+        containsHazardous: "",
+        recycleAvailability: true,
+        recyclingRatesByMaterial: {
+            Cobalt: 16.666666666666664,
+            Lithium: 12.5,
+            Manganese: 28.57142857142857,
+            Nickel: 30.76923076923077,
+        },
     },
 ];
-
-const tempMaterial = {
-    materialID: "MATERIAL-1234567890123456789",
-    supplierID: "SUPPLIER-001",
-    name: "Lithium",
-    quantity: 100,
-    status: "NEW",
-    available: "Available",
-    verifiedBy: "",
-    timestamp: "2024-09-25T06:41:00Z",
-};
