@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getUser } from "./base_api";
 
-const TEST = "org2";
+const TEST = true;
+const TEST_ORG = "org1";
 
 export const instance = axios.create({
     baseURL: "http://localhost:3000/",
@@ -12,8 +13,8 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use(async function (config) {
-    if (TEST) {
-        config.headers["org"] = TEST;
+    if (TEST_ORG) {
+        config.headers["org"] = TEST_ORG;
         return config;
     }
 
