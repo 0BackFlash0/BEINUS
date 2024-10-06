@@ -67,12 +67,7 @@ const MaterialOptions = [
     },
 ];
 
-const MaterialRegisterModal = ({
-    className = "",
-    on_success,
-    on_close,
-    ...props
-}) => {
+const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
     const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
@@ -97,7 +92,7 @@ const MaterialRegisterModal = ({
                     showCaution(
                         `원자재 ID가 발급되었습니다. \n ID : ${response.data.materialID}`
                     );
-                    on_close();
+                    handle_close();
                 } else {
                     showCaution("알수없는 에러가 발생했습니다.");
                 }
@@ -146,7 +141,7 @@ const MaterialRegisterModal = ({
             <StyledButtonContainer>
                 <Button onClick={handleRegister}>확인</Button>
                 <Button
-                    onClick={on_close}
+                    onClick={handle_close}
                     color={"red"}
                     hover_color={"#c50000"}
                 >

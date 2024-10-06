@@ -17,6 +17,9 @@ import { useNavigate } from "react-router-dom";
 import SearchingBar from "../components/molecules/SearchingBar";
 import MaterialCard from "../components/molecules/MaterialCard";
 import MaterialSideBar from "../components/organisms/MaterialSideBar";
+import SearchingFilter from "../components/molecules/SearchingFilter";
+import useInput from "../hooks/useInput";
+import MaterialInfoBar from "../components/organisms/MaterialInfoBar";
 
 const column = [
     {
@@ -81,13 +84,25 @@ const StyledUpperContainer = styled.div`
 `;
 
 const StyledContentContainer = styled.div`
-    padding: 10px 30px;
+    padding: 20px 30px 0 30px;
+    margin-top: 60px;
     margin-left: 240px;
     width: calc(100% - 240px);
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
+`;
+
+const StyledSearchingContainer = styled.div`
+    position: fixed;
+    width: calc(100% - 240px);
+    z-index: 3;
+    top: 70px;
+    left: 240px;
+    padding: 10px 20px;
+    border-bottom: solid 1px #666f7c;
+    background-color: white;
 `;
 
 const StyledListContainer = styled.div`
@@ -98,6 +113,70 @@ const StyledListContainer = styled.div`
     flex-wrap: wrap;
     gap: 10px;
 `;
+
+const MaterialFilter = {
+    type: {
+        lithium: {
+            active: true,
+            name: "리튬",
+            filtering: (target) => target.type === "Lithium",
+        },
+        cobalt: {
+            active: true,
+            name: "코발트",
+            filtering: (target) => target.type === "Cobalt",
+        },
+        manganese: {
+            active: true,
+            name: "망간",
+            filtering: (target) => target.type === "Manganese",
+        },
+        nickel: {
+            active: true,
+            name: "니켈",
+            filtering: (target) => target.type === "Nickel",
+        },
+    },
+    isVerified: {
+        verified: {
+            active: true,
+            icon: "license",
+            color: "#1ED760",
+            name: "검증됨",
+            filtering: (target) => target.verified === "Verified",
+        },
+        not_verified: {
+            active: true,
+            icon: "unlicense",
+            color: "red",
+            name: "검증되지 않음",
+            filtering: (target) => target.verified === "",
+        },
+    },
+    status: {
+        new: {
+            active: true,
+            icon: "fiber_new",
+            name: "NEW",
+            color: "blue",
+            filtering: (target) => target.status === "NEW",
+        },
+        recycled: {
+            active: true,
+            icon: "recycling",
+            color: "#1ED760",
+            name: "RECYCLED",
+            filtering: (target) => target.status === "Recycled",
+        },
+    },
+};
+
+const MaterialImage = {
+    Lithium: "./assets/lithium.jpg",
+    Cobalt: "./assets/cobalt.jpg",
+    Manganese: "./assets/manganese.jpg",
+    Nickel: "./assets/nickel.jpg",
+};
 
 const MaterialListPage = () => {
     const { showCaution } = useCaution();
@@ -114,7 +193,16 @@ const MaterialListPage = () => {
             },
         ],
     });
+
     const [loading, setLoading] = useState(true);
+
+    const [filter, setFilter] = useState(MaterialFilter);
+
+    const [inputFilter, setInputFilter] = useInput({
+        input_filter: "",
+    });
+
+    const [infoMaterial, setInfoMaterial] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -129,10 +217,11 @@ const MaterialListPage = () => {
                             ...response.data.newMaterials.map((element) => {
                                 return {
                                     id: element.materialID,
+                                    img: MaterialImage[element.name],
                                     type: element.name,
                                     amount: element.quantity,
                                     verified: element.verified,
-                                    isRecycled: element.status,
+                                    status: element.status,
                                     date: element.timestamp.slice(0, 10),
                                 };
                             }),
@@ -140,10 +229,11 @@ const MaterialListPage = () => {
                                 (element) => {
                                     return {
                                         id: element.materialID,
+                                        img: MaterialImage[element.name],
                                         type: element.name,
                                         amount: element.quantity,
                                         verified: element.verified,
-                                        isRecycled: element.status,
+                                        status: element.status,
                                         date: element.timestamp.slice(0, 10),
                                     };
                                 }
@@ -173,6 +263,26 @@ const MaterialListPage = () => {
         }
     };
 
+    const isFiltering = (battery) => {
+        let is_valid = true;
+
+        Object.entries(filter).forEach(([category, option]) => {
+            let filter_valid = false;
+            console.log(option);
+            Object.entries(option).forEach(([key, value]) => {
+                if (value.active) {
+                    filter_valid = filter_valid || value.filtering(battery);
+                }
+            });
+            console.log(battery);
+            is_valid = filter_valid && is_valid;
+        });
+
+        console.log(is_valid);
+
+        return is_valid;
+    };
+
     if (loading) {
         return <></>;
     }
@@ -180,7 +290,7 @@ const MaterialListPage = () => {
     return (
         <PageTemplate className="battery-list-page">
             <GNB />
-            <ModalTemplate
+            {/* <ModalTemplate
                 ismodalopen={isModalOpen}
                 set_ismodalopen={setIsModalOpen}
             >
@@ -188,25 +298,49 @@ const MaterialListPage = () => {
                     on_success={() => setIsModalOpen(false)}
                     on_close={() => setIsModalOpen(false)}
                 />
-            </ModalTemplate>
-            <MaterialSideBar handle_modal={setIsModalOpen} />
+            </ModalTemplate> */}
+            <MaterialSideBar filter={filter} set_filter={setFilter} />
+
+            {infoMaterial && (
+                <MaterialInfoBar
+                    material_id={infoMaterial.id}
+                    handle_close={() => {
+                        setInfoMaterial(null);
+                    }}
+                />
+            )}
+
+            <StyledSearchingContainer>
+                <SearchingFilter
+                    id="input_filter"
+                    name="input_filter"
+                    value={inputFilter.input_filter}
+                    onChange={setInputFilter}
+                />
+            </StyledSearchingContainer>
             <StyledContentContainer>
-                <SearchingBar />
                 <StyledListContainer>
                     {data.material_list.map((element, idx) => {
-                        console.log(data.material_list);
-                        return (
-                            <MaterialCard
-                                key={idx}
-                                id={element.id}
-                                type={element.type}
-                                verified={element.verified}
-                                isRecycled={element.isRecycled}
-                                amount={element.amount}
-                                date={element.date}
-                                onClick={() => openPopup(element.id)}
-                            />
-                        );
+                        if (
+                            isFiltering(element) &&
+                            (inputFilter.input_filter === "" ||
+                                element.id.indexOf(inputFilter.input_filter) >=
+                                    0)
+                        ) {
+                            return (
+                                <MaterialCard
+                                    key={idx}
+                                    id={element.id}
+                                    img={element.img}
+                                    type={element.type}
+                                    verified={element.verified}
+                                    status={element.status}
+                                    amount={element.amount}
+                                    date={element.date}
+                                    onClick={() => setInfoMaterial(element)}
+                                />
+                            );
+                        }
                     })}
                 </StyledListContainer>
             </StyledContentContainer>

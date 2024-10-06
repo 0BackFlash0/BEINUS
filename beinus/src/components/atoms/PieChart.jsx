@@ -15,6 +15,8 @@ const PieChart = ({ data /* see data tab */ }) => (
         padAngle={2}
         activeOuterRadiusOffset={8}
         colors={{ scheme: "nivo" }}
+        // colorBy={(e) => e.data.color}
+        valueFormat=">-.1%"
         borderWidth={2}
         borderColor={{
             from: "color",
@@ -127,7 +129,7 @@ const PieChart = ({ data /* see data tab */ }) => (
             },
         ]}
         theme={{
-            text: { fontSize: 16, fontWeight: 600 },
+            text: { fontSize: 13, fontWeight: 600 },
             legends: { text: { fontSize: 16 } },
         }}
     />

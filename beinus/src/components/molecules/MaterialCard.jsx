@@ -1,3 +1,4 @@
+import Icon from "../atoms/Icon";
 import Label from "../atoms/Label";
 import Photo from "../atoms/Photo";
 import Subtitle from "../atoms/Subtitle";
@@ -6,7 +7,7 @@ import styled from "styled-components";
 const StyledCardContainer = styled.div`
     width: 300px;
     height: 240px;
-    border: solid 1px;
+    border: solid 2px;
     border-color: #b6b6b6;
     border-radius: 10px;
     padding: 10px;
@@ -14,6 +15,8 @@ const StyledCardContainer = styled.div`
     flex-direction: column;
     align-items: start;
     margin: 0px;
+
+    cursor: pointer;
 `;
 
 const StyledUpperContent = styled.div`
@@ -48,6 +51,11 @@ const StyledRow = styled.div`
     justify-content: space-between;
 `;
 
+const StyledContentContainer = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
 const StyledLabel = styled.div`
     font-size: 12pt;
     color: #666f7c;
@@ -64,9 +72,10 @@ const StyledName = styled.div`
 
 const MaterialCard = ({
     id, // 원자재 id
+    img,
     type, // 원자재 type
     verified, // 검증 여부
-    isRecycled, // 재활용 여부
+    status, // 재활용 여부
     amount, // 개수
     date, // 등록 일자
     className = "",
@@ -78,13 +87,28 @@ const MaterialCard = ({
                 <StyledLabel>{type}</StyledLabel>
             </StyledUpperContent>
             <StyledMainContent>
-                <Photo src="./assets/test.png" width="50px" height="60px" />
+                <Photo src={img} width="50px" height="60px" />
                 <StyledName>{id}</StyledName>
             </StyledMainContent>
             <StyledLowerContent>
                 <StyledRow>
                     <StyledLabel>검증여부</StyledLabel>
-                    <StyledLabel>{verified}</StyledLabel>
+                    <StyledContentContainer>
+                        <StyledLabel>{verified}</StyledLabel>
+                        {verified === "Verified" ? (
+                            <Icon
+                                icon={"license"}
+                                size="16pt"
+                                color={"#1ED760"}
+                            ></Icon>
+                        ) : (
+                            <Icon
+                                icon={"unlicense"}
+                                size="16pt"
+                                color={"red"}
+                            ></Icon>
+                        )}
+                    </StyledContentContainer>
                 </StyledRow>
 
                 <StyledRow>
@@ -93,7 +117,23 @@ const MaterialCard = ({
                 </StyledRow>
                 <StyledRow>
                     <StyledLabel>상태</StyledLabel>
-                    <StyledLabel>{isRecycled}</StyledLabel>
+
+                    <StyledContentContainer>
+                        <StyledLabel>{status}</StyledLabel>
+                        {status === "NEW" ? (
+                            <Icon
+                                icon={"fiber_new"}
+                                color="blue"
+                                size="16pt"
+                            ></Icon>
+                        ) : (
+                            <Icon
+                                icon={"recycling"}
+                                color="#1ED760"
+                                size="16pt"
+                            ></Icon>
+                        )}
+                    </StyledContentContainer>
                 </StyledRow>
                 <StyledLabel>Created at {date}</StyledLabel>
             </StyledLowerContent>

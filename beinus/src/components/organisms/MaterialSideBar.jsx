@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Label from "../atoms/Label";
-import Button from "../atoms/Button";
+import MenuButton from "../atoms/MenuButton";
 import Anchor from "../atoms/Anchor";
 import Line from "../atoms/Line";
 import Icon from "../atoms/Icon";
@@ -10,11 +10,12 @@ import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
 import Subtitle from "../atoms/Subtitle";
-import Menu from "../molecules/Menu";
+import Menu from "../atoms/Menu";
 import { useNavigate } from "react-router-dom";
-import DropDownMenu from "../molecules/DropDownMenu";
+import Filter from "../molecules/Filter";
 import Topic from "../atoms/Topic";
 import Title from "../atoms/Title";
+import { useModal } from "../../hooks/useModal";
 
 const StyledSideBarContainer = styled.div`
     position: fixed;
@@ -28,7 +29,7 @@ const StyledSideBarContainer = styled.div`
     flex-direction: column;
     align-items: start;
     background-color: white;
-    border-right: solid 1px black;
+    border-right: solid 1px #afafaf;
 `;
 
 const StyledSideBar = styled.div`
@@ -51,48 +52,59 @@ const StyledMenuBar = styled.div`
     flex-direction: column;
     align-items: start;
     /* margin-left: 30px; */
-    gap: 5px;
 `;
-
-const CategoryOptions = [
-    {
-        name: "전기차",
-    },
-];
-
-const RequestOptions = [
-    {
-        name: "유지보수 요청",
-    },
-    {
-        name: "분석 요청",
-    },
-    {
-        name: "요청 없음",
-    },
-];
 
 const MaterialSideBar = ({
     className = "", // class
-    handle_modal,
+    filter,
+    set_filter,
 }) => {
+    const { showMaterialRegister } = useModal();
+
+    const handleFilter = (option, target) => {
+        set_filter({
+            ...filter,
+            [option]: {
+                ...filter[option],
+                [target]: {
+                    ...filter[option][target],
+                    active: !filter[option][target].active,
+                },
+            },
+        });
+    };
     return (
         <StyledSideBarContainer>
             <Title>원자재 목록</Title>
             <StyledSideBar className={`MaterialSideBar ${className}`}>
-                <Button onClick={() => handle_modal(true)}>원자재 등록</Button>
+                <MenuButton onClick={showMaterialRegister}>
+                    원자재 등록
+                </MenuButton>
 
                 <StyledMenuBar>
-                    <DropDownMenu
-                        icon="battery_0_bar"
-                        name="카테고리"
-                        list={CategoryOptions}
+                    <Filter
+                        icon="category"
+                        name="종류"
+                        filter={filter.type}
+                        handle_filter={(target) => handleFilter("type", target)}
                     />
 
-                    <DropDownMenu
-                        icon="info"
-                        name="요청"
-                        list={RequestOptions}
+                    <Filter
+                        icon="license"
+                        name="검증 여부"
+                        filter={filter.isVerified}
+                        handle_filter={(target) =>
+                            handleFilter("isVerified", target)
+                        }
+                    />
+
+                    <Filter
+                        icon="recycling"
+                        name="상태"
+                        filter={filter.status}
+                        handle_filter={(target) =>
+                            handleFilter("status", target)
+                        }
                     />
                 </StyledMenuBar>
             </StyledSideBar>

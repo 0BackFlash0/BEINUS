@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Label from "../atoms/Label";
 import Button from "../atoms/Button";
@@ -10,11 +10,13 @@ import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
 import Subtitle from "../atoms/Subtitle";
-import Menu from "../molecules/Menu";
+import Menu from "../atoms/Menu";
 import { useNavigate } from "react-router-dom";
-import DropDownMenu from "../molecules/DropDownMenu";
+import Filter from "../molecules/Filter";
 import Topic from "../atoms/Topic";
 import Title from "../atoms/Title";
+import MenuButton from "../atoms/MenuButton";
+import { useModal } from "../../hooks/useModal";
 
 const StyledSideBarContainer = styled.div`
     position: fixed;
@@ -28,7 +30,7 @@ const StyledSideBarContainer = styled.div`
     flex-direction: column;
     align-items: start;
     background-color: white;
-    border-right: solid 1px black;
+    border-right: solid 1px #afafaf;
 `;
 
 const StyledSideBar = styled.div`
@@ -51,48 +53,71 @@ const StyledMenuBar = styled.div`
     flex-direction: column;
     align-items: start;
     /* margin-left: 30px; */
-    gap: 5px;
 `;
-
-const CategoryOptions = [
-    {
-        name: "전기차",
-    },
-];
-
-const RequestOptions = [
-    {
-        name: "유지보수 요청",
-    },
-    {
-        name: "분석 요청",
-    },
-    {
-        name: "요청 없음",
-    },
-];
 
 const BatterySideBar = ({
     className = "", // class
-    handle_modal,
+    filter,
+    set_filter,
 }) => {
+    const { showBatteryRegister } = useModal();
+
+    const handleFilter = (option, target) => {
+        set_filter({
+            ...filter,
+            [option]: {
+                ...filter[option],
+                [target]: {
+                    ...filter[option][target],
+                    active: !filter[option][target].active,
+                },
+            },
+        });
+    };
+
     return (
         <StyledSideBarContainer>
             <Title>배터리 목록</Title>
             <StyledSideBar className={`BatterySideBar ${className}`}>
-                <Button onClick={() => handle_modal(true)}>배터리 생성</Button>
+                <MenuButton onClick={showBatteryRegister}>
+                    배터리 생성
+                </MenuButton>
 
                 <StyledMenuBar>
-                    <DropDownMenu
-                        icon="battery_0_bar"
+                    <Filter
+                        icon="category"
                         name="카테고리"
-                        list={CategoryOptions}
+                        filter={filter.category}
+                        handle_filter={(target) =>
+                            handleFilter("category", target)
+                        }
                     />
 
-                    <DropDownMenu
+                    <Filter
                         icon="info"
                         name="요청"
-                        list={RequestOptions}
+                        filter={filter.request}
+                        handle_filter={(target) =>
+                            handleFilter("request", target)
+                        }
+                    />
+
+                    <Filter
+                        icon="license"
+                        name="검증 여부"
+                        filter={filter.isVerified}
+                        handle_filter={(target) =>
+                            handleFilter("isVerified", target)
+                        }
+                    />
+
+                    <Filter
+                        icon="info"
+                        name="상태"
+                        filter={filter.status}
+                        handle_filter={(target) =>
+                            handleFilter("status", target)
+                        }
                     />
                 </StyledMenuBar>
             </StyledSideBar>

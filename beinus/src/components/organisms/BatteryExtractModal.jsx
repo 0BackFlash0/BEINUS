@@ -70,8 +70,7 @@ const tempMaterial = {
 const BatteryExtractModal = ({
     className = "",
     battery_id,
-    on_success,
-    on_close,
+    handle_close,
     ...props
 }) => {
     const { showCaution } = useCaution();
@@ -126,7 +125,7 @@ const BatteryExtractModal = ({
                 if (response.status === 200) {
                     showCaution(
                         `원자재 추출에 성공했습니다. \n ID: ${battery_id}`,
-                        on_close
+                        handle_close
                     );
                 } else {
                     showCaution("알수없는 에러가 발생했습니다.");
@@ -200,7 +199,7 @@ const BatteryExtractModal = ({
             <StyledButtonContainer>
                 <Button onClick={handleExtract}>확인</Button>
                 <Button
-                    onClick={on_close}
+                    onClick={handle_close}
                     color={"red"}
                     hover_color={"#c50000"}
                 >

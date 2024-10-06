@@ -9,45 +9,35 @@ const StyledSearchingContainer = styled.div`
     /* min-width: 720px; */
 `;
 
-const StyledSearchingBar = styled(TextInput)`
+const StyledSearchingFilter = styled(TextInput)`
+    z-index: 3;
     width: 100%;
     font-size: 12px;
     border-radius: 10px;
     padding: 10px 20px;
 `;
 
-const SearchIcon = styled(Icon)`
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #3498db;
-`;
-
-const SearchingBar = ({
+const SearchingFilter = ({
     id = "",
     name = "",
     className = "",
     value = "",
     onChange,
-    onSearch,
 }) => {
     return (
         <StyledSearchingContainer
             className={`searching-container ${className}`}
         >
-            <StyledSearchingBar
+            <StyledSearchingFilter
                 className={`searching-input ${className}`}
                 id={id}
                 name={name}
-                placeholder="배터리 ID로 찾기"
+                placeholder="ID로 찾기"
                 value={value}
                 onChange={onChange}
-            ></StyledSearchingBar>
-            <SearchIcon icon="search" onClick={(e) => onSearch(e)} />
+            ></StyledSearchingFilter>
         </StyledSearchingContainer>
     );
 };
 
-export default SearchingBar;
+export default SearchingFilter;

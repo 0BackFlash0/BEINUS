@@ -116,12 +116,7 @@ const tempMaterial = {
     amount: "0",
 };
 
-const BatteryRegisterModal = ({
-    className = "",
-    on_success,
-    on_close,
-    ...props
-}) => {
+const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
     const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
@@ -186,7 +181,7 @@ const BatteryRegisterModal = ({
                 if (response.status === 200) {
                     showCaution(
                         `배터리 ID가 발급되었습니다. \n ID: ${response.data.batteryID}`,
-                        on_close
+                        handle_close
                     );
                 } else {
                     showCaution("알수없는 에러가 발생했습니다.");
@@ -288,7 +283,7 @@ const BatteryRegisterModal = ({
                 <StyledButtonContainer>
                     <Button onClick={handleRegister}>확인</Button>
                     <Button
-                        onClick={on_close}
+                        onClick={handle_close}
                         color={"red"}
                         hover_color={"#c50000"}
                     >

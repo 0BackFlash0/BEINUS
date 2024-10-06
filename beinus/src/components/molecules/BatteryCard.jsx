@@ -1,4 +1,5 @@
 import Content from "../atoms/Content";
+import Icon from "../atoms/Icon";
 import Label from "../atoms/Label";
 import Photo from "../atoms/Photo";
 import Subtitle from "../atoms/Subtitle";
@@ -7,7 +8,7 @@ import styled from "styled-components";
 const StyledCardContainer = styled.div`
     width: 300px;
     height: 210px;
-    border: solid 1px;
+    border: solid 2px;
     border-color: #b6b6b6;
     border-radius: 10px;
     padding: 10px;
@@ -15,6 +16,8 @@ const StyledCardContainer = styled.div`
     flex-direction: column;
     align-items: start;
     margin: 0px;
+
+    cursor: pointer;
 `;
 
 const StyledUpperContent = styled.div`
@@ -49,6 +52,11 @@ const StyledRow = styled.div`
     justify-content: space-between;
 `;
 
+const StyledContentContainer = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
 const StyledLabel = styled.div`
     font-size: 12pt;
     color: #666f7c;
@@ -65,6 +73,7 @@ const StyledName = styled.div`
 
 const BatteryCard = ({
     id, // 배터리 id
+    img,
     category, // 배터리 카테고리
     verified, // 검증 여부
     status,
@@ -77,21 +86,67 @@ const BatteryCard = ({
     return (
         <StyledCardContainer className={`battery-card ${className}`} {...props}>
             <StyledUpperContent>
-                <StyledLabel>{category}</StyledLabel>
+                <StyledRow>
+                    <StyledLabel>{category}</StyledLabel>
+                    <StyledContentContainer>
+                        {isRequestMaintain ? (
+                            <Icon
+                                icon={"info"}
+                                size="14pt"
+                                color={"red"}
+                            ></Icon>
+                        ) : (
+                            ""
+                        )}
+
+                        {isRequestAnalysis ? (
+                            <Icon
+                                icon={"info"}
+                                size="14pt"
+                                color={"blue"}
+                            ></Icon>
+                        ) : (
+                            ""
+                        )}
+                    </StyledContentContainer>
+                </StyledRow>
             </StyledUpperContent>
             <StyledMainContent>
-                <Photo src="./assets/test.png" width="50px" height="60px" />
+                <Photo src={img} width="50px" height="60px" />
                 <StyledName>{id}</StyledName>
             </StyledMainContent>
             <StyledLowerContent>
                 <StyledRow>
                     <StyledLabel>검증여부</StyledLabel>
-                    <StyledLabel>{verified}</StyledLabel>
+
+                    <StyledContentContainer>
+                        <StyledLabel>{verified}</StyledLabel>
+                        {verified === "VERIFIED" ? (
+                            <Icon
+                                icon={"license"}
+                                size="16pt"
+                                color={"#1ED760"}
+                            ></Icon>
+                        ) : (
+                            <Icon
+                                icon={"unlicense"}
+                                size="16pt"
+                                color={"red"}
+                            ></Icon>
+                        )}
+                    </StyledContentContainer>
                 </StyledRow>
 
                 <StyledRow>
                     <StyledLabel>상태</StyledLabel>
-                    <StyledLabel>{status}</StyledLabel>
+                    <StyledContentContainer>
+                        <StyledLabel>{status}</StyledLabel>
+                        {status === "Disassembled" ? (
+                            <Icon icon={"raw_off"} size="16pt"></Icon>
+                        ) : (
+                            <Icon icon={"raw_on"} size="16pt"></Icon>
+                        )}
+                    </StyledContentContainer>
                 </StyledRow>
                 <StyledLabel>Created at {date}</StyledLabel>
             </StyledLowerContent>

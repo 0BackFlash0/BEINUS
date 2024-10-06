@@ -30,7 +30,8 @@ const introductions = [
 ];
 
 const StyledPageTemplate = styled(PageTemplate)`
-    padding-top: 150px;
+    padding-top: 120px;
+    gap: 70px;
 `;
 
 const MainPage = () => {
@@ -65,13 +66,7 @@ const MainPage = () => {
                     objectfit="cover"
                     width="600px"
                 />
-                <SearchingBar
-                    name="battery_id"
-                    id="battery_id"
-                    value={value.battery_id ? value.battery_id : ""}
-                    onChange={handleOnChange}
-                    onSearch={onSearch}
-                />
+
                 <IntroductionList introductions={introductions} />
             </StyledPageTemplate>
         </div>

@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ModalProvider } from "./hooks/useCaution";
+import { CautionProvider } from "./hooks/useCaution";
+import { ModalProvider } from "./hooks/useModal";
 import { Provider } from "react-redux";
 import store from "./store";
 import { PersistGate } from "redux-persist/integration/react";
@@ -16,9 +17,11 @@ root.render(
     <React.StrictMode>
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <ModalProvider>
-                    <App />
-                </ModalProvider>
+                <CautionProvider>
+                    <ModalProvider>
+                        <App />
+                    </ModalProvider>
+                </CautionProvider>
             </PersistGate>
         </Provider>
     </React.StrictMode>

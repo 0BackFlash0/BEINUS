@@ -14,7 +14,7 @@ const StyledModalContainer = styled.div`
 
 const StyledBackdrop = styled.div`
     position: fixed;
-    z-index: 2;
+    z-index: 4;
     top: 0;
     left: 0;
     width: 100%;
@@ -63,14 +63,14 @@ const ModalTemplate = ({
                     className={`modal ${className}`}
                     {...props}
                 >
-                    <StyledClossButton onClick={closeModal}>
+                    {/* <StyledClossButton onClick={closeModal}>
                         <Icon
                             icon="close"
                             color="white"
                             weight="600"
                             size="24pt"
                         />
-                    </StyledClossButton>
+                    </StyledClossButton> */}
                     {children}
                 </StyledModalContainer>
             </StyledBackdrop>

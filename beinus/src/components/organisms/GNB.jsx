@@ -20,7 +20,7 @@ const StyledNavationContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-bottom: solid 1px black;
+    border-bottom: solid 1px #afafaf;
 `;
 
 const StyledNavigationBar = styled.div`

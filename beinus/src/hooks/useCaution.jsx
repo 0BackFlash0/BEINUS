@@ -6,11 +6,11 @@ import Content from "../components/atoms/Content";
 import Subtitle from "../components/atoms/Subtitle";
 
 // Context 생성
-const ModalContext = createContext();
+const CautionContext = createContext();
 
 const StyledBackdrop = styled.div`
     position: fixed;
-    z-index: 2;
+    z-index: 9;
     top: 0;
     left: 0;
     width: 100%;
@@ -23,7 +23,7 @@ const StyledBackdrop = styled.div`
 `;
 
 const StyledCautionContainer = styled.div`
-    z-index: 3;
+    z-index: 10;
     position: relative;
     border-radius: 20px;
     /* width: 480px; */
@@ -36,8 +36,8 @@ const StyledCautionContainer = styled.div`
     background-color: white;
 `;
 
-// ModalProvider: 모달 상태를 관리하는 컴포넌트
-export const ModalProvider = ({ children }) => {
+// CautionProvider: 모달 상태를 관리하는 컴포넌트
+export const CautionProvider = ({ children }) => {
     const [modalContent, setModalContent] = useState(null);
     const [modalCloseEvent, setModalCloseEvent] = useState(null);
 
@@ -64,7 +64,7 @@ export const ModalProvider = ({ children }) => {
     };
 
     return (
-        <ModalContext.Provider
+        <CautionContext.Provider
             value={{ modalContent, showCaution, hideCaution }}
         >
             {children}
@@ -76,11 +76,11 @@ export const ModalProvider = ({ children }) => {
                     </StyledCautionContainer>
                 </StyledBackdrop>
             )}
-        </ModalContext.Provider>
+        </CautionContext.Provider>
     );
 };
 
 // 커스텀 hook으로 쉽게 context 사용
 export const useCaution = () => {
-    return useContext(ModalContext);
+    return useContext(CautionContext);
 };
