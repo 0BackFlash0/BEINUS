@@ -1,6 +1,7 @@
+import { useEffect, useRef } from "react";
 import Label from "../atoms/Label";
 import Subtitle from "../atoms/Subtitle";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const StyledOptionContainer = styled.div`
     display: flex;
@@ -12,7 +13,7 @@ const StyledOptionContainer = styled.div`
 const StyledOptionList = styled.select`
     width: 100%;
     font-size: 16pt;
-    padding: 10px;
+    padding: 10px 0 13px 0;
     border-style: solid;
     border-color: #d4d4d4;
     border-width: 0 0 1px 0;
@@ -27,6 +28,17 @@ const StyledOptionList = styled.select`
         color: #b3b3b3;
     }
 `;
+
+// const StyledOption = styled.option`
+//     width: 100%;
+//     max-width: 50px;
+//     padding: "10px";
+//     /* whitespace: "nowrap"; */
+//     overflow: "hidden";
+//     /* textoverflow: "ellipsis"; */
+//     cursor: "pointer";
+//     position: "relative";
+// `;
 
 const OptionGroup = ({
     title, // Option 제목
@@ -50,6 +62,17 @@ const OptionGroup = ({
         ...(onChange && { onChange: onChange }),
     };
 
+    useEffect(() => {
+        if (options.length > 0 && value !== options[0].key) {
+            onChange({
+                target: {
+                    name: name,
+                    value: options[0].key,
+                },
+            });
+        }
+    }, [options]);
+
     return (
         <StyledOptionContainer className={`${className}`}>
             {title ? (
@@ -60,7 +83,7 @@ const OptionGroup = ({
                 ""
             )}
             <StyledOptionList className="select" {...optionOptionalProps}>
-                {options.map((option) => (
+                {options.map((option, index) => (
                     <option
                         key={option.key}
                         value={option.key}
@@ -71,7 +94,10 @@ const OptionGroup = ({
                 ))}
             </StyledOptionList>
             {is_description ? (
-                <Label className={`input-description`} valid={valid}>
+                <Label
+                    className={`input-description`}
+                    valid={valid ? "success" : "fail"}
+                >
                     {description ? `${description}` : <br />}
                 </Label>
             ) : (

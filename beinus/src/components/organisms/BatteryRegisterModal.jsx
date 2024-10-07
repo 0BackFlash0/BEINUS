@@ -199,9 +199,6 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
         //     showCaution("모든 값을 입력해주세요.");
         //     return;
         // }
-
-        console.log(value);
-
         await createBattery({
             category: value.category,
             voltage: value.voltage,
@@ -298,10 +295,10 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
 
                     {value.materialList && materialData
                         ? value.materialList.map((element, idx) => {
-                              console.log(element);
                               return (
                                   <RegisterMaterialOption
                                       key={idx}
+                                      index={idx}
                                       type_value={element.type}
                                       material_options={materialData.material_list
                                           .filter(
@@ -316,6 +313,13 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                                           })}
                                       material_id_value={element.materialID}
                                       amount_value={element.amount}
+                                      max_amount={
+                                          materialData.material_list.filter(
+                                              (material) =>
+                                                  material.id ===
+                                                  element.materialID
+                                          )[0].amount
+                                      }
                                       on_change={(e) =>
                                           handleOnChangeMaterial(e, idx)
                                       }

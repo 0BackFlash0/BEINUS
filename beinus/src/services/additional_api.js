@@ -113,6 +113,8 @@ export const createBattery = (data) => {
     const { category, voltage, weight, capacity, lifecycle, materialList } =
         data;
 
+    console.log(materialList);
+
     const body = {
         category: category,
         voltage: voltage,

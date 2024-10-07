@@ -6,15 +6,25 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import { registerBattery } from "../../services/additional_api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const StyledRowGroupContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+`;
 
 const StyledMaterialOptionContainer = styled.div`
     position: relative;
     width: 100%;
-    padding: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: start;
+    border: dotted 1px;
+    border-radius: 10px;
 `;
 
 const StyledInputGroup = styled(InputGroup)`
@@ -27,6 +37,16 @@ const StyledOptionGroup = styled(OptionGroup)`
     width: 100%;
     padding: 0 10px 0 0;
     flex-grow: 1 0;
+`;
+
+const StyledIDOptionGroup = styled(OptionGroup)`
+    width: 100%;
+    padding: 0 10px 0 0;
+    flex-grow: 1 0;
+`;
+
+const StyledSubtitle = styled(Subtitle)`
+    margin-bottom: 10px;
 `;
 
 const MaterialOptions = [
@@ -61,6 +81,7 @@ const StatusOptions = [
 
 const RegisterMaterialOption = ({
     className = "",
+    index = "",
     type_value = "",
     material_options,
     // statusValue = "",
@@ -69,47 +90,40 @@ const RegisterMaterialOption = ({
     on_change = () => {},
     ...props
 }) => {
-    console.log(material_options);
     return (
         <StyledMaterialOptionContainer
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledOptionGroup
-                options={MaterialOptions}
-                id="type"
-                name="type"
-                value={type_value ? type_value : ""}
-                onChange={on_change}
-                title="종류"
-                is_description={false}
-            />
+            <StyledSubtitle>원자재 {index + 1}</StyledSubtitle>
+            <StyledRowGroupContainer>
+                <StyledOptionGroup
+                    options={MaterialOptions}
+                    id="type"
+                    name="type"
+                    value={type_value ? type_value : ""}
+                    onChange={on_change}
+                    title="종류"
+                    is_description={false}
+                />
 
-            {/* <StyledOptionGroup
-                options={StatusOptions}
-                id="status"
-                name="status"
-                value={statusValue ? statusValue : ""}
-                on_change={on_change}
-                title="상태"
-                is_description={false}
-            /> */}
-            <StyledOptionGroup
+                <StyledInputGroup
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    value={amount_value ? amount_value : ""}
+                    onChange={on_change}
+                    title="개수"
+                    is_description={false}
+                />
+            </StyledRowGroupContainer>
+            <StyledIDOptionGroup
                 options={material_options}
                 id="materialID"
                 name="materialID"
                 value={material_id_value ? material_id_value : ""}
                 onChange={on_change}
                 title="원자재 ID"
-                is_description={false}
-            />
-            <StyledInputGroup
-                type="number"
-                id="amount"
-                name="amount"
-                value={amount_value ? amount_value : ""}
-                onChange={on_change}
-                title="개수"
                 is_description={false}
             />
         </StyledMaterialOptionContainer>

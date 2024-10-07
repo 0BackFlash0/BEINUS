@@ -191,7 +191,6 @@ const BatteryListPage = () => {
                     setData({
                         ...data,
                         battery_list: response.data.map((element, idx) => {
-                            console.log(element);
                             return {
                                 img: "./assets/test.png",
                                 id: element.batteryID,
@@ -204,7 +203,7 @@ const BatteryListPage = () => {
                             };
                         }),
                     });
-                    console.log(response);
+                    // console.log(response);
                     setLoading(false);
                 } else {
                     showCaution("알수없는 에러가 발생했습니다.");
@@ -221,17 +220,15 @@ const BatteryListPage = () => {
 
         Object.entries(filter).forEach(([category, option]) => {
             let filter_valid = false;
-            console.log(option);
+            // console.log(option);
             Object.entries(option).forEach(([key, value]) => {
                 if (value.active) {
                     filter_valid = filter_valid || value.filtering(battery);
                 }
             });
-            console.log(battery);
+            // console.log(battery);
             is_valid = filter_valid && is_valid;
         });
-
-        console.log(is_valid);
 
         return is_valid;
     };
