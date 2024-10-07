@@ -7,6 +7,7 @@ import useStates from "../../hooks/useStates";
 import { useNavigate } from "react-router-dom";
 import OptionGroup from "../molecules/OptionGroup";
 import { register } from "../../services/base_api";
+import { useCaution } from "../../hooks/useCaution";
 // import { emailValid, register } from "../../services/api";
 
 const StyledRegisterContainer = styled.div`
@@ -76,23 +77,22 @@ const RoleTypes = [
 const RegisterForm = ({
     className, // class
 }) => {
+    const { showCaution } = useCaution();
+
     const [value, handleOnChange] = useInput({
         username: "",
         org: "org1",
         password: "",
-        // passwordConfirm: null,
     });
 
     const [description, setDescription] = useStates({
         username: "",
-        email: "",
         password: "",
         passwordConfirm: "",
     });
 
     const [valid, setValid] = useStates({
         username: false,
-        email: false,
         password: false,
         passwordConfirm: false,
     });
@@ -113,36 +113,14 @@ const RegisterForm = ({
     }, [value.username]);
 
     React.useEffect(() => {
-        const text = value.email;
-        if (text != null) {
-            if (text.length < 1) {
-                setValid({ ["email"]: false });
-                setDescription({ ["email"]: "필수 항목 입니다." });
-            } else {
-                setValid({ ["email"]: false });
-                setDescription({ ["email"]: "" });
-            }
-        }
-    }, [value.email]);
-
-    React.useEffect(() => {
         const text = value.password;
-        const re = new RegExp(
-            "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$"
-        );
         if (text != null) {
             if (text.length < 1) {
                 setValid({ ["password"]: false });
                 setDescription({ ["password"]: "필수 항목 입니다." });
-            } else if (re.test(text)) {
+            } else {
                 setValid({ ["password"]: true });
                 setDescription({ ["password"]: "사용 가능합니다." });
-            } else {
-                setValid({ ["password"]: false });
-                setDescription({
-                    ["password"]:
-                        "영어, 숫자, 특수기호를 포함한 8~20자여야 합니다.",
-                });
             }
         }
     }, [value.password]);
@@ -171,61 +149,20 @@ const RegisterForm = ({
             org: value.org,
         })
             .then((response) => {
-                return response;
+                if (response.status === 200) {
+                    navigate("/login");
+                } else {
+                    showCaution(`회원가입 중 알 수 없는 오류가 발생했습니다.`);
+                    console.log(response);
+                }
             })
-            .catch((response) => response.data);
-        console.log(loginCheck);
-        if (loginCheck.status === 200) {
-            navigate("/login");
-            // dispatch(
-            //     userLogin({
-            //         email: value.email,
-            //         time: new Date().toString(),
-            //     })
-            // );
-        } else {
-            console.log("로그인 중 오류가 발생했습니다.");
-        }
+            .catch((error) =>
+                showCaution(`에러가 발생했습니다. \n ${error.data.error}`)
+            );
     };
 
     return (
         <StyledRegisterContainer className={`${className}`}>
-            {/* <StyledIDCheckContainer>
-                <StyledInputGroup
-                    id="email"
-                    name="email"
-                    type="email"
-                    title="이메일"
-                    valid={valid.email}
-                    value={value.email ? value.email : ""}
-                    description={description.email}
-                    placeholder="이메일을 입력해주세요."
-                    className={``}
-                    onChange={handleOnChange}
-                />
-                <StyledCheckButton
-                    className="check-button"
-                    onClick={async function () {
-                        // const emailCheck = await emailValid({
-                        //     email: value.email,
-                        // })
-                        //     .then((response) => response.data)
-                        //     .catch((response) => response.data);
-                        // console.log(emailCheck);
-                        // if (emailCheck?.success === true) {
-                        //     setValid({ ["email"]: true });
-                        //     setDescription({ ["email"]: "사용 가능합니다." });
-                        // } else {
-                        //     setValid({ ["email"]: false });
-                        //     setDescription({
-                        //         ["email"]: emailCheck?.error.message,
-                        //     });
-                        // }
-                    }}
-                >
-                    검사
-                </StyledCheckButton>
-            </StyledIDCheckContainer> */}
             <StyledInputGroup
                 id="username"
                 name="username"
@@ -244,9 +181,8 @@ const RegisterForm = ({
                 id="org"
                 name="org"
                 options={RoleTypes}
-                title="종류"
+                title="소속"
                 value={value.role ? value.role : ""}
-                placeholder="이름을 입력해주세요."
                 className=""
                 onChange={(e) => {
                     handleOnChange(e);
@@ -277,32 +213,13 @@ const RegisterForm = ({
             <Button
                 onClick={async function () {
                     console.log(value);
-                    handleRegister();
-                    // if (
-                    //     valid.username &&
-                    //     valid.email &&
-                    //     valid.password &&
-                    //     valid.passwordConfirm
-                    // ) {
-                    //     const registerCheck = await register({
-                    //         email: value.email,
-                    //         password: value.password,
-                    //         username: value.username,
-                    //     }).then((response) => response.data);
-                    //     if (registerCheck.success) navigate("/");
-                    //     else {
-                    //     }
-                    // } else {
-                    //     let newDescriptions = {};
-                    //     for (let k in valid) {
-                    //         if (!valid[k]) {
-                    //             Object.assign(newDescriptions, {
-                    //                 [k]: "사용 불가능합니다.",
-                    //             });
-                    //         }
-                    //     }
-                    //     setDescription(newDescriptions);
-                    // }
+                    if (
+                        valid.username &&
+                        valid.password &&
+                        valid.passwordConfirm
+                    ) {
+                        handleRegister();
+                    }
                 }}
             >
                 회원가입

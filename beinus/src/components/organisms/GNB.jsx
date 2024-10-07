@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
+import Subtitle from "../atoms/Subtitle";
 
 const StyledNavationContainer = styled.div`
     position: fixed;
@@ -49,6 +50,7 @@ const StyledRightBar = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 30px;
 `;
 
 const StyledMenuBar = styled.div`
@@ -59,6 +61,17 @@ const StyledMenuBar = styled.div`
     align-items: center;
     margin-left: 30px;
     gap: 15px;
+`;
+
+const StyledLogout = styled(Icon)`
+    cursor: pointer;
+`;
+
+const StyledUserName = styled.div`
+    display: inline;
+    margin: 0;
+    padding: 0;
+    color: blue;
 `;
 
 const GNB = ({
@@ -95,10 +108,12 @@ const GNB = ({
                 <StyledRightBar className={`Right-GNB`}>
                     {user.isLogin ? (
                         <>
-                            <Label className="d-block pe-2">
-                                {user.user}님{" "}
-                            </Label>
-                            <Icon
+                            <Title>
+                                <StyledUserName>{user.user}</StyledUserName>님
+                            </Title>
+                            <StyledLogout
+                                icon="logout"
+                                size="40px"
                                 onClick={async () => {
                                     dispatch(userLogout());
                                     setTimeout(() => puerge(), 200);
@@ -118,7 +133,7 @@ const GNB = ({
                         </>
                     ) : (
                         <Anchor to="/login">
-                            <Icon className="fs-1" icon="login" size="40px" />
+                            <Icon icon="login" size="40px" />
                         </Anchor>
                     )}
                 </StyledRightBar>

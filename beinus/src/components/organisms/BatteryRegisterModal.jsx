@@ -5,8 +5,11 @@ import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
-import { createBattery } from "../../services/additional_api";
-import { useState } from "react";
+import {
+    createBattery,
+    queryAllMaterials,
+} from "../../services/additional_api";
+import { useEffect, useState } from "react";
 import RegisterMaterialOption from "./RegisterMaterialOption";
 import { useCaution } from "../../hooks/useCaution";
 
@@ -110,7 +113,7 @@ const HarzardousOptions = [
 ];
 
 const tempMaterial = {
-    type: "nickel",
+    type: "Nickel",
     // status: "new",
     materialID: "",
     amount: "0",
@@ -121,7 +124,7 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
 
     const [value, handleOnChange] = useInput({
         category: "",
-        voltage: "",
+        voltage: "0",
         weight: "0",
         isHardardous: "yes",
         capacity: "0",
@@ -129,11 +132,43 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
         materialList: [tempMaterial],
     });
 
-    // const handleOnChangeList = (e) => {
-    // const temp_list = [];
-    // const { name, value } = e.target;
-    // setInputValue({ ...inputValue, [name]: value });
-    // };
+    const [materialData, setMaterialData] = useState(null);
+
+    useEffect(() => {
+        queryAllMaterials()
+            .then((response) => {
+                if (response.status === 200) {
+                    setMaterialData({
+                        ...materialData,
+                        material_list: [
+                            ...response.data.newMaterials.map((element) => {
+                                return {
+                                    id: element.materialID,
+                                    type: element.name,
+                                    amount: element.quantity,
+                                };
+                            }),
+                            ...response.data.recycledMaterials.map(
+                                (element) => {
+                                    return {
+                                        id: element.materialID,
+                                        type: element.name,
+                                        amount: element.quantity,
+                                    };
+                                }
+                            ),
+                        ],
+                    });
+                } else {
+                    console.log(response.data);
+                    showCaution("알수없는 에러가 발생했습니다.");
+                }
+            })
+            .catch((response) => {
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+                console.log(response);
+            });
+    }, []);
 
     const addMaterial = () => {
         const changeEvent = {
@@ -212,7 +247,7 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                         />
 
                         <StyledInputGroup
-                            type="text"
+                            type="number"
                             id="voltage"
                             name="voltage"
                             value={value.voltage ? value.voltage : ""}
@@ -261,17 +296,27 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                 <StyledMaterialListContainer>
                     <StyledSubtitle>원자재 목록</StyledSubtitle>
 
-                    {value.materialList
+                    {value.materialList && materialData
                         ? value.materialList.map((element, idx) => {
                               console.log(element);
                               return (
                                   <RegisterMaterialOption
                                       key={idx}
-                                      typeValue={element.type}
-                                      //   statusValue={element.status}
-                                      materialIDValue={element.materialID}
-                                      amountValue={element.amount}
-                                      onChange={(e) =>
+                                      type_value={element.type}
+                                      material_options={materialData.material_list
+                                          .filter(
+                                              (material) =>
+                                                  material.type === element.type
+                                          )
+                                          .map((target) => {
+                                              return {
+                                                  key: target.id,
+                                                  name: target.id,
+                                              };
+                                          })}
+                                      material_id_value={element.materialID}
+                                      amount_value={element.amount}
+                                      on_change={(e) =>
                                           handleOnChangeMaterial(e, idx)
                                       }
                                   />

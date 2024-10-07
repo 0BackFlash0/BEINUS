@@ -31,19 +31,19 @@ const StyledOptionGroup = styled(OptionGroup)`
 
 const MaterialOptions = [
     {
-        key: "nickel",
+        key: "Nickel",
         name: "니켈",
     },
     {
-        key: "cobalt",
+        key: "Cobalt",
         name: "코발트",
     },
     {
-        key: "lithium",
+        key: "Lithium",
         name: "리튬",
     },
     {
-        key: "manganese",
+        key: "Manganese",
         name: "망간",
     },
 ];
@@ -61,13 +61,15 @@ const StatusOptions = [
 
 const RegisterMaterialOption = ({
     className = "",
-    typeValue = "",
+    type_value = "",
+    material_options,
     // statusValue = "",
-    materialIDValue = "",
-    amountValue = "",
-    onChange = () => {},
+    material_id_value = "",
+    amount_value = "",
+    on_change = () => {},
     ...props
 }) => {
+    console.log(material_options);
     return (
         <StyledMaterialOptionContainer
             className={`battery-register-modal ${className}`}
@@ -77,8 +79,8 @@ const RegisterMaterialOption = ({
                 options={MaterialOptions}
                 id="type"
                 name="type"
-                value={typeValue ? typeValue : ""}
-                onChange={onChange}
+                value={type_value ? type_value : ""}
+                onChange={on_change}
                 title="종류"
                 is_description={false}
             />
@@ -88,16 +90,16 @@ const RegisterMaterialOption = ({
                 id="status"
                 name="status"
                 value={statusValue ? statusValue : ""}
-                onChange={onChange}
+                on_change={on_change}
                 title="상태"
                 is_description={false}
             /> */}
-            <StyledInputGroup
-                type="text"
+            <StyledOptionGroup
+                options={material_options}
                 id="materialID"
                 name="materialID"
-                value={materialIDValue ? materialIDValue : ""}
-                onChange={onChange}
+                value={material_id_value ? material_id_value : ""}
+                onChange={on_change}
                 title="원자재 ID"
                 is_description={false}
             />
@@ -105,8 +107,8 @@ const RegisterMaterialOption = ({
                 type="number"
                 id="amount"
                 name="amount"
-                value={amountValue ? amountValue : ""}
-                onChange={onChange}
+                value={amount_value ? amount_value : ""}
+                onChange={on_change}
                 title="개수"
                 is_description={false}
             />

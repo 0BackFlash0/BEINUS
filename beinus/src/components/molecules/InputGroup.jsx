@@ -68,7 +68,10 @@ const InputGroup = ({
             />
 
             {is_description ? (
-                <Label className={`input-description`} valid={valid}>
+                <Label
+                    className={`input-description`}
+                    valid={valid ? "success" : "fail"}
+                >
                     {description ? `${description}` : <br />}
                 </Label>
             ) : (

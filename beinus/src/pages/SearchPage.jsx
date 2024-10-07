@@ -25,7 +25,7 @@ import CardMultiChart from "../components/molecules/CardMultiChart";
 import Icon from "../components/atoms/Icon";
 
 const StyledContentContainer = styled.div`
-    padding: 30px 30px 0 30px;
+    padding: 30px 30px 30px 30px;
     margin-top: 60px;
     margin-left: 240px;
     width: calc(100% - 240px);

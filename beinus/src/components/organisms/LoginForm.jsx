@@ -28,6 +28,14 @@ const StyledAnchor = styled(Anchor)`
     margin-top: 15px;
 `;
 
+const ErrorMessage = styled.div`
+    width: 100%;
+    padding: 10px;
+    color: red;
+    text-align: start;
+    border: none;
+`;
+
 const LoginForm = ({
     className, // class
 }) => {
@@ -53,24 +61,24 @@ const LoginForm = ({
         })
             .then((response) => {
                 console.log(response);
-                localStorage.setItem("token", response.data.token);
+
+                if (response.status === 200) {
+                    localStorage.setItem("token", response.data.token);
+                    dispatch(
+                        userLogin({
+                            username: value.username,
+                            time: new Date().toString(),
+                        })
+                    );
+                    navigate("/");
+                } else if (response.status === 401) {
+                    setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
+                } else {
+                    setErrorMsg("로그인 중 오류가 발생했습니다.");
+                }
                 return response;
             })
             .catch((response) => response.data);
-        console.log(loginCheck);
-        if (loginCheck.status === 200) {
-            navigate("/");
-            dispatch(
-                userLogin({
-                    email: value.email,
-                    time: new Date().toString(),
-                })
-            );
-        } else if (loginCheck.status === 401) {
-            setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
-        } else {
-            setErrorMsg("로그인 중 오류가 발생했습니다.");
-        }
     };
 
     return (
@@ -92,9 +100,9 @@ const LoginForm = ({
                 placeholder="비밀번호"
             />
             {errorMsg && (
-                <div className="w-100 mb-3 p-3 text-danger text-start border-0 bg-body-tertiary">
-                    <Label className="fs-6">{errorMsg}</Label>
-                </div>
+                <ErrorMessage className="">
+                    <Label valid={"fail"}>{errorMsg}</Label>
+                </ErrorMessage>
             )}
             <Button
                 className={"login-button"}

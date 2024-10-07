@@ -10,12 +10,10 @@ export const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
-    console.log(token);
     // console.log(token);
     if (token && token !== "undefined") {
-        console.log(token);
+        // console.log(token);
         config.headers["Authorization"] = `Bearer ${token}`;
-        // config.headers["access"] = `${token}`;
     } else {
         console.log("no token");
     }
@@ -28,6 +26,7 @@ instance.interceptors.response.use(
     },
     (error) => {
         // localStorage.removeItem("token");
+        console.log(error.response);
         return error.response;
     }
 );

@@ -13,7 +13,7 @@ export const userSlice = createSlice({
     reducers: {
         userLogin: (state, action) => {
             state.isLogin = true;
-            state.user = action.payload.email;
+            state.user = action.payload.username;
             state.time = action.payload.time;
             console.log(action);
         },
