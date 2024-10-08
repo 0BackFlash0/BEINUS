@@ -1,5 +1,19 @@
 import axios from "axios";
 
+export class LoginError extends Error {
+    constructor() {
+        super("로그인이 필요한 기능입니다.");
+        this.name = "Custom Error";
+    }
+}
+
+export class PermissionError extends Error {
+    constructor() {
+        super("권한이 부족합니다.");
+        this.name = "Permission Error";
+    }
+}
+
 export const instance = axios.create({
     baseURL: "http://localhost:8080/api",
     timeout: 1000,
@@ -25,9 +39,9 @@ instance.interceptors.response.use(
         return response;
     },
     (error) => {
-        // localStorage.removeItem("token");
-        console.log(error.response);
-        return error.response;
+        localStorage.removeItem("token");
+        console.log(error);
+        return error;
     }
 );
 

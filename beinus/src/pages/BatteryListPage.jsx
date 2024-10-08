@@ -105,14 +105,14 @@ const BatteryFilter = {
     request: {
         request_maintain: {
             active: true,
-            icon: "info",
+            icon: "handyman",
             color: "red",
             name: "유지보수 요청",
             filtering: (target) => target.isRequestMaintain === true,
         },
         request_analysis: {
             active: true,
-            icon: "info",
+            icon: "search_insights",
             color: "blue",
             name: "분석 요청",
             filtering: (target) => target.isRequestAnalysis === true,
@@ -206,12 +206,13 @@ const BatteryListPage = () => {
                     // console.log(response);
                     setLoading(false);
                 } else {
+                    console.log(response);
                     showCaution("알수없는 에러가 발생했습니다.");
                 }
             })
             .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
                 console.log(response);
+                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
             });
     }, []);
 

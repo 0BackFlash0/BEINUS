@@ -169,6 +169,23 @@ const MaterialFilter = {
             filtering: (target) => target.status === "Recycled",
         },
     },
+
+    availability: {
+        available: {
+            active: true,
+            icon: "priority",
+            name: "가능",
+            color: "blue",
+            filtering: (target) => target.availability === "Available",
+        },
+        unavailable: {
+            active: true,
+            icon: "disabled_by_default",
+            color: "#fc2a2a",
+            name: "불가능",
+            filtering: (target) => true,
+        },
+    },
 };
 
 const MaterialImage = {
@@ -209,7 +226,6 @@ const MaterialListPage = () => {
     useEffect(() => {
         queryAllMaterials()
             .then((response) => {
-                console.log(response);
                 if (response.status === 200) {
                     setData({
                         ...data,
@@ -221,6 +237,7 @@ const MaterialListPage = () => {
                                     type: element.name,
                                     amount: element.quantity,
                                     verified: element.verified,
+                                    availability: element.available,
                                     status: element.status,
                                     date: element.timestamp.slice(0, 10),
                                 };
@@ -233,6 +250,7 @@ const MaterialListPage = () => {
                                         type: element.name,
                                         amount: element.quantity,
                                         verified: element.verified,
+                                        availability: element.available,
                                         status: element.status,
                                         date: element.timestamp.slice(0, 10),
                                     };
@@ -268,17 +286,13 @@ const MaterialListPage = () => {
 
         Object.entries(filter).forEach(([category, option]) => {
             let filter_valid = false;
-            console.log(option);
             Object.entries(option).forEach(([key, value]) => {
                 if (value.active) {
                     filter_valid = filter_valid || value.filtering(battery);
                 }
             });
-            console.log(battery);
             is_valid = filter_valid && is_valid;
         });
-
-        console.log(is_valid);
 
         return is_valid;
     };
@@ -333,6 +347,7 @@ const MaterialListPage = () => {
                                     id={element.id}
                                     img={element.img}
                                     type={element.type}
+                                    availability={element.availability}
                                     verified={element.verified}
                                     status={element.status}
                                     amount={element.amount}

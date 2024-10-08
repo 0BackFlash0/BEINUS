@@ -63,25 +63,22 @@ const OptionGroup = ({
     };
 
     const prevValueRef = useRef(value);
-    const optionRef = useRef(options);
+    // const optionRef = useRef(options);
 
-    useEffect(() => {
-        // const prevValue = prevValueRef.current;
-        console.log("change");
-        if (
-            optionRef.current.length > 0 &&
-            value !== optionRef.current[0].key
-        ) {
-            onChange({
-                target: {
-                    name: name,
-                    value: optionRef.current[0].key,
-                },
-            });
-        }
+    // useEffect(() => {
+    //     const prevValue = prevValueRef.current;
+    //     console.log("change");
+    //     if (options.length > 0 && prevValue !== options[0].key) {
+    //         onChange({
+    //             target: {
+    //                 name: name,
+    //                 value: options[0].key,
+    //             },
+    //         });
+    //     }
 
-        // prevValueRef.current = value;
-    }, [optionRef, name, onChange]);
+    //     prevValueRef.current = value;
+    // }, [options, name, onChange]);
 
     return (
         <StyledOptionContainer className={`${className}`}>

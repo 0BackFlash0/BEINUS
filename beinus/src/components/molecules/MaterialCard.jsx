@@ -75,6 +75,7 @@ const MaterialCard = ({
     img,
     type, // 원자재 type
     verified, // 검증 여부
+    availability,
     status, // 재활용 여부
     amount, // 개수
     date, // 등록 일자
@@ -84,7 +85,24 @@ const MaterialCard = ({
     return (
         <StyledCardContainer className={`battery-card ${className}`} {...props}>
             <StyledUpperContent>
-                <StyledLabel>{type}</StyledLabel>
+                <StyledRow>
+                    <StyledLabel>{type}</StyledLabel>
+                    <StyledContentContainer>
+                        {availability ? (
+                            <Icon
+                                icon={"priority"}
+                                size="14pt"
+                                color={"blue"}
+                            ></Icon>
+                        ) : (
+                            <Icon
+                                icon={"disabled_by_default"}
+                                size="14pt"
+                                color={"#fc2a2a"}
+                            ></Icon>
+                        )}
+                    </StyledContentContainer>
+                </StyledRow>
             </StyledUpperContent>
             <StyledMainContent>
                 <Photo src={img} width="50px" height="60px" />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Label from "../atoms/Label";
 import Button from "../atoms/Button";
@@ -83,6 +83,22 @@ const GNB = ({
     const puerge = async () => {
         await persistor.purge();
     };
+
+    const loginTime = useSelector((state) => state.user.time);
+    const isLogin = useSelector((state) => state.user.isLogin);
+
+    useEffect(() => {
+        if (isLogin && loginTime) {
+            const currentTime = new Date();
+            const diff = currentTime.getTime() - new Date(loginTime).getTime();
+            if (diff > 3600000) {
+                // 1시간 = 3600000밀리초
+                dispatch(userLogout());
+                localStorage.removeItem("token");
+            }
+        }
+    }, [isLogin, loginTime, dispatch]);
+
     return (
         <StyledNavationContainer>
             <StyledNavigationBar className={`GNB ${className}`}>

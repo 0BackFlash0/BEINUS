@@ -112,7 +112,7 @@ const BatterySideBar = ({
                     />
 
                     <Filter
-                        icon="info"
+                        icon="raw_on"
                         name="상태"
                         filter={filter.status}
                         handle_filter={(target) =>

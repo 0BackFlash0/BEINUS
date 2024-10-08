@@ -101,6 +101,13 @@ const StyledSubtitle = styled(Subtitle)`
     margin-bottom: 10px;
 `;
 
+const CategoryOptions = [
+    {
+        key: "Electric Vehicle Battery",
+        name: "전기차",
+    },
+];
+
 const HarzardousOptions = [
     {
         key: "yes",
@@ -234,8 +241,8 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
             <StyledRowGroupContainer>
                 <StyledBatteryInfoContainer>
                     <StyledRowGroupContainer>
-                        <StyledInputGroup
-                            type="text"
+                        <StyledOptionGroup
+                            options={CategoryOptions}
                             id="category"
                             name="category"
                             value={value.category ? value.category : ""}

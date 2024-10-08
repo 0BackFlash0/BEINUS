@@ -91,7 +91,7 @@ const BatteryCard = ({
                     <StyledContentContainer>
                         {isRequestMaintain ? (
                             <Icon
-                                icon={"info"}
+                                icon={"handyman"}
                                 size="14pt"
                                 color={"red"}
                             ></Icon>
@@ -101,7 +101,7 @@ const BatteryCard = ({
 
                         {isRequestAnalysis ? (
                             <Icon
-                                icon={"info"}
+                                icon={"search_insights"}
                                 size="14pt"
                                 color={"blue"}
                             ></Icon>

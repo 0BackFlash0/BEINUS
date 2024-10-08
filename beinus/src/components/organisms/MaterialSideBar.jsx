@@ -106,6 +106,15 @@ const MaterialSideBar = ({
                             handleFilter("status", target)
                         }
                     />
+
+                    <Filter
+                        icon="priority"
+                        name="사용 가능"
+                        filter={filter.availability}
+                        handle_filter={(target) =>
+                            handleFilter("availability", target)
+                        }
+                    />
                 </StyledMenuBar>
             </StyledSideBar>
         </StyledSideBarContainer>

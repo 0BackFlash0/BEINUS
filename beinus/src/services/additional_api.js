@@ -1,8 +1,8 @@
 import axios from "axios";
-import { getUser } from "./base_api";
+import { getUser, LoginError } from "./base_api";
 
-const TEST = true;
-const TEST_ORG = "org1";
+const TEST = false;
+const TEST_ORG = null;
 
 export const instance = axios.create({
     baseURL: "http://localhost:3000/",
@@ -22,7 +22,7 @@ instance.interceptors.request.use(async function (config) {
     console.log(token);
 
     if (token && token !== "undefined") {
-        console.log(token);
+        // console.log(token);
         config.headers["Authorization"] = `Bearer ${token}`;
     } else {
         console.log("no token");
@@ -31,11 +31,13 @@ instance.interceptors.request.use(async function (config) {
     const user_data = await getUser().then((response) => response.data);
     console.log(user_data);
 
-    if (user_data && user_data !== "undefined") {
-        console.log(user_data.role);
+    if (user_data && user_data.username !== "anonymousUser") {
+        // console.log(user_data.role);
         config.headers["org"] = `${user_data.role}`;
     } else {
         console.log("no org");
+        const error = new LoginError();
+        return Promise.reject(error);
     }
 
     return config;
@@ -47,8 +49,8 @@ instance.interceptors.response.use(
     },
     (error) => {
         // localStorage.removeItem("token");
-        console.log(error.response);
-        return error.response;
+        console.log(error);
+        return error;
     }
 );
 
