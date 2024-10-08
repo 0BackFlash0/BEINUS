@@ -62,23 +62,22 @@ const LoginForm = ({
             .then((response) => {
                 console.log(response);
 
-                if (response.status === 200) {
-                    localStorage.setItem("token", response.data.token);
-                    dispatch(
-                        userLogin({
-                            username: value.username,
-                            time: new Date().toString(),
-                        })
-                    );
-                    navigate("/");
-                } else if (response.status === 401) {
+                localStorage.setItem("token", response.data.token);
+                dispatch(
+                    userLogin({
+                        username: value.username,
+                        time: new Date().toString(),
+                    })
+                );
+                navigate("/");
+            })
+            .catch((error) => {
+                if (error.status === 401) {
                     setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
                 } else {
                     setErrorMsg("로그인 중 오류가 발생했습니다.");
                 }
-                return response;
-            })
-            .catch((response) => response.data);
+            });
     };
 
     return (

@@ -121,18 +121,17 @@ const BatteryExtractModal = ({
             manganese: value.manganese,
         })
             .then((response) => {
-                // return response.data;
-                if (response.status === 200) {
-                    showCaution(
-                        `원자재 추출에 성공했습니다. \n ID: ${battery_id}`,
-                        handle_close
-                    );
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(
+                    `원자재 추출에 성공했습니다. \n 
+                        리튬 ID: ${response.data.exxtractedMaterials.Lithium.materialID} \n
+                        코발트 ID: ${response.data.exxtractedMaterials.Cobalt.materialID} \n
+                        망간 ID: ${response.data.exxtractedMaterials.Manganese.materialID} \n
+                        니켈 ID: ${response.data.exxtractedMaterials.Nickel.materialID} \n`,
+                    handle_close
+                );
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 

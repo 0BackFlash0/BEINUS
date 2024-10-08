@@ -14,6 +14,7 @@ import SearchingFilter from "../components/molecules/SearchingFilter";
 import BatteryInfoBar from "../components/organisms/BatteryInfoBar";
 import { useModal } from "../hooks/useModal";
 import useInput from "../hooks/useInput";
+import { useNavigate } from "react-router-dom";
 
 const column = [
     {
@@ -96,7 +97,7 @@ const BatteryFilter = {
     category: {
         "Electric Vehicle Battery": {
             active: true,
-            name: "전기차",
+            name: "EV",
             icon: "electric_car",
             filtering: (target) =>
                 target.category === "Electric Vehicle Battery",
@@ -107,19 +108,19 @@ const BatteryFilter = {
             active: true,
             icon: "handyman",
             color: "red",
-            name: "유지보수 요청",
+            name: "Maintenance",
             filtering: (target) => target.isRequestMaintain === true,
         },
         request_analysis: {
             active: true,
             icon: "search_insights",
             color: "blue",
-            name: "분석 요청",
+            name: "Analysis",
             filtering: (target) => target.isRequestAnalysis === true,
         },
         request_none: {
             active: true,
-            name: "요청 없음",
+            name: "No Request",
             filtering: (target) =>
                 target.isRequestMaintain === false &&
                 target.isRequestAnalysis === false,
@@ -130,14 +131,14 @@ const BatteryFilter = {
             active: true,
             icon: "license",
             color: "#1ED760",
-            name: "검증됨",
+            name: "Verified",
             filtering: (target) => target.verified === "VERIFIED",
         },
         not_verified: {
             active: true,
             icon: "unlicense",
             color: "red",
-            name: "검증되지 않음",
+            name: "Not Verified",
             filtering: (target) => target.verified === "NOT VERIFIED",
         },
     },
@@ -145,19 +146,20 @@ const BatteryFilter = {
         original: {
             active: true,
             icon: "raw_on",
-            name: "원본",
+            name: "Original",
             filtering: (target) => target.status === "ORIGINAL",
         },
         disassembled: {
             active: true,
             icon: "raw_off",
-            name: "분해됨",
+            name: "Disassembled",
             filtering: (target) => target.status === "Disassembled",
         },
     },
 };
 
 const BatteryListPage = () => {
+    const navigate = useNavigate();
     const { showCaution } = useCaution();
 
     const [data, setData] = useState({
@@ -187,32 +189,32 @@ const BatteryListPage = () => {
     useEffect(() => {
         queryAllBatteries()
             .then((response) => {
-                if (response.status === 200) {
-                    setData({
-                        ...data,
-                        battery_list: response.data.map((element, idx) => {
-                            return {
-                                img: "./assets/test.png",
-                                id: element.batteryID,
-                                category: element.category,
-                                status: element.status,
-                                verified: element.Verified,
-                                isRequestMaintain: element.maintenanceRequest,
-                                isRequestAnalysis: element.analysisRequest,
-                                date: element.manufactureDate.slice(0, 10),
-                            };
-                        }),
-                    });
-                    // console.log(response);
-                    setLoading(false);
-                } else {
-                    console.log(response);
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                setData({
+                    ...data,
+                    battery_list: response.data.map((element, idx) => {
+                        return {
+                            img: "./assets/test.png",
+                            id: element.batteryID,
+                            category: element.category,
+                            status: element.status,
+                            verified: element.Verified,
+                            isRequestMaintain: element.maintenanceRequest,
+                            isRequestAnalysis: element.analysisRequest,
+                            date: element.manufactureDate.slice(0, 10),
+                        };
+                    }),
+                });
+                // console.log(response);
+                setLoading(false);
             })
-            .catch((response) => {
-                console.log(response);
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                if (error.navigate) {
+                    showCaution(`${error.message}`, () => {
+                        navigate("/login");
+                    });
+                } else {
+                    showCaution(`${error.message}`);
+                }
             });
     }, []);
 

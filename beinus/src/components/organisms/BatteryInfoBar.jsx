@@ -68,6 +68,18 @@ const StyledButtonContainer = styled.div`
     align-items: center;
 `;
 
+const StyledRequestContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+`;
+
+const StyledContentContainer = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
 const CloseButton = styled.button`
     position: absolute;
     display: flex;
@@ -83,23 +95,42 @@ const CloseButton = styled.button`
     border-width: 0;
 `;
 
+const StyledSmallButton = styled.button`
+    display: inline-block;
+    background-color: #ff2600;
+    border-style: none;
+    border-radius: 4px;
+    padding: 2px;
+    /* width: 120px; */
+    height: auto;
+    font-size: 8pt;
+    font-weight: 500;
+    color: white;
+
+    &:hover {
+        background-color: #13c752;
+    }
+`;
+
 const StyledRow = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid #c9c9c9;
 `;
 
 const StyledLabel = styled.div`
-    font-size: 12pt;
+    font-size: 11pt;
     color: #666f7c;
     padding: 2px 0;
     margin: 0;
 `;
 
 const StyledTitle = styled.div`
-    font-size: 10pt;
-    color: #666f7c;
+    font-size: 11pt;
+    color: #1a1a1a;
     font-weight: 600;
     padding: 2px 0;
     margin: 0;
@@ -127,38 +158,46 @@ const BatteryInfoBar = ({
                     <StyledLabel>{battery.id}</StyledLabel>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>카테고리</StyledTitle>
+                    <StyledTitle>Category</StyledTitle>
                     <StyledLabel>{battery.category}</StyledLabel>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>검증여부</StyledTitle>
+                    <StyledTitle>Verification</StyledTitle>
                     <StyledLabel>{battery.verified}</StyledLabel>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>상태</StyledTitle>
-                    <StyledLabel>{battery.status}</StyledLabel>
+                    <StyledTitle>Status</StyledTitle>
+                    <StyledContentContainer>
+                        <StyledLabel>{battery.status}</StyledLabel>
+                    </StyledContentContainer>
                 </StyledRow>
 
                 <StyledRow>
-                    <StyledTitle>유지보수 요청</StyledTitle>
+                    <StyledTitle>Maintenance Request</StyledTitle>
                     <StyledLabel>
-                        {battery.isRequestMaintain ? "O" : "X"}
+                        <StyledContentContainer>
+                            {battery.isRequestMaintain ? "O" : "X"}
+                            <StyledSmallButton>Req</StyledSmallButton>
+                        </StyledContentContainer>
                     </StyledLabel>
                 </StyledRow>
 
                 <StyledRow>
-                    <StyledTitle>분석 요청</StyledTitle>
+                    <StyledTitle>Analysis Request</StyledTitle>
                     <StyledLabel>
                         {battery.isRequestAnalysis ? "O" : "X"}
                     </StyledLabel>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>생성 날짜</StyledTitle>
+                    <StyledTitle>Created Date</StyledTitle>
                     <StyledLabel>{battery.date}</StyledLabel>
                 </StyledRow>
+                <StyledRequestContainer>
+                    {/* <StyledSmallButton>Maintenance Request</StyledSmallButton> */}
+                </StyledRequestContainer>
                 <StyledButtonContainer>
                     <Button onClick={() => navigate(`/search/${battery.id}`)}>
-                        상세정보 조회
+                        Detail Inquiry
                     </Button>
                 </StyledButtonContainer>
             </StyledInfoBar>

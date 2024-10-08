@@ -117,7 +117,7 @@ const BatteryCard = ({
             </StyledMainContent>
             <StyledLowerContent>
                 <StyledRow>
-                    <StyledLabel>검증여부</StyledLabel>
+                    <StyledLabel>Verification</StyledLabel>
 
                     <StyledContentContainer>
                         <StyledLabel>{verified}</StyledLabel>
@@ -138,7 +138,7 @@ const BatteryCard = ({
                 </StyledRow>
 
                 <StyledRow>
-                    <StyledLabel>상태</StyledLabel>
+                    <StyledLabel>Status</StyledLabel>
                     <StyledContentContainer>
                         <StyledLabel>{status}</StyledLabel>
                         {status === "Disassembled" ? (

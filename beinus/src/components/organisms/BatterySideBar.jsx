@@ -77,16 +77,16 @@ const BatterySideBar = ({
 
     return (
         <StyledSideBarContainer>
-            <Title>배터리 목록</Title>
+            <Title>Battery List</Title>
             <StyledSideBar className={`BatterySideBar ${className}`}>
                 <MenuButton onClick={showBatteryRegister}>
-                    배터리 생성
+                    Create Battery
                 </MenuButton>
 
                 <StyledMenuBar>
                     <Filter
                         icon="category"
-                        name="카테고리"
+                        name="Category"
                         filter={filter.category}
                         handle_filter={(target) =>
                             handleFilter("category", target)
@@ -95,7 +95,7 @@ const BatterySideBar = ({
 
                     <Filter
                         icon="info"
-                        name="요청"
+                        name="Request"
                         filter={filter.request}
                         handle_filter={(target) =>
                             handleFilter("request", target)
@@ -104,7 +104,7 @@ const BatterySideBar = ({
 
                     <Filter
                         icon="license"
-                        name="검증 여부"
+                        name="Verification"
                         filter={filter.isVerified}
                         handle_filter={(target) =>
                             handleFilter("isVerified", target)
@@ -113,7 +113,7 @@ const BatterySideBar = ({
 
                     <Filter
                         icon="raw_on"
-                        name="상태"
+                        name="Status"
                         filter={filter.status}
                         handle_filter={(target) =>
                             handleFilter("status", target)

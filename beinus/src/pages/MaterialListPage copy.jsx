@@ -14,6 +14,7 @@ import { queryAllMaterials } from "../services/additional_api";
 import { useEffect } from "react";
 import { useCaution } from "../hooks/useCaution";
 import MaterialSideBar from "../components/organisms/MaterialSideBar";
+import { useNavigate } from "react-router-dom";
 
 const column = [
     {
@@ -78,6 +79,7 @@ const StyledUpperContainer = styled.div`
 `;
 
 const MaterialListPage = () => {
+    const navigate = useNavigate();
     const { showCaution } = useCaution();
 
     const [data, setData] = useState({
@@ -98,27 +100,27 @@ const MaterialListPage = () => {
     useEffect(() => {
         queryAllMaterials()
             .then((response) => {
-                if (response.status === 200) {
-                    setData({
-                        ...data,
-                        material_list: response.data.map((element) => {
-                            return {
-                                id: element.materialID,
-                                type: element.name,
-                                amount: element.quantity,
-                                status: element.status,
-                            };
-                        }),
-                    });
-                    console.log(response.data);
-                    setLoading(false);
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                setData({
+                    ...data,
+                    material_list: response.data.map((element) => {
+                        return {
+                            id: element.materialID,
+                            type: element.name,
+                            amount: element.quantity,
+                            status: element.status,
+                        };
+                    }),
+                });
+                setLoading(false);
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
-                console.log(response);
+            .catch((error) => {
+                if (error.navigate) {
+                    showCaution(`${error.message}`, () => {
+                        navigate("/login");
+                    });
+                } else {
+                    showCaution(`${error.message}`);
+                }
             });
     }, []);
 

@@ -3,7 +3,8 @@ import axios from "axios";
 export class LoginError extends Error {
     constructor() {
         super("로그인이 필요한 기능입니다.");
-        this.name = "Custom Error";
+        this.name = "Login Error";
+        this.navigate = "/login";
     }
 }
 
@@ -36,12 +37,14 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use(
     (response) => {
-        return response;
+        if (response.status === 200) {
+            return response;
+        }
     },
     (error) => {
         localStorage.removeItem("token");
         console.log(error);
-        return error;
+        return Promise.reject(error);
     }
 );
 

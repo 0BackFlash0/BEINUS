@@ -88,17 +88,13 @@ const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
             vendor: value.vendor,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    showCaution(
-                        `원자재 ID가 발급되었습니다. \n ID : ${response.data.materialID}`
-                    );
-                    handle_close();
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(
+                    `원자재 ID가 발급되었습니다. \n ID : ${response.data.materialID}`
+                );
+                handle_close();
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 

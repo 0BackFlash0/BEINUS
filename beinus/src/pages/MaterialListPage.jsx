@@ -226,47 +226,46 @@ const MaterialListPage = () => {
     useEffect(() => {
         queryAllMaterials()
             .then((response) => {
-                if (response.status === 200) {
-                    setData({
-                        ...data,
-                        material_list: [
-                            ...response.data.newMaterials.map((element) => {
-                                return {
-                                    id: element.materialID,
-                                    img: MaterialImage[element.name],
-                                    type: element.name,
-                                    amount: element.quantity,
-                                    verified: element.verified,
-                                    availability: element.available,
-                                    status: element.status,
-                                    date: element.timestamp.slice(0, 10),
-                                };
-                            }),
-                            ...response.data.recycledMaterials.map(
-                                (element) => {
-                                    return {
-                                        id: element.materialID,
-                                        img: MaterialImage[element.name],
-                                        type: element.name,
-                                        amount: element.quantity,
-                                        verified: element.verified,
-                                        availability: element.available,
-                                        status: element.status,
-                                        date: element.timestamp.slice(0, 10),
-                                    };
-                                }
-                            ),
-                        ],
-                    });
-                    console.log(response.data);
-                    setLoading(false);
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                setData({
+                    ...data,
+                    material_list: [
+                        ...response.data.newMaterials.map((element) => {
+                            return {
+                                id: element.materialID,
+                                img: MaterialImage[element.name],
+                                type: element.name,
+                                amount: element.quantity,
+                                verified: element.verified,
+                                availability: element.available,
+                                status: element.status,
+                                date: element.timestamp.slice(0, 10),
+                            };
+                        }),
+                        ...response.data.recycledMaterials.map((element) => {
+                            return {
+                                id: element.materialID,
+                                img: MaterialImage[element.name],
+                                type: element.name,
+                                amount: element.quantity,
+                                verified: element.verified,
+                                availability: element.available,
+                                status: element.status,
+                                date: element.timestamp.slice(0, 10),
+                            };
+                        }),
+                    ],
+                });
+                // console.log(response.data);
+                setLoading(false);
             })
-            .catch((response) => {
-                // showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
-                console.log(response);
+            .catch((error) => {
+                if (error.navigate) {
+                    showCaution(`${error.message}`, () => {
+                        navigate("/login");
+                    });
+                } else {
+                    showCaution(`${error.message}`);
+                }
             });
     }, []);
 

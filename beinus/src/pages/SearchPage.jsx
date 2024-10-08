@@ -39,10 +39,10 @@ const StyledListContainer = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: start;
     /* flex-wrap: wrap; */
-    gap: 50px;
+    gap: 30px;
 `;
 
 const StyledIDContainer = styled.div`
@@ -57,7 +57,8 @@ const StyledIDContainer = styled.div`
 `;
 
 const StyledCardContainer = styled.div`
-    width: 100%;
+    flex-shrink: 0;
+    width: 30%;
     /* height: 270px; */
     border: solid 2px;
     border-color: #13c752;
@@ -180,19 +181,14 @@ const SearchPage = () => {
             batteryID: batteryID,
         })
             .then((response) => {
-                console.log(response);
-                if (response.status === 200) {
-                    setData({
-                        ...data,
-                        ...response.data.batteryDetails,
-                    });
-                    setLoading(false);
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                setData({
+                    ...data,
+                    ...response.data.batteryDetails,
+                });
+                setLoading(false);
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     }, []);
 
@@ -226,8 +222,12 @@ const SearchPage = () => {
                             <StyledTitle>배터리</StyledTitle>
                             <Icon icon="battery_0_bar" size="23pt" />
                         </StyledRow>
-                        <CardInfo title="카테고리" info={data.category} />
-                        <CardInfo title="무게" info={data.weight} />
+                        <StyledRow>
+                            <CardInfo title="카테고리" info={data.category} />
+
+                            <CardInfo title="무게" info={data.weight} />
+                        </StyledRow>
+
                         <CardInfo title="상태" info={data.status} />
                         <CardInfo title="검증" info={data.Verified} />
                     </StyledCardContainer>

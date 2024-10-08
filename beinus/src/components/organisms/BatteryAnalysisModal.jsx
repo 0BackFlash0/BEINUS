@@ -81,17 +81,13 @@ const BatteryAnalysisModal = ({
             recycleAvailability: value.recycleAvailability,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    showCaution(
-                        `배터리 분석에 성공했습니다. \n ID: ${battery_id}`,
-                        handle_close
-                    );
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(
+                    `재활용 가능성 평가를 완료했습니다. \n ID: ${response.data.batteryID} \n 가능여부: ${response.data.result}`,
+                    handle_close
+                );
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 

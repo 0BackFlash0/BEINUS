@@ -16,6 +16,7 @@ import Topic from "../atoms/Topic";
 import Title from "../atoms/Title";
 import MenuButton from "../atoms/MenuButton";
 import { queryMaterial } from "../../services/additional_api";
+import { useCaution } from "../../hooks/useCaution";
 
 const StyledInfoBarContainer = styled.div`
     position: fixed;
@@ -118,6 +119,8 @@ const MaterialInfoBar = ({
     material_id,
     handle_close,
 }) => {
+    const { showCaution } = useCaution();
+
     const [data, setData] = useState({
         materialID: "-",
         supplierID: "-",
@@ -135,19 +138,15 @@ const MaterialInfoBar = ({
             materialID: material_id,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    console.log(response);
-                    setData({
-                        ...data,
-                        ...response.data.rawMaterial,
-                    });
-                    setLoading(false);
-                } else {
-                    console.log("error");
-                }
-            })
-            .catch((response) => {
                 console.log(response);
+                setData({
+                    ...data,
+                    ...response.data.rawMaterial,
+                });
+                setLoading(false);
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     }, []);
 

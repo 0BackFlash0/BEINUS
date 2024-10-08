@@ -93,17 +93,10 @@ const BatteryMaintainModal = ({
             soh: value.soh,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    showCaution(
-                        `배터리 정비에 성공했습니다. \n ID: ${battery_id}`,
-                        handle_close
-                    );
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(`배터리 정비 로그를 입력했습니다.`, handle_close);
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 

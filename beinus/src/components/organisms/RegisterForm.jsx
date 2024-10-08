@@ -143,22 +143,17 @@ const RegisterForm = ({
 
     const handleRegister = async function () {
         // console.log(value.username);
-        const loginCheck = await register({
+        await register({
             username: value.username,
             password: value.password,
             org: value.org,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    navigate("/login");
-                } else {
-                    showCaution(`회원가입 중 알 수 없는 오류가 발생했습니다.`);
-                    console.log(response);
-                }
+                navigate("/login");
             })
-            .catch((error) =>
-                showCaution(`에러가 발생했습니다. \n ${error.data.error}`)
-            );
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
     };
 
     return (

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { getUser, LoginError } from "./base_api";
+import { getUser, LoginError, PermissionError } from "./base_api";
 
-const TEST = false;
+const TEST = true;
 const TEST_ORG = null;
 
 export const instance = axios.create({
@@ -45,12 +45,22 @@ instance.interceptors.request.use(async function (config) {
 
 instance.interceptors.response.use(
     (response) => {
-        return response;
+        // return response;
+        console.log(response);
+        if (response.status === 200) {
+            return response;
+            // } else if (response.status === 403) {
+            //     const permissionError = new PermissionError();
+            //     return Promise.reject(permissionError);
+        } else {
+            const error = new Error("에러가 발생했습니다.");
+            return Promise.reject(error);
+        }
     },
     (error) => {
         // localStorage.removeItem("token");
-        console.log(error);
-        return error;
+        console.log(`에러: ${error}`);
+        return Promise.reject(error);
     }
 );
 

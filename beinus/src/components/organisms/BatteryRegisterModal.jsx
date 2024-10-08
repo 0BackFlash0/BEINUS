@@ -216,18 +216,13 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
             materialList: value.materialList,
         })
             .then((response) => {
-                // return response.data;
-                if (response.status === 200) {
-                    showCaution(
-                        `배터리 ID가 발급되었습니다. \n ID: ${response.data.batteryID}`,
-                        handle_close
-                    );
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(
+                    `배터리 생성에 성공했습니다. \n ID: ${response.data.batteryID}`,
+                    handle_close
+                );
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 
