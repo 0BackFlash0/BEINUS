@@ -173,15 +173,13 @@ const RegisterForm = ({
                 }}
             />
             <StyledOptionGroup
+                options={RoleTypes}
                 id="org"
                 name="org"
-                options={RoleTypes}
                 title="소속"
-                value={value.role ? value.role : ""}
+                value={value.org ? value.org : ""}
                 className=""
-                onChange={(e) => {
-                    handleOnChange(e);
-                }}
+                onChange={handleOnChange}
             />
             <StyledInputGroup
                 id="password"
