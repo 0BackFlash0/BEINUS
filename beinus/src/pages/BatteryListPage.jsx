@@ -138,7 +138,7 @@ const BatteryFilter = {
             icon: "unlicense",
             color: "red",
             name: "검증되지 않음",
-            filtering: (target) => target.verified === "UN-VERIFIED",
+            filtering: (target) => target.verified === "NOT VERIFIED",
         },
     },
     status: {
@@ -146,7 +146,7 @@ const BatteryFilter = {
             active: true,
             icon: "raw_on",
             name: "원본",
-            filtering: (target) => target.status === "Original",
+            filtering: (target) => target.status === "ORIGINAL",
         },
         disassembled: {
             active: true,

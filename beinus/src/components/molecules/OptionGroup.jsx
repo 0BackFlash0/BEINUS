@@ -62,16 +62,26 @@ const OptionGroup = ({
         ...(onChange && { onChange: onChange }),
     };
 
+    const prevValueRef = useRef(value);
+    const optionRef = useRef(options);
+
     useEffect(() => {
-        if (options.length > 0 && value !== options[0].key) {
+        // const prevValue = prevValueRef.current;
+        console.log("change");
+        if (
+            optionRef.current.length > 0 &&
+            value !== optionRef.current[0].key
+        ) {
             onChange({
                 target: {
                     name: name,
-                    value: options[0].key,
+                    value: optionRef.current[0].key,
                 },
             });
         }
-    }, [options]);
+
+        // prevValueRef.current = value;
+    }, [optionRef, name, onChange]);
 
     return (
         <StyledOptionContainer className={`${className}`}>

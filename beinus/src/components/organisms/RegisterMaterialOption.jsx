@@ -6,7 +6,7 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import { registerBattery } from "../../services/additional_api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const StyledRowGroupContainer = styled.div`
     width: 100%;
@@ -18,7 +18,7 @@ const StyledRowGroupContainer = styled.div`
 const StyledMaterialOptionContainer = styled.div`
     position: relative;
     width: 100%;
-    padding: 15px;
+    padding: 15px 10px 5px 10px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -90,6 +90,45 @@ const RegisterMaterialOption = ({
     on_change = () => {},
     ...props
 }) => {
+    const [maxAmount, setMaxAmount] = useState(0);
+    const [errerMsg, setErrorMsg] = useState("");
+
+    // const prevAmountRef = useMemo(() => material_id_value);
+
+    // useEffect(() => {
+    //     let max_amount = 0;
+
+    //     material_options.forEach((element, idx) => {
+    //         console.log(element);
+    //         console.log(material_id_value);
+    //         if (element.key === material_id_value) {
+    //             max_amount = element.amount;
+    //         }
+    //     });
+    //     setMaxAmount(max_amount);
+    //     console.log(max_amount);
+
+    //     on_change({
+    //         target: {
+    //             name: "amount",
+    //             value: max_amount,
+    //         },
+    //     });
+    // }, [material_id_value]);
+
+    // useEffect(() => {
+    //     if (amount_value < 0) {
+    //         setErrorMsg("원자재의 개수는 1개 이상 사용해야 합니다.");
+    //     }
+    //     if (amount_value > maxAmount) {
+    //         setErrorMsg(
+    //             `원자재의 개수는 최대 개수(${maxAmount})를 넘을 수 없습니다.`
+    //         );
+    //     } else {
+    //         setErrorMsg("");
+    //     }
+    // }, [amount_value, maxAmount]);
+
     return (
         <StyledMaterialOptionContainer
             className={`battery-register-modal ${className}`}
@@ -124,7 +163,8 @@ const RegisterMaterialOption = ({
                 value={material_id_value ? material_id_value : ""}
                 onChange={on_change}
                 title="원자재 ID"
-                is_description={false}
+                // is_description={false}
+                // description={errerMsg}
             />
         </StyledMaterialOptionContainer>
     );

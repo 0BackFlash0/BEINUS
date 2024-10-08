@@ -309,17 +309,11 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                                               return {
                                                   key: target.id,
                                                   name: target.id,
+                                                  amount: target.amount,
                                               };
                                           })}
                                       material_id_value={element.materialID}
                                       amount_value={element.amount}
-                                      max_amount={
-                                          materialData.material_list.filter(
-                                              (material) =>
-                                                  material.id ===
-                                                  element.materialID
-                                          )[0].amount
-                                      }
                                       on_change={(e) =>
                                           handleOnChangeMaterial(e, idx)
                                       }
