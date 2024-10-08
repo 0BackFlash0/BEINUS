@@ -57,8 +57,15 @@ const StyledIDContainer = styled.div`
     background-color: white;
 `;
 
+const StyledPhotoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
 const StyledCardContainer = styled.div`
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
     width: 100%;
     /* height: 270px; */
     border: solid 2px;
@@ -217,22 +224,32 @@ const SearchPage = () => {
                 </StyledRow>
             </StyledIDContainer>
             <StyledContentContainer>
-                <Photo src="/assets/battery_example.png" />
                 <StyledListContainer>
-                    <StyledCardContainer ref={batteryRef}>
-                        <StyledRow>
-                            <StyledTitle>배터리</StyledTitle>
-                            <Icon icon="battery_0_bar" size="23pt" />
-                        </StyledRow>
-                        <StyledRow>
-                            <CardInfo title="카테고리" info={data.category} />
+                    <StyledRow>
+                        <StyledPhotoContainer>
+                            <Photo src="/assets/battery_example.png" />
+                        </StyledPhotoContainer>
+                        <StyledCardContainer ref={batteryRef}>
+                            <StyledRow>
+                                <StyledTitle>배터리</StyledTitle>
+                                <Icon icon="battery_0_bar" size="23pt" />
+                            </StyledRow>
+                            <StyledRow>
+                                <CardInfo
+                                    title="카테고리"
+                                    info={data.category}
+                                />
 
-                            <CardInfo title="무게" info={`${data.weight} kg`} />
-                        </StyledRow>
+                                <CardInfo
+                                    title="무게"
+                                    info={`${data.weight} kg`}
+                                />
+                            </StyledRow>
 
-                        <CardInfo title="상태" info={data.status} />
-                        <CardInfo title="검증" info={data.Verified} />
-                    </StyledCardContainer>
+                            <CardInfo title="상태" info={data.status} />
+                            <CardInfo title="검증" info={data.Verified} />
+                        </StyledCardContainer>
+                    </StyledRow>
 
                     <StyledCardContainer ref={manufactureRef}>
                         <StyledRow>

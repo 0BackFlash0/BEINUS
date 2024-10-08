@@ -13,7 +13,7 @@ const StyledInfoContainer = styled.div`
     padding: 10px;
     /* border-radius: 10px; */
 
-    background-color: #edffed;
+    /* background-color: #edffed; */
 `;
 
 const StyledTitle = styled.div`
