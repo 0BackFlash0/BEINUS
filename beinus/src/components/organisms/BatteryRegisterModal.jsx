@@ -103,7 +103,7 @@ const StyledSubtitle = styled(Subtitle)`
 
 const CategoryOptions = [
     {
-        key: "Electric Vehicle Battery",
+        key: "EV Battery",
         name: "전기차",
     },
 ];

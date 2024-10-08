@@ -78,7 +78,7 @@ const OptionGroup = ({
         }
 
         prevValueRef.current = value;
-    }, [options, name, onChange]);
+    }, [options]);
 
     return (
         <StyledOptionContainer className={`${className}`}>

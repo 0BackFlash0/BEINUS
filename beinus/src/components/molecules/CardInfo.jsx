@@ -7,7 +7,7 @@ const StyledInfoContainer = styled.div`
     flex-direction: column;
     align-items: start;
     gap: 5px;
-    margin: 0px;
+    margin: 2px;
 
     width: 100%;
     padding: 10px;

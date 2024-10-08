@@ -99,8 +99,7 @@ const BatteryFilter = {
             active: true,
             name: "EV",
             icon: "electric_car",
-            filtering: (target) =>
-                target.category === "Electric Vehicle Battery",
+            filtering: (target) => target.category === "EV Battery",
         },
     },
     request: {

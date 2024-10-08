@@ -23,6 +23,7 @@ import CardInfo from "../components/molecules/CardInfo";
 import Line from "../components/atoms/Line";
 import CardMultiChart from "../components/molecules/CardMultiChart";
 import Icon from "../components/atoms/Icon";
+import Photo from "../components/atoms/Photo";
 
 const StyledContentContainer = styled.div`
     padding: 30px 30px 30px 30px;
@@ -41,8 +42,8 @@ const StyledListContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: start;
-    /* flex-wrap: wrap; */
-    gap: 30px;
+    flex-wrap: wrap;
+    /* gap: 30px; */
 `;
 
 const StyledIDContainer = styled.div`
@@ -58,7 +59,7 @@ const StyledIDContainer = styled.div`
 
 const StyledCardContainer = styled.div`
     flex-shrink: 0;
-    width: 30%;
+    width: 100%;
     /* height: 270px; */
     border: solid 2px;
     border-color: #13c752;
@@ -67,7 +68,7 @@ const StyledCardContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
-    margin: 0px;
+    margin: 10px;
     gap: 10px;
 
     cursor: pointer;
@@ -216,6 +217,7 @@ const SearchPage = () => {
                 </StyledRow>
             </StyledIDContainer>
             <StyledContentContainer>
+                <Photo src="/assets/battery_example.png" />
                 <StyledListContainer>
                     <StyledCardContainer ref={batteryRef}>
                         <StyledRow>
@@ -225,7 +227,7 @@ const SearchPage = () => {
                         <StyledRow>
                             <CardInfo title="카테고리" info={data.category} />
 
-                            <CardInfo title="무게" info={data.weight} />
+                            <CardInfo title="무게" info={`${data.weight} kg`} />
                         </StyledRow>
 
                         <CardInfo title="상태" info={data.status} />
@@ -240,7 +242,7 @@ const SearchPage = () => {
                         <CardInfo title="제조사" info={data.ManufacturerName} />
                         <CardInfo
                             title="제조 일자"
-                            info={data.manufactureDate}
+                            info={data.manufactureDate.slice(0, 10)}
                         />
                         <CardInfo title="위치" info={data.location} />
                     </StyledCardContainer>
