@@ -62,13 +62,16 @@ const OptionGroup = ({
         ...(onChange && { onChange: onChange }),
     };
 
-    const prevValueRef = useRef(value);
-    // const optionRef = useRef(options);
-
     useEffect(() => {
-        const prevValue = prevValueRef.current;
-        console.log("change");
-        if (options.length > 0 && prevValue !== options[0].key) {
+        let is_in_options = false;
+
+        options.forEach((element, idx) => {
+            if (element.key === value) {
+                is_in_options = true;
+            }
+        });
+
+        if (options.length > 0 && !is_in_options) {
             onChange({
                 target: {
                     name: name,
@@ -76,9 +79,7 @@ const OptionGroup = ({
                 },
             });
         }
-
-        prevValueRef.current = value;
-    }, [options]);
+    }, [options, value, name, onChange]);
 
     return (
         <StyledOptionContainer className={`${className}`}>

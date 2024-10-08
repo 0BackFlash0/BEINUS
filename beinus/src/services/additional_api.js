@@ -125,8 +125,6 @@ export const createBattery = (data) => {
     const { category, voltage, weight, capacity, lifecycle, materialList } =
         data;
 
-    console.log(materialList);
-
     const body = {
         category: category,
         voltage: voltage,
@@ -146,6 +144,8 @@ export const createBattery = (data) => {
             }, {})
         ),
     };
+
+    console.log(body);
 
     if (TEST) {
         return new Promise((resolve) => {
@@ -537,7 +537,7 @@ const tempBattery = {
         manufactureDate: "2024-09-30T06:23:01.828408169Z",
         ManufacturerName: "",
         location: "",
-        category: "Electric Vehicle Battery",
+        category: "EV Battery",
         weight: 500.5,
         status: "ORIGINAL",
         Verified: "VERIFIED",
@@ -620,7 +620,7 @@ const tempBatteries = [
         manufactureDate: "2024-09-30T06:23:01.828408169Z",
         ManufacturerName: "",
         location: "",
-        category: "Electric Vehicle Battery",
+        category: "EV Battery",
         weight: 500.5,
         status: "Disassembled",
         Verified: "VERIFIED",
@@ -700,7 +700,7 @@ const tempBatteries = [
         manufactureDate: "2024-09-30T06:23:01.828408169Z",
         ManufacturerName: "",
         location: "",
-        category: "Electric Vehicle Battery",
+        category: "EV Battery",
         weight: 500.5,
         status: "Disassembled",
         Verified: "VERIFIED",
@@ -780,7 +780,7 @@ const tempBatteries = [
         manufactureDate: "2024-09-30T06:23:01.828408169Z",
         ManufacturerName: "",
         location: "",
-        category: "Electric Vehicle Battery",
+        category: "EV Battery",
         weight: 500.5,
         status: "Disassembled",
         Verified: "VERIFIED",
@@ -860,7 +860,7 @@ const tempBatteries = [
         manufactureDate: "2024-09-30T06:23:01.828408169Z",
         ManufacturerName: "",
         location: "",
-        category: "Electric Vehicle Battery",
+        category: "EV Battery",
         weight: 500.5,
         status: "Disassembled",
         Verified: "VERIFIED",
