@@ -24,6 +24,7 @@ import {
 import { useCaution } from "../../hooks/useCaution";
 import DropDown from "../molecules/DropDown";
 import FlexCarousel from "../molecules/FlexCarousel";
+import Scroller from "../atoms/Scoller";
 
 const StyledSideBarContainer = styled.div`
     position: fixed;
@@ -58,7 +59,17 @@ const StyledMenuInfo = styled.div`
     padding: 0 10px 0 5px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
+`;
+
+const LogContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 5px;
+    gap: 7px;
 `;
 
 const StyledHead = styled.h5`
@@ -66,6 +77,16 @@ const StyledHead = styled.h5`
     font-size: 11pt;
     font-weight: 600;
     color: #666666;
+`;
+
+const StyledContent = styled.h5`
+    margin: 10px 0px 5px 0px;
+    /* width: 100%; */
+    /* flex-shrink: 1; */
+    font-size: 11pt;
+    font-weight: 600;
+    color: #666666;
+    text-align: end;
 `;
 
 const StyledMenuButton = styled.button`
@@ -170,21 +191,45 @@ const SearchSideBar = ({
                         </MenuButton>
                     )}
                     <DropDown icon="handyman" name="유지보수 기록">
-                        <FlexCarousel>
-                            <StyledMenuInfo>
-                                <StyledHead>일자</StyledHead>
-                                <StyledHead>
-                                    {recycle_availability ? "O" : "X"}
-                                </StyledHead>
-                            </StyledMenuInfo>
-                        </FlexCarousel>
+                        <FlexCarousel
+                            container_width="100%"
+                            element_width={150}
+                            elements={maintenance_log.map((element, idx) => {
+                                return (
+                                    <LogContainer>
+                                        <StyledMenuInfo>
+                                            <StyledHead>일자</StyledHead>
+                                            <StyledHead>
+                                                {element.date}
+                                            </StyledHead>
+                                        </StyledMenuInfo>
+                                        <StyledMenuInfo>
+                                            <StyledHead>회사</StyledHead>
+                                            <Scroller>
+                                                <StyledContent>
+                                                    {element.name}
+                                                </StyledContent>
+                                            </Scroller>
+                                        </StyledMenuInfo>
+                                        <StyledMenuInfo>
+                                            <StyledHead>내용</StyledHead>
+                                            <Scroller>
+                                                <StyledContent>
+                                                    {element.info}
+                                                </StyledContent>
+                                            </Scroller>
+                                        </StyledMenuInfo>
+                                    </LogContainer>
+                                );
+                            })}
+                        />
 
                         <MenuButton
                             onClick={() => {
                                 showBatteryMaintain(battery_id);
                             }}
                         >
-                            유지보수 기록 작성
+                            기록 작성
                         </MenuButton>
                     </DropDown>
                 </DropDown>

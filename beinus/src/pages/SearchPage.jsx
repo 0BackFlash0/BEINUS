@@ -362,7 +362,7 @@ const SearchPage = () => {
             <GNB></GNB>
             <SearchSideBar
                 battery_id={batteryID}
-                handle_scroll={handleScroll}
+                maintenance_log={data.maintenanceLogs}
             />
             {/* <BatteryPassport battery_passport_data={data.passport} /> */}
 

@@ -132,8 +132,8 @@ const PieChart = ({ data /* see data tab */ }) => (
             },
         ]}
         theme={{
-            text: { fontSize: 13, fontWeight: 600 },
-            legends: { text: { fontSize: 16 } },
+            text: { fontSize: 13, fontWeight: 700 },
+            legends: { text: { fontSize: 14, fontWeight: 700 } },
         }}
     />
 );

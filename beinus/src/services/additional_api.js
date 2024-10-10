@@ -548,7 +548,28 @@ const tempBattery = {
         soce: 100,
         totalLifeCycle: 1000,
         remainingLifeCycle: 1000,
-        maintenanceLogs: [],
+        maintenanceLogs: [
+            {
+                date: "2024-10-02",
+                name: "정비회사",
+                info: "BMS Update",
+            },
+            {
+                date: "2024-10-02",
+                name: "정비회사",
+                info: "BMS Update",
+            },
+            {
+                date: "2024-09-25",
+                name: "BatteryMaintenanceCo",
+                info: "Battery capacity reduced Battery capacity reduced",
+            },
+            {
+                date: "2024-11-25",
+                name: "BatteryMaintenanceCo",
+                info: "Battery capacity reduced",
+            },
+        ],
         accidentLogs: [],
         maintenanceRequest: false,
         analysisRequest: false,
