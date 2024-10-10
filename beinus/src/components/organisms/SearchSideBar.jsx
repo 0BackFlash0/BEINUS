@@ -22,6 +22,8 @@ import {
     requestMaintenance,
 } from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
+import DropDown from "../molecules/DropDown";
+import FlexCarousel from "../molecules/FlexCarousel";
 
 const StyledSideBarContainer = styled.div`
     position: fixed;
@@ -48,7 +50,22 @@ const StyledSideBar = styled.div`
     /* max-width: 1440px; */
     /* min-width: 720px; */
     padding: 20px 0px;
-    gap: 7px;
+    gap: 20px;
+`;
+
+const StyledMenuInfo = styled.div`
+    width: 100%;
+    padding: 0 10px 0 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const StyledHead = styled.h5`
+    margin: 1px 6px;
+    font-size: 11pt;
+    font-weight: 600;
+    color: #666666;
 `;
 
 const StyledMenuButton = styled.button`
@@ -83,7 +100,11 @@ const StyledMenuBar = styled.div`
 const SearchSideBar = ({
     className = "", // class
     battery_id,
-    handle_scroll,
+    is_verified = false,
+    is_requested_maintenance = false,
+    is_requested_analysis = false,
+    recycle_availability = false,
+    maintenance_log,
 }) => {
     const { showCaution } = useCaution();
     const { showBatteryAnalysis, showBatteryMaintain, showMaterialExtract } =
@@ -94,14 +115,12 @@ const SearchSideBar = ({
             batteryID: battery_id,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    showCaution(`유지보수 요청 성공. \n ID: ${battery_id}`);
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(
+                    `해당 배터리에 대해 유지보수를 요청했습니다. \n ID: ${battery_id}`
+                );
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 
@@ -110,14 +129,12 @@ const SearchSideBar = ({
             batteryID: battery_id,
         })
             .then((response) => {
-                if (response.status === 200) {
-                    showCaution(`분석 요청 성공. \n ID: ${battery_id}`);
-                } else {
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                showCaution(
+                    `해당 배터리에 대해 분석을 요청했습니다. \n ID: ${battery_id}`
+                );
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     };
 
@@ -125,51 +142,91 @@ const SearchSideBar = ({
         <StyledSideBarContainer>
             <Title>배터리 정보</Title>
             <StyledSideBar className={`SearchSideBar ${className}`}>
-                <MenuButton onClick={handleRequestMaintenance}>
-                    유지보수 요청
-                </MenuButton>
-                <MenuButton
-                    onClick={() => {
-                        showBatteryMaintain(battery_id);
-                    }}
-                >
-                    유지보수 기록 작성
-                </MenuButton>
-                <MenuButton onClick={handleRequestAnalysis}>
-                    분석 요청
-                </MenuButton>
-                <MenuButton
-                    onClick={() => {
-                        showBatteryAnalysis(battery_id);
-                    }}
-                >
-                    재활용여부 분석
-                </MenuButton>
-                <MenuButton
-                    onClick={() => {
-                        showMaterialExtract(battery_id);
-                    }}
-                >
-                    원자재 추출
-                </MenuButton>
+                <DropDown icon="license" name="검증">
+                    <StyledMenuInfo>
+                        <StyledHead>검증여부</StyledHead>
+                        <StyledHead>{is_verified ? "O" : "X"}</StyledHead>
+                    </StyledMenuInfo>
+                    {is_verified ? (
+                        ""
+                    ) : (
+                        <MenuButton onClick={handleRequestMaintenance}>
+                            검증
+                        </MenuButton>
+                    )}
+                </DropDown>
+                <DropDown icon="handyman" name="유지보수">
+                    <StyledMenuInfo>
+                        <StyledHead>유지보수 요청</StyledHead>
+                        <StyledHead>
+                            {is_requested_maintenance ? "O" : "X"}
+                        </StyledHead>
+                    </StyledMenuInfo>
+                    {is_requested_maintenance ? (
+                        ""
+                    ) : (
+                        <MenuButton onClick={handleRequestMaintenance}>
+                            유지보수 요청
+                        </MenuButton>
+                    )}
+                    <DropDown icon="handyman" name="유지보수 기록">
+                        <FlexCarousel>
+                            <StyledMenuInfo>
+                                <StyledHead>일자</StyledHead>
+                                <StyledHead>
+                                    {recycle_availability ? "O" : "X"}
+                                </StyledHead>
+                            </StyledMenuInfo>
+                        </FlexCarousel>
 
-                <StyledMenuBar>
-                    <StyledMenuButton onClick={() => handle_scroll(0)}>
-                        <Menu icon="battery_0_bar">배터리</Menu>
-                    </StyledMenuButton>
-                    <StyledMenuButton onClick={() => handle_scroll(1)}>
-                        <Menu icon="factory">제조</Menu>
-                    </StyledMenuButton>
-                    <StyledMenuButton onClick={() => handle_scroll(2)}>
-                        <Menu icon="data_usage">원자재</Menu>
-                    </StyledMenuButton>
-                    <StyledMenuButton onClick={() => handle_scroll(3)}>
-                        <Menu icon="speed">성능</Menu>
-                    </StyledMenuButton>
-                    <StyledMenuButton onClick={() => handle_scroll(4)}>
-                        <Menu icon="info">요청</Menu>
-                    </StyledMenuButton>
-                </StyledMenuBar>
+                        <MenuButton
+                            onClick={() => {
+                                showBatteryMaintain(battery_id);
+                            }}
+                        >
+                            유지보수 기록 작성
+                        </MenuButton>
+                    </DropDown>
+                </DropDown>
+                <DropDown icon="search_insights" name="재활용 / 분석">
+                    <StyledMenuInfo>
+                        <StyledHead>분석 요청</StyledHead>
+                        <StyledHead>
+                            {is_requested_analysis ? "O" : "X"}
+                        </StyledHead>
+                    </StyledMenuInfo>
+                    {is_requested_maintenance ? (
+                        <MenuButton
+                            onClick={() => {
+                                showBatteryAnalysis(battery_id);
+                            }}
+                        >
+                            재활용여부 분석
+                        </MenuButton>
+                    ) : (
+                        <MenuButton onClick={handleRequestAnalysis}>
+                            분석 요청
+                        </MenuButton>
+                    )}
+
+                    <StyledMenuInfo>
+                        <StyledHead>재활용 가능 여부</StyledHead>
+                        <StyledHead>
+                            {recycle_availability ? "O" : "X"}
+                        </StyledHead>
+                    </StyledMenuInfo>
+                    {recycle_availability ? (
+                        <MenuButton
+                            onClick={() => {
+                                showMaterialExtract(battery_id);
+                            }}
+                        >
+                            원자재 추출
+                        </MenuButton>
+                    ) : (
+                        ""
+                    )}
+                </DropDown>
             </StyledSideBar>
         </StyledSideBarContainer>
     );

@@ -24,16 +24,26 @@ import Line from "../components/atoms/Line";
 import CardMultiChart from "../components/molecules/CardMultiChart";
 import Icon from "../components/atoms/Icon";
 import Photo from "../components/atoms/Photo";
+import TabBar from "../components/molecules/TabBar";
+import PassInfo from "../components/molecules/PassInfo";
+import FlexCarousel from "../components/molecules/FlexCarousel";
+import CardChart from "../components/molecules/CardChart";
 
-const StyledContentContainer = styled.div`
-    padding: 30px 30px 30px 30px;
-    margin-top: 60px;
+const StyledMainContainer = styled.div`
+    padding: 20px 20px 10px 20px;
+    /* margin-top: 60px; */
     margin-left: 240px;
     width: calc(100% - 240px);
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
+`;
+
+const StyledContentContainer = styled.div`
+    display: flex;
+    gap: 10px;
+    align-items: center;
 `;
 
 const StyledListContainer = styled.div`
@@ -59,12 +69,14 @@ const StyledIDContainer = styled.div`
 
 const StyledPhotoContainer = styled.div`
     display: flex;
+    height: 100%;
+    width: 40%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 `;
 
-const StyledCardContainer = styled.div`
+const StyledBatteryContainer = styled.div`
     /* flex-shrink: 0; */
     width: 100%;
     /* height: 270px; */
@@ -81,10 +93,83 @@ const StyledCardContainer = styled.div`
     cursor: pointer;
 `;
 
+const CardChartContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+    margin: 3px;
+
+    width: 100%;
+    /* height: 176px; */
+    padding: 12px 12px 0 12px;
+    /* border-radius: 10px; */
+
+    background-color: #edffed;
+`;
+
+const StyledCardContainer = styled.div`
+    /* flex-shrink: 0; */
+    width: 100%;
+    /* height: 270px; */
+    border: solid 2px;
+    border-color: #13c752;
+    border-radius: 10px;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 10px;
+    gap: 10px;
+`;
+
+const StyledCardTitle = styled.div`
+    font-size: 10pt;
+    color: #666f7c;
+    padding: 2px 0;
+    margin: 0;
+`;
+
+const StyledBatteryInfoContainer = styled.div`
+    /* flex-shrink: 0; */
+    width: 100%;
+    /* height: 270px; */
+    /* border: solid 2px; */
+    /* border-color: #13c752; */
+    border-radius: 10px;
+    /* padding: 20px 15px; */
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 10px;
+    gap: 10px;
+    border: 1px solid #cacaca;
+    box-shadow: 2px 2px 2px gray;
+
+    cursor: pointer;
+`;
+
+const StyledTabContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 0 10px 10px;
+    padding: 15px;
+    /* gap: 10px; */
+    /* background-color: #edffed; */
+`;
+
 const StyledRow = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+`;
+
+const StyledColumn = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
 `;
 
@@ -96,63 +181,30 @@ const StyledLabel = styled.div`
 `;
 
 const StyledTitle = styled.div`
-    font-size: 18pt;
+    font-size: 16pt;
     font-weight: 700;
     color: #292929;
     padding: 2px 0;
-    margin: 0 0 10px 0;
+    /* margin: 5px 0 0 0; */
 `;
 
-const tempPassport = {
-    id: "-",
-    model_number: "-",
-    serial_number: "-",
-    image: "-",
-    QR: "-",
-};
-
-const tempInformation = {
-    model_name: "-",
-    manufacture: "-",
-    category: "-",
-    status: "-",
-    manufactured_date: "-",
-    remaining_capacity: "-",
-    maximum_capacity: "-",
-    normal_voltage: "-",
-    soc: "-",
-    soh: "-H",
-    material_composition: {
-        nickel: 1,
-        cobalt: 1,
-        lithium: 1,
-        lead: 1,
+const tabTitles = [
+    {
+        key: "manufacture",
+        name: "Manufacture",
+        icon: "factory",
     },
-    contain_harzardous: "-",
-    material_recycled: {
-        nickel: {
-            pre_consumer: 1,
-            post_consumer: 1,
-            primary: 1,
-        },
-        cobalt: {
-            pre_consumer: 1,
-            post_consumer: 1,
-            primary: 1,
-        },
-        lithium: {
-            pre_consumer: 1,
-            post_consumer: 1,
-            primary: 1,
-        },
-        lead: {
-            pre_consumer: 1,
-            post_consumer: 1,
-            primary: 1,
-        },
+    {
+        key: "performance",
+        name: "Performance",
+        icon: "speed",
     },
-    maintenance_history: "-",
-};
+    {
+        key: "material",
+        name: "Material",
+        icon: "data_usage",
+    },
+];
 
 const SearchPage = () => {
     const navigate = useNavigate();
@@ -161,6 +213,7 @@ const SearchPage = () => {
     const { batteryID } = useParams();
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState(0);
 
     const batteryRef = useRef(null);
     const manufactureRef = useRef(null);
@@ -181,6 +234,106 @@ const SearchPage = () => {
             behavior: "smooth",
             block: "end",
         });
+    };
+
+    const handleTab = (idx) => {
+        setActiveTab(idx);
+    };
+
+    const showContent = (idx) => {
+        switch (idx) {
+            case 0:
+                return (
+                    <StyledTabContainer ref={manufactureRef}>
+                        <CardInfo title="제조사" info={data.ManufacturerName} />
+                        <CardInfo
+                            title="제조 일자"
+                            info={data.manufactureDate.slice(0, 10)}
+                        />
+                        <CardInfo title="위치" info={data.location} />
+                    </StyledTabContainer>
+                );
+            case 1:
+                return (
+                    <StyledTabContainer ref={performanceRef}>
+                        <StyledRow>
+                            <CardInfo title="전압" info={data.voltage} />
+                            <CardInfo title="용량" info={data.capacity} />
+                        </StyledRow>
+                        <StyledRow>
+                            <CardInfo
+                                title="수명"
+                                info={data.remainingLifeCycle}
+                            />
+                            <CardInfo
+                                title="SoH (State of Health)"
+                                info={data.soh}
+                            />
+                        </StyledRow>
+                        <StyledRow>
+                            <CardInfo
+                                title="SoC (State of Charge)"
+                                info={data.soc}
+                            />
+                            <CardInfo
+                                title="SoCE (State of CE)"
+                                info={data.soh}
+                            />
+                        </StyledRow>
+                    </StyledTabContainer>
+                );
+            case 2:
+                return (
+                    <StyledTabContainer ref={materialRef}>
+                        <CardChartContainer>
+                            <StyledCardTitle>
+                                재활용 원료 사용 비율
+                            </StyledCardTitle>
+                            <FlexCarousel
+                                container_width={"100%"}
+                                element_width={250}
+                                elements={Object.entries(
+                                    data.recyclingRatesByMaterial
+                                ).map(([key, value], index) => {
+                                    return (
+                                        // <CardInfo
+                                        //     title="SoC (State of Charge)"
+                                        //     info={value}
+                                        // />
+
+                                        <CardChart
+                                            chartname={key}
+                                            data={[
+                                                {
+                                                    id: "Recycled",
+                                                    label: "Recycled",
+                                                    value:
+                                                        Math.round(value * 10) /
+                                                        1000,
+                                                },
+                                                {
+                                                    id: "New",
+                                                    label: "New",
+                                                    value:
+                                                        Math.round(
+                                                            (100 - value) * 10
+                                                        ) / 1000,
+                                                },
+                                            ]}
+                                        />
+                                    );
+                                })}
+                            ></FlexCarousel>
+                        </CardChartContainer>
+                        <CardInfo
+                            title="포함 위험 물질"
+                            info={data.containsHazardous}
+                        />
+                    </StyledTabContainer>
+                );
+            default:
+                return;
+        }
     };
 
     useEffect(() => {
@@ -213,7 +366,7 @@ const SearchPage = () => {
             />
             {/* <BatteryPassport battery_passport_data={data.passport} /> */}
 
-            <StyledIDContainer>
+            {/* <StyledIDContainer>
                 <StyledRow>
                     <StyledLabel>배터리 ID</StyledLabel>
                     <StyledLabel>{batteryID}</StyledLabel>
@@ -222,122 +375,72 @@ const SearchPage = () => {
                     <StyledLabel>여권 ID</StyledLabel>
                     <StyledLabel>{data.PassportID}</StyledLabel>
                 </StyledRow>
-            </StyledIDContainer>
-            <StyledContentContainer>
+            </StyledIDContainer> */}
+            <StyledMainContainer>
                 <StyledListContainer>
                     <StyledRow>
-                        <StyledPhotoContainer>
-                            <Photo src="/assets/battery_example.png" />
-                        </StyledPhotoContainer>
-                        <StyledCardContainer ref={batteryRef}>
-                            <StyledRow>
-                                <StyledTitle>배터리</StyledTitle>
-                                <Icon icon="battery_0_bar" size="23pt" />
-                            </StyledRow>
-                            <StyledRow>
-                                <CardInfo
-                                    title="카테고리"
-                                    info={data.category}
+                        <StyledBatteryContainer ref={batteryRef}>
+                            <StyledContentContainer>
+                                <StyledTitle>Battery Information</StyledTitle>
+                                <Icon
+                                    icon="battery_0_bar"
+                                    size="14pt"
+                                    weight="600"
                                 />
+                            </StyledContentContainer>
+                            <StyledRow>
+                                <StyledPhotoContainer>
+                                    <Photo
+                                        src="/assets/battery_example.png"
+                                        width="auto"
+                                    />
+                                </StyledPhotoContainer>
+                                <StyledColumn>
+                                    <PassInfo
+                                        title="배터리 ID"
+                                        info={batteryID}
+                                    />
 
-                                <CardInfo
-                                    title="무게"
-                                    info={`${data.weight} kg`}
-                                />
+                                    <PassInfo
+                                        title="여권 ID"
+                                        info={`${data.PassportID}`}
+                                    />
+                                    <StyledRow>
+                                        <PassInfo
+                                            title="카테고리"
+                                            info={data.category}
+                                        />
+
+                                        <PassInfo
+                                            title="무게"
+                                            info={`${data.weight} kg`}
+                                        />
+                                        <PassInfo
+                                            title="상태"
+                                            info={data.status}
+                                        />
+                                        {/* <CardInfo
+                                            title="검증"
+                                            info={data.Verified}
+                                        /> */}
+                                    </StyledRow>
+
+                                    <StyledRow></StyledRow>
+                                </StyledColumn>
                             </StyledRow>
-
-                            <CardInfo title="상태" info={data.status} />
-                            <CardInfo title="검증" info={data.Verified} />
-                        </StyledCardContainer>
+                        </StyledBatteryContainer>
                     </StyledRow>
 
-                    <StyledCardContainer ref={manufactureRef}>
-                        <StyledRow>
-                            <StyledTitle>제조</StyledTitle>
-                            <Icon icon="factory" size="23pt" />
-                        </StyledRow>
-                        <CardInfo title="제조사" info={data.ManufacturerName} />
-                        <CardInfo
-                            title="제조 일자"
-                            info={data.manufactureDate.slice(0, 10)}
-                        />
-                        <CardInfo title="위치" info={data.location} />
-                    </StyledCardContainer>
-
-                    <StyledCardContainer ref={materialRef}>
-                        <StyledRow>
-                            <StyledTitle>원자재</StyledTitle>
-                            <Icon icon="data_usage" size="23pt" />
-                        </StyledRow>
-                        <CardMultiChart
-                            chartname={"재활용 원료 사용 비율"}
-                            datas={Object.entries(
-                                data.recyclingRatesByMaterial
-                            ).map(([key, value], index) => {
-                                return {
-                                    [key]: [
-                                        {
-                                            id: "Recycled",
-                                            label: "Recycled",
-                                            value:
-                                                Math.round(value * 10) / 1000,
-                                        },
-                                        {
-                                            id: "New",
-                                            label: "New",
-                                            value:
-                                                Math.round((100 - value) * 10) /
-                                                1000,
-                                        },
-                                    ],
-                                };
-                            })}
-                        />
-                        <CardInfo
-                            title="포함 위험 물질"
-                            info={data.containsHazardous}
-                        />
-                    </StyledCardContainer>
-
-                    <StyledCardContainer ref={performanceRef}>
-                        <StyledRow>
-                            <StyledTitle>성능</StyledTitle>
-                            <Icon icon="speed" size="23pt" />
-                        </StyledRow>
-
-                        <CardInfo title="전압" info={data.voltage} />
-                        <CardInfo title="용량" info={data.capacity} />
-                        <CardInfo title="수명" info={data.remainingLifeCycle} />
-                        <CardInfo
-                            title="SoC (State of Charge)"
-                            info={data.soc}
-                        />
-                        <CardInfo title="SoCE (State of CE)" info={data.soh} />
-                        <CardInfo
-                            title="SoH (State of Health)"
-                            info={data.soh}
-                        />
-                    </StyledCardContainer>
-                    <StyledCardContainer ref={requestRef}>
-                        <StyledRow>
-                            <StyledTitle>요청</StyledTitle>
-                            <Icon icon="info" size="23pt" />
-                        </StyledRow>
-                        <CardInfo
-                            title="유지보수 요청"
-                            info={data.maintenanceRequest ? "O" : "X"}
-                        />
-                        <CardInfo
-                            title="분석 요청"
-                            info={data.analysisRequest ? "O" : "X"}
-                        />
-                        <CardInfo
-                            title="재활용 가능 여부"
-                            info={data.recycleAvailability ? "O" : "X"}
-                        />
-                    </StyledCardContainer>
+                    <StyledBatteryInfoContainer>
+                        <TabBar
+                            tabs={tabTitles}
+                            onClick={handleTab}
+                            actived={activeTab}
+                        ></TabBar>
+                        {showContent(activeTab)}
+                    </StyledBatteryInfoContainer>
                 </StyledListContainer>
-            </StyledContentContainer>
+            </StyledMainContainer>
         </PageTemplate>
     );
 };

@@ -10,9 +10,11 @@ import { ResponsivePie } from "@nivo/pie";
 const PieChart = ({ data /* see data tab */ }) => (
     <ResponsivePie
         data={data}
-        margin={{ top: 20, right: 100, bottom: 20, left: 0 }}
+        margin={{ top: 10, right: 0, bottom: 30, left: 0 }}
         innerRadius={0.7}
         padAngle={2}
+        cornerRadious={3}
+        // height={180}
         activeOuterRadiusOffset={8}
         colors={{ scheme: "nivo" }}
         // colorBy={(e) => e.data.color}
@@ -22,6 +24,7 @@ const PieChart = ({ data /* see data tab */ }) => (
             from: "color",
             modifiers: [["darker", 0.2]],
         }}
+        enableArcLabels={false}
         enableArcLinkLabels={false}
         arcLinkLabelsSkipAngle={10}
         arcLinkLabelsTextColor="#333333"
@@ -105,11 +108,11 @@ const PieChart = ({ data /* see data tab */ }) => (
         // ]}
         legends={[
             {
-                anchor: "center",
-                direction: "column",
+                anchor: "bottom",
+                direction: "row",
                 justify: false,
-                translateX: 180,
-                translateY: 0,
+                translateX: 20,
+                translateY: 40,
                 itemsSpacing: 0,
                 itemWidth: 99,
                 itemHeight: 39,
@@ -117,14 +120,14 @@ const PieChart = ({ data /* see data tab */ }) => (
                 itemDirection: "left-to-right",
                 itemOpacity: 1,
                 symbolSize: 18,
-                symbolShape: "square",
+                symbolShape: "circle",
                 effects: [
-                    {
-                        on: "hover",
-                        style: {
-                            itemTextColor: "#000",
-                        },
-                    },
+                    // {
+                    //     on: "hover",
+                    //     style: {
+                    //         itemTextColor: "#000",
+                    //     },
+                    // },
                 ],
             },
         ]}

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Photo from "../atoms/Photo";
+import Icon from "../atoms/Icon";
 
 const StyledBarContainer = styled.div`
     width: 100%;
@@ -10,6 +11,7 @@ const StyledBarContainer = styled.div`
     flex-direction: row;
     align-items: start;
     margin: 0px;
+    /* border-bottom: 2px solid #d8d8d8; */
 `;
 
 const StyledTab = styled.button`
@@ -20,14 +22,24 @@ const StyledTab = styled.button`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 0 10px;
+    gap: 15px;
 
-    font-size: 15pt;
+    font-size: 11pt;
+    font-weight: 800;
     border-width: 0;
     outline: none;
 
-    background-color: ${(props) =>
-        props.actived === props.index ? "#EDFFED" : "white"};
+    color: ${(props) =>
+        props.actived === props.index ? "#1ED760" : "#adadad"};
+
+    border-bottom: ${(props) =>
+        props.actived === props.index
+            ? "2px solid #1ED760"
+            : "2px solid #d8d8d8"};
+
+    background-color: white;
+    /* background-color: ${(props) =>
+        props.actived === props.index ? "#EDFFED" : "white"}; */
 
     border-radius: ${(props) => {
         return props.index == 0
@@ -53,7 +65,11 @@ const TabBar = ({ tabs, className = "", onClick, actived }) => {
                     length={array.length}
                     actived={actived}
                 >
-                    <Photo src={tab.icon} width="20px" />
+                    <Icon
+                        icon={tab.icon}
+                        size="16pt"
+                        color={actived === index ? "#1ED760" : "#adadad"}
+                    />
                     {tab.name}
                 </StyledTab>
             ))}
