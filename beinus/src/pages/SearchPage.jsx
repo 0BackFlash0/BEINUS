@@ -245,39 +245,51 @@ const SearchPage = () => {
             case 0:
                 return (
                     <StyledTabContainer ref={manufactureRef}>
-                        <CardInfo title="제조사" info={data.ManufacturerName} />
                         <CardInfo
-                            title="제조 일자"
+                            title="Manufacturer"
+                            info={data.ManufacturerName}
+                        />
+                        <CardInfo
+                            title="Manufactured Date"
                             info={data.manufactureDate.slice(0, 10)}
                         />
-                        <CardInfo title="위치" info={data.location} />
+                        <CardInfo
+                            title="Manufactured Location"
+                            info={data.location}
+                        />
                     </StyledTabContainer>
                 );
             case 1:
                 return (
                     <StyledTabContainer ref={performanceRef}>
                         <StyledRow>
-                            <CardInfo title="전압" info={data.voltage} />
-                            <CardInfo title="용량" info={data.capacity} />
+                            <CardInfo
+                                title="Voltage"
+                                info={`${data.voltage} V`}
+                            />
+                            <CardInfo
+                                title="Capacity"
+                                info={`${data.capacity} Ah`}
+                            />
                         </StyledRow>
                         <StyledRow>
                             <CardInfo
-                                title="수명"
-                                info={data.remainingLifeCycle}
+                                title="Total Lifecycle"
+                                info={data.totalLifeCycle}
                             />
+                            {/* <CardInfo
+                                title="Remaining Lifecycle"
+                                info={data.remainingLifeCycle}
+                            /> */}
+                        </StyledRow>
+                        <StyledRow>
                             <CardInfo
                                 title="SoH (State of Health)"
-                                info={data.soh}
+                                info={`${data.soh} %`}
                             />
-                        </StyledRow>
-                        <StyledRow>
                             <CardInfo
                                 title="SoC (State of Charge)"
-                                info={data.soc}
-                            />
-                            <CardInfo
-                                title="SoCE (State of CE)"
-                                info={data.soh}
+                                info={`${data.soc} %`}
                             />
                         </StyledRow>
                     </StyledTabContainer>
@@ -287,7 +299,7 @@ const SearchPage = () => {
                     <StyledTabContainer ref={materialRef}>
                         <CardChartContainer>
                             <StyledCardTitle>
-                                재활용 원료 사용 비율
+                                Recycled Material Usage Ratio
                             </StyledCardTitle>
                             <FlexCarousel
                                 container_width={"100%"}
@@ -326,7 +338,7 @@ const SearchPage = () => {
                             ></FlexCarousel>
                         </CardChartContainer>
                         <CardInfo
-                            title="포함 위험 물질"
+                            title="Harzardous Materials"
                             info={data.containsHazardous}
                         />
                     </StyledTabContainer>
@@ -397,33 +409,31 @@ const SearchPage = () => {
                                 </StyledPhotoContainer>
                                 <StyledColumn>
                                     <PassInfo
-                                        title="배터리 ID"
+                                        title="Battery ID"
                                         info={batteryID}
                                     />
 
                                     <PassInfo
-                                        title="여권 ID"
+                                        title="Passport ID"
                                         info={`${data.PassportID}`}
                                     />
-                                    <StyledRow>
-                                        <PassInfo
-                                            title="카테고리"
-                                            info={data.category}
-                                        />
+                                    <PassInfo
+                                        title="Category"
+                                        info={data.category}
+                                    />
 
-                                        <PassInfo
-                                            title="무게"
-                                            info={`${data.weight} kg`}
-                                        />
-                                        <PassInfo
-                                            title="상태"
-                                            info={data.status}
-                                        />
-                                        {/* <CardInfo
+                                    <PassInfo
+                                        title="Weight"
+                                        info={`${data.weight} kg`}
+                                    />
+                                    <PassInfo
+                                        title="Status"
+                                        info={data.status}
+                                    />
+                                    {/* <CardInfo
                                             title="검증"
                                             info={data.Verified}
                                         /> */}
-                                    </StyledRow>
 
                                     <StyledRow></StyledRow>
                                 </StyledColumn>

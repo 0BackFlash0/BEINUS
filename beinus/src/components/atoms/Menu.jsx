@@ -13,7 +13,7 @@ const StyledMenuContainer = styled.div`
 
 const StyledHead = styled.h5`
     margin: 1px 6px;
-    font-size: 11pt;
+    font-size: 10pt;
     font-weight: 600;
     color: #666666;
 `;

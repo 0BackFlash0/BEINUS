@@ -15,7 +15,7 @@ const StyledInnerContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5px 0 0 12px;
+    padding: 0px 0 0 12px;
     gap: 7px;
 `;
 

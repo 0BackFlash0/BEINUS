@@ -60,7 +60,7 @@ const StyledMenuInfo = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
 `;
 
 const LogContainer = styled.div`
@@ -77,6 +77,17 @@ const StyledHead = styled.h5`
     font-size: 11pt;
     font-weight: 600;
     color: #666666;
+    color: ${(props) => (props.status ? "#1ED760" : "red")};
+`;
+
+const StyledRequestContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 0 0 0px;
+    margin-bottom: 20px;
+    gap: 7px;
 `;
 
 const StyledContent = styled.h5`
@@ -161,36 +172,42 @@ const SearchSideBar = ({
 
     return (
         <StyledSideBarContainer>
-            <Title>배터리 정보</Title>
+            <Title>Request Status</Title>
             <StyledSideBar className={`SearchSideBar ${className}`}>
-                <DropDown icon="license" name="검증">
+                <DropDown icon="license" name="VERIFICAITON">
                     <StyledMenuInfo>
-                        <StyledHead>검증여부</StyledHead>
-                        <StyledHead>{is_verified ? "O" : "X"}</StyledHead>
+                        {/* <StyledHead>VERIFICATION</StyledHead> */}
+                        <StyledHead status={is_verified}>
+                            {is_verified ? "VERIFIED" : "NOT VERIFIED"}
+                        </StyledHead>
+                        {/* <RequestButton onClick={handleRequestMaintenance}>
+                            Request
+                        </RequestButton> */}
                     </StyledMenuInfo>
                     {is_verified ? (
                         ""
                     ) : (
                         <MenuButton onClick={handleRequestMaintenance}>
-                            검증
+                            REQUEST
                         </MenuButton>
                     )}
                 </DropDown>
-                <DropDown icon="handyman" name="유지보수">
+                <DropDown icon="handyman" name="MAINTENANCE">
                     <StyledMenuInfo>
-                        <StyledHead>유지보수 요청</StyledHead>
-                        <StyledHead>
-                            {is_requested_maintenance ? "O" : "X"}
+                        <StyledHead status={is_requested_maintenance}>
+                            {is_requested_maintenance
+                                ? "REQUESTED"
+                                : "NOT REQUESTED"}
                         </StyledHead>
                     </StyledMenuInfo>
                     {is_requested_maintenance ? (
                         ""
                     ) : (
                         <MenuButton onClick={handleRequestMaintenance}>
-                            유지보수 요청
+                            REQUEST
                         </MenuButton>
                     )}
-                    <DropDown icon="handyman" name="유지보수 기록">
+                    {/* <DropDown icon="handyman" name="유지보수 기록">
                         <FlexCarousel
                             container_width="100%"
                             element_width={150}
@@ -231,47 +248,65 @@ const SearchSideBar = ({
                         >
                             기록 작성
                         </MenuButton>
-                    </DropDown>
+                    </DropDown> */}
                 </DropDown>
-                <DropDown icon="search_insights" name="재활용 / 분석">
-                    <StyledMenuInfo>
-                        <StyledHead>분석 요청</StyledHead>
-                        <StyledHead>
-                            {is_requested_analysis ? "O" : "X"}
-                        </StyledHead>
-                    </StyledMenuInfo>
-                    {is_requested_maintenance ? (
+                <DropDown icon="search_insights" name="RECYCLE CHECK">
+                    <StyledRequestContainer>
+                        <StyledMenuInfo>
+                            <StyledHead status={is_requested_analysis}>
+                                {is_requested_analysis
+                                    ? "REQUESTED"
+                                    : "NOT REQUESTED"}
+                            </StyledHead>
+                        </StyledMenuInfo>
+                        <MenuButton onClick={handleRequestAnalysis}>
+                            REQUEST
+                        </MenuButton>
                         <MenuButton
                             onClick={() => {
                                 showBatteryAnalysis(battery_id);
                             }}
                         >
-                            재활용여부 분석
+                            CHECK AVAILABILITY
                         </MenuButton>
-                    ) : (
-                        <MenuButton onClick={handleRequestAnalysis}>
-                            분석 요청
-                        </MenuButton>
-                    )}
+                    </StyledRequestContainer>
+                </DropDown>
 
-                    <StyledMenuInfo>
-                        <StyledHead>재활용 가능 여부</StyledHead>
-                        <StyledHead>
-                            {recycle_availability ? "O" : "X"}
-                        </StyledHead>
-                    </StyledMenuInfo>
-                    {recycle_availability ? (
+                <DropDown icon="search_insights" name="RECYCLE">
+                    <StyledRequestContainer>
+                        <StyledMenuInfo>
+                            <StyledHead status={recycle_availability}>
+                                {recycle_availability
+                                    ? "AVAILABLE"
+                                    : "NOT AVAILABLE"}
+                            </StyledHead>
+                        </StyledMenuInfo>
                         <MenuButton
                             onClick={() => {
                                 showMaterialExtract(battery_id);
                             }}
                         >
-                            원자재 추출
+                            EXTRACT
                         </MenuButton>
-                    ) : (
-                        ""
-                    )}
+                    </StyledRequestContainer>
                 </DropDown>
+
+                {/* <DropDown icon="search_insights" name="RECYCLE">
+                    <StyledMenuInfo>
+                        <StyledHead status={recycle_availability}>
+                            {recycle_availability
+                                ? "AVAILABLE"
+                                : "NOT AVAILABLE"}
+                        </StyledHead>
+                    </StyledMenuInfo>
+                    <MenuButton
+                        onClick={() => {
+                            showMaterialExtract(battery_id);
+                        }}
+                    >
+                        원자재 추출
+                    </MenuButton>
+                </DropDown> */}
             </StyledSideBar>
         </StyledSideBarContainer>
     );

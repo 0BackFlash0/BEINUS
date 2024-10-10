@@ -3,22 +3,24 @@ import Subtitle from "../atoms/Subtitle";
 import MainContent from "../atoms/MainContent";
 
 const StyledInfoContainer = styled.div`
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: start;
     gap: 5px;
     margin: 3px;
 
     width: 100%;
-    height: 85px;
+    /* height: 85px; */
     padding: 12px;
     /* border-radius: 10px; */
 
-    background-color: #f8f8f8;
+    /* background-color: #f8f8f8; */
 `;
 
 const StyledTitle = styled.div`
-    font-size: 10pt;
+    font-size: 12pt;
+    width: 100px;
     color: #666f7c;
     padding: 2px 0;
     margin: 0;
