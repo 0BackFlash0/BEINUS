@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Label from "../atoms/Label";
 import Subtitle from "../atoms/Subtitle";
-import styled, { keyframes } from "styled-components";
+import styled, { css } from "styled-components";
+import Icon from "../atoms/Icon";
 
 const StyledOptionContainer = styled.div`
     display: flex;
@@ -10,107 +11,167 @@ const StyledOptionContainer = styled.div`
     margin: 0px;
 `;
 
-const StyledOptionList = styled.select`
+const StyledSelectBox = styled.div`
     width: 100%;
     font-size: 16pt;
-    padding: 10px 0 13px 0;
+    padding: 4px 5px 6px 5px;
+    margin: 0;
     border-style: solid;
     border-color: #d4d4d4;
     border-width: 0 0 1px 0;
+    cursor: pointer;
+    position: relative;
+    text-align: start;
 
     &:focus {
         outline: none;
         border-color: #383838;
     }
 
-    &::is_disabled {
+    &.is-disabled {
         font-size: 14pt;
         color: #b3b3b3;
+        pointer-events: none;
     }
 `;
 
-// const StyledOption = styled.option`
-//     width: 100%;
-//     max-width: 50px;
-//     padding: "10px";
-//     /* whitespace: "nowrap"; */
-//     overflow: "hidden";
-//     /* textoverflow: "ellipsis"; */
-//     cursor: "pointer";
-//     position: "relative";
-// `;
+const StyledSelectedOption = styled.div`
+    padding: 5px;
+    font-size: 16pt;
+    color: #383838;
+`;
+
+const StyledOptionList = styled.div`
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+    display: ${(props) => (props.show ? "block" : "none")};
+`;
+
+const StyledOption = styled.div`
+    padding: 10px;
+    font-size: 16pt;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f4f4f4;
+    }
+
+    ${(props) =>
+        props.selected &&
+        css`
+            /* background-color: #e4e4e4; */
+            color: blue;
+            /* font-weight: bold; */
+        `}
+`;
+
+const StyledSelectIcon = styled(Icon)`
+    position: absolute;
+    top: 7px;
+    right: 0px;
+`;
 
 const OptionGroup = ({
-    title, // Option 제목
+    title,
     options,
-    id, // id
-    name, // Option의 name
-    value, // Option의 value
-    is_disabled, // Option의 is_disabled
-    onChange, // Option의 onChange handler
-    valid, // 올바른지 여부 (설명 메시지 색 설정)
+    id,
+    name,
+    value,
+    is_disabled,
+    onChange,
+    valid,
     is_description = true,
-    description, // 설명 메세지
+    description,
     className = "",
 }) => {
-    const titleOptionalProps = { ...(id && { htmlFor: id }) };
-    const optionOptionalProps = {
-        ...(id && { id: id }),
-        ...(name && { name: name }),
-        ...(value && { value: value }),
-        ...(is_disabled && "disabled"),
-        ...(onChange && { onChange: onChange }),
-    };
+    const [selected, setSelected] = useState(value || options[0]?.key);
+    const [showOptions, setShowOptions] = useState(false);
+    const selectBoxRef = useRef(null);
 
-    useEffect(() => {
-        let is_in_options = false;
-
-        options.forEach((element, idx) => {
-            if (element.key === value) {
-                is_in_options = true;
-            }
-        });
-
-        if (options.length > 0 && !is_in_options) {
+    const handleOptionSelect = (key) => {
+        setSelected(key);
+        setShowOptions(false);
+        if (onChange) {
             onChange({
                 target: {
                     name: name,
-                    value: options[0].key,
+                    value: key,
                 },
             });
         }
-    }, [options, value, name, onChange]);
+    };
+
+    const handleClickOutside = (event) => {
+        if (
+            selectBoxRef.current &&
+            !selectBoxRef.current.contains(event.target)
+        ) {
+            setShowOptions(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        setSelected(value || options[0]?.key);
+    }, [value, options]);
 
     return (
         <StyledOptionContainer className={`${className}`}>
             {title ? (
-                <Subtitle className="option-title" {...titleOptionalProps}>
+                <Subtitle className="option-title" htmlFor={id || ""}>
                     {title}
                 </Subtitle>
-            ) : (
-                ""
-            )}
-            <StyledOptionList className="select" {...optionOptionalProps}>
-                {options.map((option, index) => (
-                    <option
-                        key={option.key}
-                        value={option.key}
-                        className="option"
-                    >
-                        {option.name}
-                    </option>
-                ))}
-            </StyledOptionList>
+            ) : null}
+            <StyledSelectBox
+                ref={selectBoxRef}
+                onClick={() => setShowOptions(!showOptions)}
+                className={`select ${is_disabled ? "is-disabled" : ""}`}
+            >
+                <StyledSelectIcon
+                    icon={
+                        showOptions
+                            ? "keyboard_arrow_up"
+                            : "keyboard_arrow_down"
+                    }
+                    weight="700"
+                />
+                <StyledSelectedOption>
+                    {options.find((option) => option.key === selected)?.name ||
+                        "Select an option"}
+                </StyledSelectedOption>
+                <StyledOptionList show={showOptions}>
+                    {options.map((option, index) => (
+                        <StyledOption
+                            key={option.key}
+                            onClick={() => handleOptionSelect(option.key)}
+                            selected={option.key === selected}
+                            className="option"
+                        >
+                            {option.name}
+                        </StyledOption>
+                    ))}
+                </StyledOptionList>
+            </StyledSelectBox>
             {is_description ? (
                 <Label
                     className={`input-description`}
                     valid={valid ? "success" : "fail"}
                 >
-                    {description ? `${description}` : <br />}
+                    {description || <br />}
                 </Label>
-            ) : (
-                ""
-            )}
+            ) : null}
         </StyledOptionContainer>
     );
 };

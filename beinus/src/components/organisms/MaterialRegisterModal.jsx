@@ -29,6 +29,7 @@ const StyledTopic = styled(Topic)`
 `;
 
 const StyledInputGroupContainer = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: row;
 `;

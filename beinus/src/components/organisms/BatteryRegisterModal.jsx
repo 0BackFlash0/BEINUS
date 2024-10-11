@@ -12,11 +12,12 @@ import {
 import { useEffect, useState } from "react";
 import RegisterMaterialOption from "./RegisterMaterialOption";
 import { useCaution } from "../../hooks/useCaution";
+import FlexCarousel from "../molecules/FlexCarousel";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
     width: 900px;
-    height: 720px;
+    height: 560px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -24,7 +25,7 @@ const StyledBatteryRegisterContainer = styled.div`
 `;
 
 const StyledBatteryInfoContainer = styled.div`
-    flex-grow: 3;
+    flex-grow: 1;
     flex-basis: 0;
     /* width: 100%; */
     height: 400px;
@@ -35,14 +36,16 @@ const StyledBatteryInfoContainer = styled.div`
 `;
 
 const StyledMaterialListContainer = styled.div`
-    flex-grow: 4;
-    flex-basis: 0;
-    /* width: 100%; */
+    position: relative;
+    padding: 0 10px;
+    width: 450px;
+    flex-grow: 0;
     height: 400px;
     display: flex;
     flex-direction: column;
     align-items: start;
     overflow: auto;
+    gap: 10px;
 `;
 
 const StyledColumnGroupContainer = styled.div`
@@ -75,10 +78,15 @@ const StyledTopic = styled(Topic)`
 `;
 
 const StyledAddButton = styled.button`
-    width: 100%;
+    position: absolute;
+    /* width: 50px; */
+    top: 5px;
+    right: 30px;
+    padding: 5px 8px 0 8px;
+
     border-style: none;
     border-radius: 5px;
-    font-size: 16pt;
+    font-size: 18pt;
     font-weight: 900;
     background-color: #ececec;
     color: #6d6d6d;
@@ -295,34 +303,45 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                 <StyledMaterialListContainer>
                     <StyledSubtitle>원자재 목록</StyledSubtitle>
 
-                    {value.materialList && materialData
-                        ? value.materialList.map((element, idx) => {
-                              return (
-                                  <RegisterMaterialOption
-                                      key={idx}
-                                      index={idx}
-                                      type_value={element.type}
-                                      material_options={materialData.material_list
-                                          .filter(
-                                              (material) =>
-                                                  material.type === element.type
-                                          )
-                                          .map((target) => {
-                                              return {
-                                                  key: target.id,
-                                                  name: target.id,
-                                                  amount: target.amount,
-                                              };
-                                          })}
-                                      material_id_value={element.materialID}
-                                      amount_value={element.amount}
-                                      on_change={(e) =>
-                                          handleOnChangeMaterial(e, idx)
-                                      }
-                                  />
-                              );
-                          })
-                        : ""}
+                    <FlexCarousel
+                        container_width={"100%"}
+                        element_width={400}
+                        elements={
+                            value.materialList && materialData
+                                ? value.materialList.map((element, idx) => {
+                                      return (
+                                          <RegisterMaterialOption
+                                              key={idx}
+                                              index={idx}
+                                              type_value={element.type}
+                                              material_options={materialData.material_list
+                                                  .filter(
+                                                      (material) =>
+                                                          material.type ===
+                                                          element.type
+                                                  )
+                                                  .map((target) => {
+                                                      return {
+                                                          key: target.id,
+                                                          name: target.id,
+                                                          amount: target.amount,
+                                                      };
+                                                  })}
+                                              material_id_value={
+                                                  element.materialID
+                                              }
+                                              amount_value={element.amount}
+                                              on_change={(e) =>
+                                                  handleOnChangeMaterial(e, idx)
+                                              }
+                                          />
+                                      );
+                                  })
+                                : []
+                        }
+                    />
+
+                    {}
                     <StyledAddButton onClick={addMaterial}>+</StyledAddButton>
                 </StyledMaterialListContainer>
                 <StyledButtonContainer>

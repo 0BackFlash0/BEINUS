@@ -84,7 +84,7 @@ const FlexCarousel = ({
                 setShowNumber(new_shownum);
                 console.log(new_shownum);
                 if (firstElement + showNumber > elements.length) {
-                    setFirstElement((prev) => prev - showNumber);
+                    setFirstElement(elements.length - new_shownum);
                 }
                 // setWidthPixel(entries[0].contentRect.width);
             }
@@ -97,7 +97,7 @@ const FlexCarousel = ({
         return () => {
             resizeObserver.disconnect();
         };
-    });
+    }, [elements, element_width, firstElement]);
 
     return (
         <StyledCarouselContainer
@@ -105,7 +105,7 @@ const FlexCarousel = ({
             container_width={container_width}
             ref={carouselRef}
         >
-            {firstElement !== 0 ? (
+            {firstElement > 0 && (
                 <StyledMoveButton
                     position="left"
                     onClick={() => {
@@ -118,10 +118,8 @@ const FlexCarousel = ({
                         weight="900"
                     />
                 </StyledMoveButton>
-            ) : (
-                ""
             )}
-            {firstElement + showNumber !== elements.length ? (
+            {firstElement + showNumber !== elements.length && (
                 <StyledMoveButton
                     position="right"
                     onClick={() => {
@@ -134,23 +132,24 @@ const FlexCarousel = ({
                         weight="900"
                     />
                 </StyledMoveButton>
-            ) : (
-                ""
             )}
 
-            {elements
-                .filter(
-                    (element, idx) =>
-                        idx >= firstElement && idx < firstElement + showNumber
-                )
-                .map((element) => (
-                    <StyledElement
-                        showing_num={showNumber}
-                        element_width={`${element_width}px`}
-                    >
-                        {element}
-                    </StyledElement>
-                ))}
+            {elements &&
+                elements
+                    .filter(
+                        (element, idx) =>
+                            idx >= firstElement &&
+                            idx < firstElement + showNumber
+                    )
+                    .map((element, idx) => (
+                        <StyledElement
+                            key={idx}
+                            showing_num={showNumber}
+                            element_width={`${element_width}px`}
+                        >
+                            {element}
+                        </StyledElement>
+                    ))}
         </StyledCarouselContainer>
     );
 };
