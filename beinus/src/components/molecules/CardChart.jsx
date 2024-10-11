@@ -16,7 +16,7 @@ const StyledChartContainer = styled.div`
 `;
 
 const StyledChartTitle = styled.p`
-    font-size: 9pt;
+    font-size: 10pt;
     font-weight: 600;
     position: absolute;
     top: 50%;
@@ -27,7 +27,7 @@ const StyledChartTitle = styled.p`
 const StyledPieContainer = styled.div`
     position: relative;
     width: 100%;
-    height: 153px;
+    height: 173px;
 
     /* transform: translate(0%, 0); */
 

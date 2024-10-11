@@ -20,6 +20,7 @@ import { useModal } from "../../hooks/useModal";
 import {
     requestAnalysis,
     requestMaintenance,
+    verifyBattery,
 } from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
 import DropDown from "../molecules/DropDown";
@@ -77,7 +78,6 @@ const StyledHead = styled.h5`
     font-size: 11pt;
     font-weight: 600;
     color: #666666;
-    color: ${(props) => (props.status ? "#1ED760" : "red")};
 `;
 
 const StyledRequestContainer = styled.div`
@@ -95,9 +95,10 @@ const StyledContent = styled.h5`
     /* width: 100%; */
     /* flex-shrink: 1; */
     font-size: 11pt;
-    font-weight: 600;
+    font-weight: 800;
     color: #666666;
     text-align: end;
+    color: ${(props) => (props.status ? "blue" : "red")};
 `;
 
 const StyledMenuButton = styled.button`
@@ -136,11 +137,24 @@ const SearchSideBar = ({
     is_requested_maintenance = false,
     is_requested_analysis = false,
     recycle_availability = false,
-    maintenance_log,
 }) => {
     const { showCaution } = useCaution();
     const { showBatteryAnalysis, showBatteryMaintain, showMaterialExtract } =
         useModal();
+
+    const handleVerifyBattery = () => {
+        verifyBattery({
+            batteryID: battery_id,
+        })
+            .then((response) => {
+                showCaution(
+                    `해당 배터리의 검증에 성공했습니다. \n ID: ${battery_id}`
+                );
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    };
 
     const handleRequestMaintenance = () => {
         requestMaintenance({
@@ -177,9 +191,9 @@ const SearchSideBar = ({
                 <DropDown icon="license" name="VERIFICAITON">
                     <StyledMenuInfo>
                         {/* <StyledHead>VERIFICATION</StyledHead> */}
-                        <StyledHead status={is_verified}>
+                        <StyledContent status={is_verified}>
                             {is_verified ? "VERIFIED" : "NOT VERIFIED"}
-                        </StyledHead>
+                        </StyledContent>
                         {/* <RequestButton onClick={handleRequestMaintenance}>
                             Request
                         </RequestButton> */}
@@ -187,21 +201,23 @@ const SearchSideBar = ({
                     {is_verified ? (
                         ""
                     ) : (
-                        <MenuButton onClick={handleRequestMaintenance}>
+                        <MenuButton onClick={handleVerifyBattery}>
                             REQUEST
                         </MenuButton>
                     )}
                 </DropDown>
                 <DropDown icon="handyman" name="MAINTENANCE">
                     <StyledMenuInfo>
-                        <StyledHead status={is_requested_maintenance}>
+                        <StyledContent status={is_requested_maintenance}>
                             {is_requested_maintenance
                                 ? "REQUESTED"
                                 : "NOT REQUESTED"}
-                        </StyledHead>
+                        </StyledContent>
                     </StyledMenuInfo>
                     {is_requested_maintenance ? (
-                        ""
+                        <MenuButton onClick={handleRequestMaintenance}>
+                            REQUEST
+                        </MenuButton>
                     ) : (
                         <MenuButton onClick={handleRequestMaintenance}>
                             REQUEST
@@ -253,41 +269,50 @@ const SearchSideBar = ({
                 <DropDown icon="search_insights" name="RECYCLE CHECK">
                     <StyledRequestContainer>
                         <StyledMenuInfo>
-                            <StyledHead status={is_requested_analysis}>
+                            <StyledContent status={is_requested_analysis}>
                                 {is_requested_analysis
                                     ? "REQUESTED"
                                     : "NOT REQUESTED"}
-                            </StyledHead>
+                            </StyledContent>
                         </StyledMenuInfo>
-                        <MenuButton onClick={handleRequestAnalysis}>
-                            REQUEST
-                        </MenuButton>
-                        <MenuButton
-                            onClick={() => {
-                                showBatteryAnalysis(battery_id);
-                            }}
-                        >
-                            CHECK AVAILABILITY
-                        </MenuButton>
+
+                        {is_requested_analysis ? (
+                            <MenuButton onClick={handleRequestAnalysis}>
+                                REQUEST
+                            </MenuButton>
+                        ) : (
+                            <MenuButton
+                                onClick={() => {
+                                    showBatteryAnalysis(battery_id);
+                                }}
+                            >
+                                CHECK AVAILABILITY
+                            </MenuButton>
+                        )}
                     </StyledRequestContainer>
                 </DropDown>
 
                 <DropDown icon="search_insights" name="RECYCLE">
                     <StyledRequestContainer>
                         <StyledMenuInfo>
-                            <StyledHead status={recycle_availability}>
+                            <StyledContent status={recycle_availability}>
                                 {recycle_availability
                                     ? "AVAILABLE"
                                     : "NOT AVAILABLE"}
-                            </StyledHead>
+                            </StyledContent>
                         </StyledMenuInfo>
-                        <MenuButton
-                            onClick={() => {
-                                showMaterialExtract(battery_id);
-                            }}
-                        >
-                            EXTRACT
-                        </MenuButton>
+
+                        {recycle_availability ? (
+                            <MenuButton
+                                onClick={() => {
+                                    showMaterialExtract(battery_id);
+                                }}
+                            >
+                                EXTRACT
+                            </MenuButton>
+                        ) : (
+                            ""
+                        )}
                     </StyledRequestContainer>
                 </DropDown>
 

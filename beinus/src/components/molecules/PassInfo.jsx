@@ -24,6 +24,7 @@ const StyledTitle = styled.div`
     color: #666f7c;
     padding: 2px 0;
     margin: 0;
+    flex-shrink: 0;
 `;
 
 const StyledInfo = styled.div`

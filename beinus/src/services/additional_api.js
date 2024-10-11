@@ -188,6 +188,27 @@ export const registerRawMaterial = (data) => {
     });
 };
 
+export const verifyBattery = (data) => {
+    const { batteryID } = data;
+
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "verify Battery success",
+                    },
+                });
+            }, 100);
+        });
+    }
+
+    return instance.post("/verifyBattery", {
+        batteryID: batteryID,
+    });
+};
+
 export const requestMaintenance = (data) => {
     const { batteryID } = data;
 
@@ -549,29 +570,18 @@ const tempBattery = {
         totalLifeCycle: 1000,
         remainingLifeCycle: 1000,
         maintenanceLogs: [
-            {
-                date: "2024-10-02",
-                name: "정비회사",
-                info: "BMS Update",
-            },
-            {
-                date: "2024-10-02",
-                name: "정비회사",
-                info: "BMS Update",
-            },
-            {
-                date: "2024-09-25",
-                name: "BatteryMaintenanceCo",
-                info: "Battery capacity reduced Battery capacity reduced",
-            },
-            {
-                date: "2024-11-25",
-                name: "BatteryMaintenanceCo",
-                info: "Battery capacity reduced",
-            },
+            "Maintenance on 2024-10-02 by 정비회사: BMS Update",
+            "Maintenance on 2024-10-02 by 정비회사: BMS Update",
+            "Maintenance on 2024-09-25 by BatteryMaintenanceCo: Battery capacity reduced Battery capacity reduced",
+            "Maintenance on 2024-11-25 by BatteryMaintenanceCo: Battery capacity reduced",
+            "Maintenance on 2024-10-02 by 정비회사: BMS Update",
+            "Maintenance on 2024-10-02 by 정비회사: BMS Update",
+            "Maintenance on 2024-09-25 by BatteryMaintenanceCo: Battery capacity reduced",
+            "Maintenance on 2024-11-25 by BatteryMaintenanceCo: Battery capacity reduced",
         ],
+
         accidentLogs: [],
-        maintenanceRequest: false,
+        maintenanceRequest: true,
         analysisRequest: false,
         containsHazardous: "Cadmium, Lithium, Nickel, Lead",
         recycleAvailability: false,

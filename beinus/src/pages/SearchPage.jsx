@@ -93,7 +93,7 @@ const StyledBatteryContainer = styled.div`
     cursor: pointer;
 `;
 
-const CardChartContainer = styled.div`
+const CustomCardContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -149,6 +149,18 @@ const StyledBatteryInfoContainer = styled.div`
     cursor: pointer;
 `;
 
+const StyledLogContainer = styled.div`
+    width: 100%;
+    height: 249px;
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    overflow-y: scroll;
+    /* border: 1px solid #cacaca; */
+`;
+
 const StyledTabContainer = styled.div`
     width: 100%;
     display: flex;
@@ -173,9 +185,11 @@ const StyledColumn = styled.div`
     justify-content: space-between;
 `;
 
-const StyledLabel = styled.div`
+const StyledLog = styled.div`
+    text-align: start;
     font-size: 12pt;
-    color: #666f7c;
+    font-weight: 800;
+    color: black;
     padding: 2px 0;
     margin: 0;
 `;
@@ -203,6 +217,11 @@ const tabTitles = [
         key: "material",
         name: "Material",
         icon: "data_usage",
+    },
+    {
+        key: "maintenance_log",
+        name: "Maintenance Log",
+        icon: "receipt_long",
     },
 ];
 
@@ -264,6 +283,16 @@ const SearchPage = () => {
                     <StyledTabContainer ref={performanceRef}>
                         <StyledRow>
                             <CardInfo
+                                title="Total Lifecycle"
+                                info={data.totalLifeCycle}
+                            />
+                            {/* <CardInfo
+                            title="Remaining Lifecycle"
+                            info={data.remainingLifeCycle}
+                        /> */}
+                        </StyledRow>
+                        <StyledRow>
+                            <CardInfo
                                 title="Voltage"
                                 info={`${data.voltage} V`}
                             />
@@ -271,16 +300,6 @@ const SearchPage = () => {
                                 title="Capacity"
                                 info={`${data.capacity} Ah`}
                             />
-                        </StyledRow>
-                        <StyledRow>
-                            <CardInfo
-                                title="Total Lifecycle"
-                                info={data.totalLifeCycle}
-                            />
-                            {/* <CardInfo
-                                title="Remaining Lifecycle"
-                                info={data.remainingLifeCycle}
-                            /> */}
                         </StyledRow>
                         <StyledRow>
                             <CardInfo
@@ -297,7 +316,7 @@ const SearchPage = () => {
             case 2:
                 return (
                     <StyledTabContainer ref={materialRef}>
-                        <CardChartContainer>
+                        <CustomCardContainer>
                             <StyledCardTitle>
                                 Recycled Material Usage Ratio
                             </StyledCardTitle>
@@ -336,11 +355,33 @@ const SearchPage = () => {
                                     );
                                 })}
                             ></FlexCarousel>
-                        </CardChartContainer>
+                        </CustomCardContainer>
                         <CardInfo
                             title="Harzardous Materials"
                             info={data.containsHazardous}
+                            height={"75px"}
                         />
+                    </StyledTabContainer>
+                );
+            case 3:
+                return (
+                    <StyledTabContainer ref={materialRef}>
+                        <CustomCardContainer>
+                            <StyledCardTitle>Maintenance Log</StyledCardTitle>
+                            <StyledLogContainer>
+                                {data.maintenanceLogs
+                                    ? data.maintenanceLogs.map(
+                                          (element, idx) => {
+                                              return (
+                                                  <StyledLog>
+                                                      {element}
+                                                  </StyledLog>
+                                              );
+                                          }
+                                      )
+                                    : "-"}
+                            </StyledLogContainer>
+                        </CustomCardContainer>
                     </StyledTabContainer>
                 );
             default:
@@ -374,7 +415,10 @@ const SearchPage = () => {
             <GNB></GNB>
             <SearchSideBar
                 battery_id={batteryID}
-                maintenance_log={data.maintenanceLogs}
+                is_verified={data.Verified}
+                is_requested_maintenance={data.maintenanceRequest}
+                is_requested_analysis={data.analysisRequest}
+                recycle_availability={data.recycleAvailability}
             />
             {/* <BatteryPassport battery_passport_data={data.passport} /> */}
 
@@ -393,12 +437,12 @@ const SearchPage = () => {
                     <StyledRow>
                         <StyledBatteryContainer ref={batteryRef}>
                             <StyledContentContainer>
-                                <StyledTitle>Battery Information</StyledTitle>
                                 <Icon
-                                    icon="battery_0_bar"
-                                    size="14pt"
-                                    weight="600"
+                                    icon="battery_unknown"
+                                    size="20pt"
+                                    weight="900"
                                 />
+                                <StyledTitle>Battery Information</StyledTitle>
                             </StyledContentContainer>
                             <StyledRow>
                                 <StyledPhotoContainer>

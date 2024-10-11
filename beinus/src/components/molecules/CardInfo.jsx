@@ -10,7 +10,7 @@ const StyledInfoContainer = styled.div`
     margin: 3px;
 
     width: 100%;
-    height: 95px;
+    height: ${(props) => props.height || "95px"};
     padding: 12px;
     /* border-radius: 10px; */
 
@@ -33,9 +33,9 @@ const StyledInfo = styled.div`
     margin: 0;
 `;
 
-const CardInfo = ({ className = "", title = "-", info = "-" }) => {
+const CardInfo = ({ className = "", title = "-", info = "-", height }) => {
     return (
-        <StyledInfoContainer className={`${className}`}>
+        <StyledInfoContainer className={`${className}`} height={height}>
             <StyledTitle>{title}</StyledTitle>
             <StyledInfo>{info || "-"}</StyledInfo>
         </StyledInfoContainer>
