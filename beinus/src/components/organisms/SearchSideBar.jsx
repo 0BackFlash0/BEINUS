@@ -215,8 +215,10 @@ const SearchSideBar = ({
                         </StyledContent>
                     </StyledMenuInfo>
                     {is_requested_maintenance ? (
-                        <MenuButton onClick={handleRequestMaintenance}>
-                            REQUEST
+                        <MenuButton
+                            onClick={() => showBatteryMaintain(battery_id)}
+                        >
+                            RECORD
                         </MenuButton>
                     ) : (
                         <MenuButton onClick={handleRequestMaintenance}>

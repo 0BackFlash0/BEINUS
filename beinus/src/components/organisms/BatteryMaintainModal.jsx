@@ -11,7 +11,7 @@ import { useCaution } from "../../hooks/useCaution";
 const StyledBatteryExtractContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 640px;
+    height: 560px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -124,14 +124,6 @@ const BatteryMaintainModal = ({
                     title="정비일자"
                 />
             </StyledInputGroupContainer>
-            <StyledInputGroup
-                type="text"
-                id="others"
-                name="others"
-                value={value.info ? value.info : ""}
-                onChange={handleOnChange}
-                title="정비 내용"
-            />
             <StyledInputGroupContainer>
                 <StyledInputGroup
                     type="number"
@@ -150,6 +142,14 @@ const BatteryMaintainModal = ({
                     title="SoH"
                 />
             </StyledInputGroupContainer>
+            <StyledInputGroup
+                type="text"
+                id="others"
+                name="others"
+                value={value.info ? value.info : ""}
+                onChange={handleOnChange}
+                title="정비 내용"
+            />
             <StyledButtonContainer>
                 <Button onClick={handleMaintain}>확인</Button>
                 <Button

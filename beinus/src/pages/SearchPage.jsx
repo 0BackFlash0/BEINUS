@@ -149,16 +149,33 @@ const StyledBatteryInfoContainer = styled.div`
     cursor: pointer;
 `;
 
-const StyledLogContainer = styled.div`
+const StyledLogScroll = styled.div`
     width: 100%;
-    height: 249px;
+    height: 303px;
+    /* margin: 3px; */
+    padding: 3px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    gap: 10px;
+`;
+
+const StyledLogContainer = styled.div`
     display: flex;
-    margin-bottom: 10px;
     flex-direction: column;
     align-items: start;
-    gap: 20px;
-    overflow-y: scroll;
-    /* border: 1px solid #cacaca; */
+    margin: 5px 3px;
+    width: 100%;
+    /* height: 75px; */
+    padding: 20px;
+
+    text-align: start;
+    font-size: 12pt;
+    font-weight: 800;
+    color: black;
+
+    background-color: #edffed;
 `;
 
 const StyledTabContainer = styled.div`
@@ -366,22 +383,19 @@ const SearchPage = () => {
             case 3:
                 return (
                     <StyledTabContainer ref={materialRef}>
-                        <CustomCardContainer>
-                            <StyledCardTitle>Maintenance Log</StyledCardTitle>
-                            <StyledLogContainer>
-                                {data.maintenanceLogs
-                                    ? data.maintenanceLogs.map(
-                                          (element, idx) => {
-                                              return (
-                                                  <StyledLog>
-                                                      {element}
-                                                  </StyledLog>
-                                              );
-                                          }
-                                      )
-                                    : "-"}
-                            </StyledLogContainer>
-                        </CustomCardContainer>
+                        <StyledLogScroll>
+                            {data.maintenanceLogs ? (
+                                data.maintenanceLogs.map((element, idx) => {
+                                    return (
+                                        <StyledLogContainer>
+                                            {element}
+                                        </StyledLogContainer>
+                                    );
+                                })
+                            ) : (
+                                <StyledLogContainer>no log</StyledLogContainer>
+                            )}
+                        </StyledLogScroll>
                     </StyledTabContainer>
                 );
             default:
