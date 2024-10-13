@@ -202,7 +202,7 @@ const SearchSideBar = ({
                         ""
                     ) : (
                         <MenuButton onClick={handleVerifyBattery}>
-                            REQUEST
+                            VERIFY
                         </MenuButton>
                     )}
                 </DropDown>
@@ -294,7 +294,7 @@ const SearchSideBar = ({
                     </StyledRequestContainer>
                 </DropDown>
 
-                <DropDown icon="search_insights" name="RECYCLE">
+                <DropDown icon="recycling" name="RECYCLE">
                     <StyledRequestContainer>
                         <StyledMenuInfo>
                             <StyledContent status={recycle_availability}>

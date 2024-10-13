@@ -1,6 +1,7 @@
 import Icon from "../atoms/Icon";
 import Label from "../atoms/Label";
 import Photo from "../atoms/Photo";
+import Scroller from "../atoms/Scoller";
 import Subtitle from "../atoms/Subtitle";
 import styled from "styled-components";
 
@@ -88,7 +89,7 @@ const MaterialCard = ({
                 <StyledRow>
                     <StyledLabel>{type}</StyledLabel>
                     <StyledContentContainer>
-                        {availability ? (
+                        {availability === "AVAILABLE" ? (
                             <Icon
                                 icon={"priority"}
                                 size="14pt"
@@ -106,14 +107,16 @@ const MaterialCard = ({
             </StyledUpperContent>
             <StyledMainContent>
                 <Photo src={img} width="50px" height="60px" />
-                <StyledName>{id}</StyledName>
+                <Scroller>
+                    <StyledName>{id}</StyledName>
+                </Scroller>
             </StyledMainContent>
             <StyledLowerContent>
                 <StyledRow>
-                    <StyledLabel>검증여부</StyledLabel>
+                    <StyledLabel>Verification</StyledLabel>
                     <StyledContentContainer>
                         <StyledLabel>{verified}</StyledLabel>
-                        {verified === "Verified" ? (
+                        {verified === "VERIFIED" ? (
                             <Icon
                                 icon={"license"}
                                 size="16pt"
@@ -130,11 +133,11 @@ const MaterialCard = ({
                 </StyledRow>
 
                 <StyledRow>
-                    <StyledLabel>개수</StyledLabel>
+                    <StyledLabel>Quantity</StyledLabel>
                     <StyledLabel>{amount}</StyledLabel>
                 </StyledRow>
                 <StyledRow>
-                    <StyledLabel>상태</StyledLabel>
+                    <StyledLabel>Status</StyledLabel>
 
                     <StyledContentContainer>
                         <StyledLabel>{status}</StyledLabel>

@@ -75,23 +75,23 @@ const MaterialSideBar = ({
     };
     return (
         <StyledSideBarContainer>
-            <Title>원자재 목록</Title>
+            <Title>Material List</Title>
             <StyledSideBar className={`MaterialSideBar ${className}`}>
                 <MenuButton onClick={showMaterialRegister}>
-                    원자재 등록
+                    Register Material
                 </MenuButton>
 
                 <StyledMenuBar>
                     <Filter
                         icon="category"
-                        name="종류"
+                        name="Type"
                         filter={filter.type}
                         handle_filter={(target) => handleFilter("type", target)}
                     />
 
                     <Filter
                         icon="license"
-                        name="검증 여부"
+                        name="Verification"
                         filter={filter.isVerified}
                         handle_filter={(target) =>
                             handleFilter("isVerified", target)

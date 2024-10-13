@@ -80,8 +80,8 @@ const StyledBatteryContainer = styled.div`
     /* flex-shrink: 0; */
     width: 100%;
     /* height: 270px; */
-    border: solid 2px;
-    border-color: #13c752;
+    /* border: solid 2px; */
+    /* border-color: #13c752; */
     border-radius: 10px;
     padding: 20px 15px;
     display: flex;
@@ -276,6 +276,23 @@ const SearchPage = () => {
         setActiveTab(idx);
     };
 
+    useEffect(() => {
+        // 데이터 fetch 요청
+        queryBatteryDetails({
+            batteryID: batteryID,
+        })
+            .then((response) => {
+                setData({
+                    ...data,
+                    ...response.data.batteryDetails,
+                });
+                setLoading(false);
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    }, []);
+
     const showContent = (idx) => {
         switch (idx) {
             case 0:
@@ -402,23 +419,6 @@ const SearchPage = () => {
                 return;
         }
     };
-
-    useEffect(() => {
-        // 데이터 fetch 요청
-        queryBatteryDetails({
-            batteryID: batteryID,
-        })
-            .then((response) => {
-                setData({
-                    ...data,
-                    ...response.data.batteryDetails,
-                });
-                setLoading(false);
-            })
-            .catch((error) => {
-                showCaution(`${error.message}`);
-            });
-    }, []);
 
     if (loading) {
         return <></>;

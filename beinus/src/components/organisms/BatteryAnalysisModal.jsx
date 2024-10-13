@@ -5,13 +5,18 @@ import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import useInput from "../../hooks/useInput";
 import OptionGroup from "../molecules/OptionGroup";
-import { setRecycleAvailability } from "../../services/additional_api";
+import {
+    queryBatterySOCEAndLifeCycle,
+    setRecycleAvailability,
+} from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
+import PassInfo from "../molecules/PassInfo";
+import { useEffect, useState } from "react";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 360px;
+    height: 500px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -25,13 +30,31 @@ const StyledInputGroup = styled(InputGroup)`
 `;
 
 const StyledOptionGroup = styled(OptionGroup)`
+    margin-top: 20px;
     width: 100%;
     padding: 0 10px 0 0;
     flex-grow: 1 0;
 `;
 
 const StyledTopic = styled(Topic)`
-    margin-bottom: 60px;
+    margin-bottom: 30px;
+`;
+
+const StyledInfoContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 15px;
+    margin-bottom: 5px;
+`;
+
+const StyledInfo = styled.div`
+    padding: 5px;
+    font-size: 13pt;
+    font-weight: 600;
+    color: #8a8a8a;
 `;
 
 const StyledInputGroupContainer = styled.div`
@@ -75,6 +98,13 @@ const BatteryAnalysisModal = ({
         recycleAvailability: "true",
     });
 
+    const [data, setData] = useState({
+        capacity: 0,
+        remainingLifeCycle: 0,
+        soce: 0,
+        totalLifeCycle: 0,
+    });
+
     const handleAnalysis = async function () {
         await setRecycleAvailability({
             batteryID: battery_id,
@@ -91,12 +121,44 @@ const BatteryAnalysisModal = ({
             });
     };
 
+    useEffect(() => {
+        queryBatterySOCEAndLifeCycle({
+            batteryID: battery_id,
+        })
+            .then((response) => {
+                console.log(response);
+                setData({
+                    ...data,
+                    ...response.data,
+                });
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    }, []);
+
     return (
         <StyledBatteryRegisterContainer
             className={`battery-register-modal ${className}`}
             {...props}
         >
             <StyledTopic>재활용 여부 분석</StyledTopic>
+            <StyledInfoContainer>
+                <Subtitle>Capacity</Subtitle>
+                <StyledInfo>{data.capacity}</StyledInfo>
+            </StyledInfoContainer>
+            <StyledInfoContainer>
+                <Subtitle>SoCE</Subtitle>
+                <StyledInfo>{data.soce}</StyledInfo>
+            </StyledInfoContainer>
+            <StyledInfoContainer>
+                <Subtitle>Remaining Lifecycle</Subtitle>
+                <StyledInfo>{data.remainingLifeCycle}</StyledInfo>
+            </StyledInfoContainer>
+            <StyledInfoContainer>
+                <Subtitle>Total Lifecycle</Subtitle>
+                <StyledInfo>{data.totalLifeCycle}</StyledInfo>
+            </StyledInfoContainer>
             <StyledOptionGroup
                 options={resultOptions}
                 id="recycleAvailability"

@@ -39,10 +39,17 @@ const StyledSelectedOption = styled.div`
     padding: 5px;
     font-size: 16pt;
     color: #383838;
+    ${(props) =>
+        props.disabled &&
+        css`
+            color: red;
+        `}
 `;
 
 const StyledOptionList = styled.div`
     position: absolute;
+    top: 100%;
+    left: 0;
     width: 100%;
     background: #fff;
     border: 1px solid #d4d4d4;
@@ -68,6 +75,15 @@ const StyledOption = styled.div`
             /* background-color: #e4e4e4; */
             color: blue;
             /* font-weight: bold; */
+        `}
+    ${(props) =>
+        props.disabled &&
+        css`
+            background-color: red;
+            color: white;
+            &:hover {
+                color: red;
+            }
         `}
 `;
 
@@ -124,8 +140,26 @@ const OptionGroup = ({
     }, []);
 
     useEffect(() => {
-        setSelected(value || options[0]?.key);
-    }, [value, options]);
+        let is_in_options = false;
+
+        options.forEach((element, idx) => {
+            if (element.key === value) {
+                is_in_options = true;
+            }
+        });
+
+        // console.log(is_in_options, value);
+
+        if (options.length > 0 && !is_in_options) {
+            setSelected(options[0].key);
+            onChange({
+                target: {
+                    name: name,
+                    value: options[0].key,
+                },
+            });
+        }
+    }, [options, value, name, onChange]);
 
     return (
         <StyledOptionContainer className={`${className}`}>
@@ -147,7 +181,12 @@ const OptionGroup = ({
                     }
                     weight="700"
                 />
-                <StyledSelectedOption>
+                <StyledSelectedOption
+                    disabled={
+                        options.find((option) => option.key === selected)
+                            ?.disabled || false
+                    }
+                >
                     {options.find((option) => option.key === selected)?.name ||
                         "Select an option"}
                 </StyledSelectedOption>
@@ -155,8 +194,13 @@ const OptionGroup = ({
                     {options.map((option, index) => (
                         <StyledOption
                             key={option.key}
-                            onClick={() => handleOptionSelect(option.key)}
+                            onClick={() => {
+                                if (!option.disabled) {
+                                    handleOptionSelect(option.key);
+                                }
+                            }}
                             selected={option.key === selected}
+                            disabled={option.disabled || false}
                             className="option"
                         >
                             {option.name}
@@ -169,7 +213,9 @@ const OptionGroup = ({
                     className={`input-description`}
                     valid={valid ? "success" : "fail"}
                 >
-                    {description || <br />}
+                    {options.find((option) => option.key === selected)?.disabled
+                        ? "잘못된 선택입니다."
+                        : description || <br />}
                 </Label>
             ) : null}
         </StyledOptionContainer>

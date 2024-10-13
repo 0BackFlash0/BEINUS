@@ -11,6 +11,8 @@ import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
 import Subtitle from "../atoms/Subtitle";
+import { useNavigate } from "react-router-dom";
+import SearchingBar from "../molecules/SearchingBar";
 
 const StyledNavationContainer = styled.div`
     position: fixed;
@@ -37,6 +39,10 @@ const StyledNavigationBar = styled.div`
     background-color: white;
 `;
 
+const StyledLogButton = styled(Button)`
+    flex-shrink: 0;
+`;
+
 const StyledLeftBar = styled.div`
     height: 100%;
     flex-grow: 0;
@@ -60,31 +66,62 @@ const StyledMenuBar = styled.div`
     flex-direction: row;
     align-items: center;
     margin-left: 30px;
-    gap: 15px;
+    gap: 20px;
 `;
 
-const StyledLogout = styled(Icon)`
-    cursor: pointer;
+const StyledUserInfoContainer = styled.div`
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+    justify-content: space-around;
 `;
 
-const StyledUserName = styled.div`
+const StyledUser = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: 10px;
+
+    font-size: 12pt;
+    font-weight: 500;
+
+    margin: 0;
+    padding: 0;
+`;
+
+const StyledUserInfo = styled.div`
     display: inline;
     margin: 0;
     padding: 0;
-    color: blue;
+    font-weight: 700;
+    color: #13c752;
 `;
+
+const RoleMap = {
+    org1: "원자재 공급업체",
+    org2: "배터리 제조업체",
+    org3: "전기차 제조업체",
+    org4: "배터리 정비업체",
+    org5: "배터리 검사업체",
+    org6: "재활용 업체",
+    org7: "검증 업체",
+};
 
 const GNB = ({
     className = "", // class
 }) => {
-    const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const puerge = async () => {
         await persistor.purge();
     };
 
+    const user = useSelector((state) => state.user);
     const loginTime = useSelector((state) => state.user.time);
+    const role = useSelector((state) => state.user.role);
     const isLogin = useSelector((state) => state.user.isLogin);
 
     useEffect(() => {
@@ -112,22 +149,41 @@ const GNB = ({
                         />
                     </Anchor>
                     <StyledMenuBar>
+                        <SearchingBar />
                         <Anchor to="/battery">
-                            <Title>배터리</Title>
+                            <Title>Battery</Title>
                         </Anchor>
                         {/* <Line is_horizontal={false} margin="20px" /> */}
                         <Anchor to="/material">
-                            <Title>원자재</Title>
+                            <Title>Material</Title>
                         </Anchor>
                     </StyledMenuBar>
                 </StyledLeftBar>
                 <StyledRightBar className={`Right-GNB`}>
                     {user.isLogin ? (
                         <>
-                            <Title>
-                                <StyledUserName>{user.user}</StyledUserName>님
-                            </Title>
-                            <StyledLogout
+                            <StyledUserInfoContainer>
+                                <StyledUser>
+                                    Name:
+                                    <StyledUserInfo>{user.user}</StyledUserInfo>
+                                </StyledUser>
+                                <StyledUser>
+                                    Role:
+                                    <StyledUserInfo>
+                                        {RoleMap[user.role]}
+                                    </StyledUserInfo>
+                                </StyledUser>
+                            </StyledUserInfoContainer>
+                            <StyledLogButton
+                                onClick={async () => {
+                                    dispatch(userLogout());
+                                    setTimeout(() => puerge(), 200);
+                                    localStorage.removeItem("token");
+                                }}
+                            >
+                                Log out
+                            </StyledLogButton>
+                            {/* <StyledLogout
                                 icon="logout"
                                 size="40px"
                                 onClick={async () => {
@@ -135,7 +191,7 @@ const GNB = ({
                                     setTimeout(() => puerge(), 200);
                                     localStorage.removeItem("token");
                                 }}
-                            />
+                            /> */}
                             {/* <Button
                                 className="bg-transparent"
                                 onClick={async () => {
@@ -148,9 +204,12 @@ const GNB = ({
                             </Button> */}
                         </>
                     ) : (
-                        <Anchor to="/login">
-                            <Icon icon="login" size="40px" />
-                        </Anchor>
+                        <StyledLogButton onClick={() => navigate("/login")}>
+                            Log in
+                        </StyledLogButton>
+                        // <Anchor to="/login">
+                        //     <Icon icon="login" size="40px" />
+                        // </Anchor>
                     )}
                 </StyledRightBar>
             </StyledNavigationBar>

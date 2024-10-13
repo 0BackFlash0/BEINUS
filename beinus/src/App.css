@@ -1,8 +1,8 @@
 * {
     box-sizing: border-box;
     font-family: "Gothic A1", sans-serif;
+    scroll-behavior: smooth; /* Ensures smooth scrolling */
 }
-
 .App {
     text-align: center;
 }

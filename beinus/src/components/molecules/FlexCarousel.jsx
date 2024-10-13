@@ -15,6 +15,7 @@ const StyledElement = styled.div`
     /* width: 100%; */
     /* width: ${(props) => props.element_width || "auto"}; */
     display: flex;
+    flex-direction: column;
     align-items: center;
     flex-basis: 0px;
     padding: 0;

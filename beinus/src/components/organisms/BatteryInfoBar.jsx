@@ -15,6 +15,13 @@ import { useNavigate } from "react-router-dom";
 import Topic from "../atoms/Topic";
 import Title from "../atoms/Title";
 import MenuButton from "../atoms/MenuButton";
+import { useCaution } from "../../hooks/useCaution";
+import { useModal } from "../../hooks/useModal";
+import {
+    requestAnalysis,
+    requestMaintenance,
+    verifyBattery,
+} from "../../services/additional_api";
 
 const StyledInfoBarContainer = styled.div`
     position: fixed;
@@ -100,7 +107,8 @@ const StyledSmallButton = styled.button`
     background-color: #ff2600;
     border-style: none;
     border-radius: 4px;
-    padding: 2px;
+    /* margin-left: 6px; */
+    padding: 2px 4px;
     /* width: 120px; */
     height: auto;
     font-size: 8pt;
@@ -117,11 +125,16 @@ const StyledRow = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     padding: 4px 0;
     border-bottom: 1px solid #c9c9c9;
 `;
 
-const StyledLabel = styled.div`
+const StyledContent = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
     font-size: 11pt;
     color: #666f7c;
     padding: 2px 0;
@@ -142,6 +155,49 @@ const BatteryInfoBar = ({
     handle_close,
 }) => {
     const navigate = useNavigate();
+    const { showCaution } = useCaution();
+
+    const handleVerifyBattery = () => {
+        verifyBattery({
+            batteryID: battery.id,
+        })
+            .then((response) => {
+                showCaution(
+                    `해당 배터리의 검증에 성공했습니다. \n ID: ${battery.id}`
+                );
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    };
+
+    const handleRequestMaintenance = () => {
+        requestMaintenance({
+            batteryID: battery.id,
+        })
+            .then((response) => {
+                showCaution(
+                    `해당 배터리에 대해 유지보수를 요청했습니다. \n ID: ${battery.id}`
+                );
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    };
+
+    const handleRequestAnalysis = () => {
+        requestAnalysis({
+            batteryID: battery.id,
+        })
+            .then((response) => {
+                showCaution(
+                    `해당 배터리에 대해 분석을 요청했습니다. \n ID: ${battery.id}`
+                );
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    };
 
     return (
         <StyledInfoBarContainer>
@@ -155,42 +211,60 @@ const BatteryInfoBar = ({
                 <Line margin="15px" />
                 <StyledRow>
                     <StyledTitle>ID</StyledTitle>
-                    <StyledLabel>{battery.id}</StyledLabel>
+                    <StyledContent>{battery.id}</StyledContent>
                 </StyledRow>
                 <StyledRow>
                     <StyledTitle>Category</StyledTitle>
-                    <StyledLabel>{battery.category}</StyledLabel>
+                    <StyledContent>{battery.category}</StyledContent>
                 </StyledRow>
                 <StyledRow>
                     <StyledTitle>Verification</StyledTitle>
-                    <StyledLabel>{battery.verified}</StyledLabel>
+                    <StyledContent>
+                        {battery.verified}
+                        {battery.verified === "NOT VERIFIED" && (
+                            <StyledSmallButton onClick={handleVerifyBattery}>
+                                Verify
+                            </StyledSmallButton>
+                        )}
+                    </StyledContent>
                 </StyledRow>
                 <StyledRow>
                     <StyledTitle>Status</StyledTitle>
                     <StyledContentContainer>
-                        <StyledLabel>{battery.status}</StyledLabel>
+                        <StyledContent>{battery.status}</StyledContent>
                     </StyledContentContainer>
                 </StyledRow>
 
                 <StyledRow>
                     <StyledTitle>Maintenance Request</StyledTitle>
-                    <StyledLabel>
+                    <StyledContent>
                         <StyledContentContainer>
                             {battery.isRequestMaintain ? "O" : "X"}
-                            <StyledSmallButton>Req</StyledSmallButton>
+                            {!battery.isRequestMaintain && (
+                                <StyledSmallButton
+                                    onClick={handleRequestMaintenance}
+                                >
+                                    Request
+                                </StyledSmallButton>
+                            )}
                         </StyledContentContainer>
-                    </StyledLabel>
+                    </StyledContent>
                 </StyledRow>
 
                 <StyledRow>
                     <StyledTitle>Analysis Request</StyledTitle>
-                    <StyledLabel>
+                    <StyledContent>
                         {battery.isRequestAnalysis ? "O" : "X"}
-                    </StyledLabel>
+                        {!battery.isRequestAnalysis && (
+                            <StyledSmallButton onClick={handleRequestAnalysis}>
+                                Request
+                            </StyledSmallButton>
+                        )}
+                    </StyledContent>
                 </StyledRow>
                 <StyledRow>
                     <StyledTitle>Created Date</StyledTitle>
-                    <StyledLabel>{battery.date}</StyledLabel>
+                    <StyledContent>{battery.date}</StyledContent>
                 </StyledRow>
                 <StyledRequestContainer>
                     {/* <StyledSmallButton>Maintenance Request</StyledSmallButton> */}

@@ -21,58 +21,6 @@ import SearchingFilter from "../components/molecules/SearchingFilter";
 import useInput from "../hooks/useInput";
 import MaterialInfoBar from "../components/organisms/MaterialInfoBar";
 
-const column = [
-    {
-        id: "image",
-        header: "",
-        accessorKey: "image",
-        cell: ({ getValue }) => (
-            <Photo
-                src={getValue()}
-                alt={getValue()}
-                width="50px"
-                height="50px"
-            />
-        ),
-        size: 70,
-    },
-    {
-        id: "type",
-        header: "종류",
-        accessorFn: (row) => {
-            return row.type;
-        },
-        size: 200,
-    },
-    {
-        id: "amount",
-        header: "수량",
-        accessorFn: (row) => row.amount,
-        size: 200,
-    },
-    {
-        id: "status",
-        header: "상태",
-        accessorFn: (row) => row.status,
-        size: 200,
-    },
-    {
-        id: "id",
-        header: "ID",
-        accessorFn: (row) => row.id,
-        cell: ({ getValue }) => (
-            <PopupAnchor
-                to={`/material_detail/${getValue()}`}
-                name={"원자재 상세 정보"}
-                feature={"width=640,height=640"}
-            >
-                {getValue()}
-            </PopupAnchor>
-        ),
-        size: 600,
-    },
-];
-
 const StyledUpperContainer = styled.div`
     width: 100%;
     background-color: white;
@@ -116,25 +64,25 @@ const StyledListContainer = styled.div`
 
 const MaterialFilter = {
     type: {
-        lithium: {
+        nickel: {
             active: true,
-            name: "리튬",
-            filtering: (target) => target.type === "Lithium",
+            name: "Nickel",
+            filtering: (target) => target.type === "Nickel",
         },
         cobalt: {
             active: true,
-            name: "코발트",
+            name: "Cobalt",
             filtering: (target) => target.type === "Cobalt",
+        },
+        lithium: {
+            active: true,
+            name: "Lithium",
+            filtering: (target) => target.type === "Lithium",
         },
         manganese: {
             active: true,
-            name: "망간",
+            name: "Manganese",
             filtering: (target) => target.type === "Manganese",
-        },
-        nickel: {
-            active: true,
-            name: "니켈",
-            filtering: (target) => target.type === "Nickel",
         },
     },
     isVerified: {
@@ -142,22 +90,22 @@ const MaterialFilter = {
             active: true,
             icon: "license",
             color: "#1ED760",
-            name: "검증됨",
-            filtering: (target) => target.verified === "Verified",
+            name: "Verified",
+            filtering: (target) => target.verified === "VERIFIED",
         },
         not_verified: {
             active: true,
             icon: "unlicense",
             color: "red",
-            name: "검증되지 않음",
-            filtering: (target) => target.verified === "",
+            name: "Not Verified",
+            filtering: (target) => target.verified === "NOT VERIFIED",
         },
     },
     status: {
         new: {
             active: true,
             icon: "fiber_new",
-            name: "NEW",
+            name: "New",
             color: "blue",
             filtering: (target) => target.status === "NEW",
         },
@@ -165,8 +113,8 @@ const MaterialFilter = {
             active: true,
             icon: "recycling",
             color: "#1ED760",
-            name: "RECYCLED",
-            filtering: (target) => target.status === "Recycled",
+            name: "Recycled",
+            filtering: (target) => target.status === "RECYCLED",
         },
     },
 
@@ -174,16 +122,16 @@ const MaterialFilter = {
         available: {
             active: true,
             icon: "priority",
-            name: "가능",
+            name: "Available",
             color: "blue",
-            filtering: (target) => target.availability === "Available",
+            filtering: (target) => target.availability === "AVAILABLE",
         },
         unavailable: {
             active: true,
             icon: "disabled_by_default",
             color: "#fc2a2a",
-            name: "불가능",
-            filtering: (target) => true,
+            name: "Unavailable",
+            filtering: (target) => target.availability === "UNAVAILABLE",
         },
     },
 };
@@ -220,8 +168,6 @@ const MaterialListPage = () => {
     });
 
     const [infoMaterial, setInfoMaterial] = useState(null);
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         queryAllMaterials()

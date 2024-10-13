@@ -52,19 +52,19 @@ const StyledSubtitle = styled(Subtitle)`
 const MaterialOptions = [
     {
         key: "Nickel",
-        name: "니켈",
+        name: "Nickel",
     },
     {
         key: "Cobalt",
-        name: "코발트",
+        name: "Cobalt",
     },
     {
         key: "Lithium",
-        name: "리튬",
+        name: "Lithium",
     },
     {
         key: "Manganese",
-        name: "망간",
+        name: "Manganese",
     },
 ];
 
@@ -93,48 +93,38 @@ const RegisterMaterialOption = ({
     const [maxAmount, setMaxAmount] = useState(0);
     const [errerMsg, setErrorMsg] = useState("");
 
-    // const prevAmountRef = useMemo(() => material_id_value);
+    const prevAmountRef = useMemo(() => material_id_value);
 
-    // useEffect(() => {
-    //     let max_amount = 0;
+    useEffect(() => {
+        let max_amount = 0;
 
-    //     material_options.forEach((element, idx) => {
-    //         console.log(element);
-    //         console.log(material_id_value);
-    //         if (element.key === material_id_value) {
-    //             max_amount = element.amount;
-    //         }
-    //     });
-    //     setMaxAmount(max_amount);
-    //     console.log(max_amount);
+        material_options.forEach((element, idx) => {
+            if (element.key === material_id_value) {
+                max_amount = element.amount;
+            }
+        });
+        setMaxAmount(max_amount);
+    }, [material_id_value]);
 
-    //     on_change({
-    //         target: {
-    //             name: "amount",
-    //             value: max_amount,
-    //         },
-    //     });
-    // }, [material_id_value]);
-
-    // useEffect(() => {
-    //     if (amount_value < 0) {
-    //         setErrorMsg("원자재의 개수는 1개 이상 사용해야 합니다.");
-    //     }
-    //     if (amount_value > maxAmount) {
-    //         setErrorMsg(
-    //             `원자재의 개수는 최대 개수(${maxAmount})를 넘을 수 없습니다.`
-    //         );
-    //     } else {
-    //         setErrorMsg("");
-    //     }
-    // }, [amount_value, maxAmount]);
+    useEffect(() => {
+        console.log(amount_value, maxAmount);
+        if (amount_value < 0) {
+            setErrorMsg("원자재의 개수는 1개 이상 사용해야 합니다.");
+        } else if (amount_value > maxAmount) {
+            setErrorMsg(
+                `원자재의 개수는 최대 개수(${maxAmount})를 넘을 수 없습니다.`
+            );
+        } else {
+            setErrorMsg("");
+        }
+    }, [amount_value, maxAmount]);
 
     return (
         <StyledMaterialOptionContainer
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledSubtitle>원자재 {index + 1}</StyledSubtitle>
+            <StyledSubtitle>Material {index + 1}</StyledSubtitle>
             <StyledRowGroupContainer>
                 <StyledOptionGroup
                     options={MaterialOptions}
@@ -142,7 +132,7 @@ const RegisterMaterialOption = ({
                     name="type"
                     value={type_value ? type_value : ""}
                     onChange={on_change}
-                    title="종류"
+                    title="Type"
                     is_description={false}
                 />
 
@@ -152,7 +142,7 @@ const RegisterMaterialOption = ({
                     name="amount"
                     value={amount_value ? amount_value : ""}
                     onChange={on_change}
-                    title="개수"
+                    title={`Quantity (Max ${maxAmount})`}
                     is_description={false}
                 />
             </StyledRowGroupContainer>
@@ -162,9 +152,9 @@ const RegisterMaterialOption = ({
                 name="materialID"
                 value={material_id_value ? material_id_value : ""}
                 onChange={on_change}
-                title="원자재 ID"
+                title="Material ID"
                 // is_description={false}
-                // description={errerMsg}
+                description={errerMsg}
             />
         </StyledMaterialOptionContainer>
     );

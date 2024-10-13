@@ -23,15 +23,6 @@ const StyledScroller = styled.div`
         linear infinite;
 `;
 
-const scrollAnimation = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-`;
-
 function Scroller({ children }) {
     const containerRef = useRef(null);
     const [shouldScroll, setShouldScroll] = useState(false);

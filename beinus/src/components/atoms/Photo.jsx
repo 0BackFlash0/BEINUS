@@ -35,12 +35,10 @@ const Photo = ({
     };
 
     return (
-        <div>
-            <StyledPicture className={`${className}`} {...props}>
-                <StyledSource srcSet={`${src}`} {...optionalProps} />
-                <StyledImg src={`${src}`} alt={alt} {...optionalProps} />
-            </StyledPicture>
-        </div>
+        <StyledPicture className={`${className}`} {...props}>
+            <StyledSource srcSet={`${src}`} {...optionalProps} />
+            <StyledImg src={`${src}`} alt={alt} {...optionalProps} />
+        </StyledPicture>
     );
 };
 

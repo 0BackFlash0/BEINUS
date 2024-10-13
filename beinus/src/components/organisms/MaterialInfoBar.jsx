@@ -15,7 +15,11 @@ import { useNavigate } from "react-router-dom";
 import Topic from "../atoms/Topic";
 import Title from "../atoms/Title";
 import MenuButton from "../atoms/MenuButton";
-import { queryMaterial } from "../../services/additional_api";
+import {
+    queryMaterial,
+    verifyBattery,
+    verifyMaterial,
+} from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
 
 const StyledInfoBarContainer = styled.div`
@@ -90,21 +94,45 @@ const StyledRow = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid #c9c9c9;
 `;
 
-const StyledLabel = styled.div`
-    font-size: 12pt;
+const StyledContent = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    font-size: 11pt;
     color: #666f7c;
     padding: 2px 0;
     margin: 0;
 `;
 
 const StyledTitle = styled.div`
-    font-size: 10pt;
-    color: #666f7c;
+    font-size: 11pt;
+    color: #1a1a1a;
     font-weight: 600;
     padding: 2px 0;
     margin: 0;
+`;
+
+const StyledSmallButton = styled.button`
+    display: inline-block;
+    background-color: #ff2600;
+    border-style: none;
+    border-radius: 4px;
+    /* margin-left: 6px; */
+    padding: 2px 4px;
+    /* width: 120px; */
+    height: auto;
+    font-size: 8pt;
+    font-weight: 500;
+    color: white;
+
+    &:hover {
+        background-color: #13c752;
+    }
 `;
 
 const MaterialImage = {
@@ -132,6 +160,20 @@ const MaterialInfoBar = ({
         timestamp: "-",
     });
     const [loading, setLoading] = useState(true);
+
+    const handleVerifyMaterial = () => {
+        verifyMaterial({
+            materialID: data.materialID,
+        })
+            .then((response) => {
+                showCaution(
+                    `해당 배터리의 검증에 성공했습니다. \n ID: ${data.materialID}`
+                );
+            })
+            .catch((error) => {
+                showCaution(`${error.message}`);
+            });
+    };
 
     useEffect(() => {
         queryMaterial({
@@ -166,37 +208,44 @@ const MaterialInfoBar = ({
                 <Line margin="15px" />
                 <StyledRow>
                     <StyledTitle>ID</StyledTitle>
-                    <StyledLabel>{data.materialID}</StyledLabel>
+                    <StyledContent>{data.materialID}</StyledContent>
                 </StyledRow>
 
                 <StyledRow>
-                    <StyledTitle>공급자 ID</StyledTitle>
-                    <StyledLabel>{data.supplierID}</StyledLabel>
+                    <StyledTitle>Supplier ID</StyledTitle>
+                    <StyledContent>{data.supplierID}</StyledContent>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>종류</StyledTitle>
-                    <StyledLabel>{data.name}</StyledLabel>
+                    <StyledTitle>Type</StyledTitle>
+                    <StyledContent>{data.name}</StyledContent>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>수량</StyledTitle>
-                    <StyledLabel>{data.quantity}</StyledLabel>
+                    <StyledTitle>Quantity</StyledTitle>
+                    <StyledContent>{data.quantity}</StyledContent>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>검증여부</StyledTitle>
-                    <StyledLabel>{data.verified}</StyledLabel>
+                    <StyledTitle>Verification</StyledTitle>
+                    <StyledContent>
+                        {data.verified}
+                        {data.verified === "NOT VERIFIED" && (
+                            <StyledSmallButton onClick={handleVerifyMaterial}>
+                                Verify
+                            </StyledSmallButton>
+                        )}
+                    </StyledContent>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>상태</StyledTitle>
-                    <StyledLabel>{data.status}</StyledLabel>
+                    <StyledTitle>Status</StyledTitle>
+                    <StyledContent>{data.status}</StyledContent>
                 </StyledRow>
 
                 <StyledRow>
-                    <StyledTitle>사용가능 여부</StyledTitle>
-                    <StyledLabel>{data.available ? "O" : "X"}</StyledLabel>
+                    <StyledTitle>Availability</StyledTitle>
+                    <StyledContent>{data.available ? "O" : "X"}</StyledContent>
                 </StyledRow>
                 <StyledRow>
-                    <StyledTitle>생성 날짜</StyledTitle>
-                    <StyledLabel>{data.timestamp}</StyledLabel>
+                    <StyledTitle>Created Date</StyledTitle>
+                    <StyledContent>{data.timestamp.slice(0, 10)}</StyledContent>
                 </StyledRow>
                 <StyledButtonContainer></StyledButtonContainer>
             </StyledInfoBar>

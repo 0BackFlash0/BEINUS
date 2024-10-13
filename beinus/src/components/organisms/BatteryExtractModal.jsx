@@ -12,7 +12,7 @@ import { extractMaterials } from "../../services/additional_api";
 const StyledBatteryExtractContainer = styled.div`
     position: relative;
     width: 480px;
-    height: 480px;
+    height: 460px;
     padding: 60px 40px 0 40px;
     display: flex;
     flex-direction: column;
@@ -82,30 +82,6 @@ const BatteryExtractModal = ({
         lithium: "0",
     });
 
-    const addMaterial = () => {
-        const changeEvent = {
-            target: {
-                name: "materialList",
-                value: [...value.materialList, tempMaterial],
-            },
-        };
-        handleOnChange(changeEvent);
-    };
-
-    const handleOnChangeMaterial = (e, index) => {
-        const { name, targetValue } = e.target;
-
-        const changeEvent = {
-            target: {
-                name: "materialList",
-                value: value.materialList.map((item, idx) =>
-                    idx === index ? { ...item, [name]: targetValue } : item
-                ),
-            },
-        };
-        handleOnChange(changeEvent);
-    };
-
     const handleExtract = async function () {
         // if (!checkValue()) {
         //     showCaution("모든 값을 입력해주세요.");
@@ -148,7 +124,7 @@ const BatteryExtractModal = ({
                     name="nickel"
                     value={value.nickel ? value.nickel : ""}
                     onChange={handleOnChange}
-                    title="니켈"
+                    title="Nickel"
                 />
 
                 <StyledInputGroup
@@ -157,7 +133,7 @@ const BatteryExtractModal = ({
                     name="lithium"
                     value={value.lithium ? value.lithium : ""}
                     onChange={handleOnChange}
-                    title="리튬"
+                    title="Lithium"
                 />
             </StyledInputGroupContainer>
 
@@ -168,7 +144,7 @@ const BatteryExtractModal = ({
                     name="cobalt"
                     value={value.cobalt ? value.cobalt : ""}
                     onChange={handleOnChange}
-                    title="코발트"
+                    title="Cobalt"
                 />
 
                 <StyledInputGroup
@@ -177,7 +153,7 @@ const BatteryExtractModal = ({
                     name="manganese"
                     value={value.manganese ? value.manganese : ""}
                     onChange={handleOnChange}
-                    title="망간"
+                    title="Manganese"
                 />
             </StyledInputGroupContainer>
             {/* {value.materialList

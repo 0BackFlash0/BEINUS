@@ -16,52 +16,6 @@ import { useModal } from "../hooks/useModal";
 import useInput from "../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 
-const column = [
-    {
-        id: "image",
-        header: "",
-        accessorKey: "image",
-        cell: ({ getValue }) => (
-            <Photo
-                src={getValue()}
-                alt={getValue()}
-                width="50px"
-                height="50px"
-            />
-        ),
-        size: 70,
-    },
-    {
-        id: "model",
-        header: "모델",
-        accessorFn: (row) => {
-            return row.model;
-        },
-        size: 200,
-    },
-    {
-        id: "category",
-        header: "카테고리",
-        accessorFn: (row) => row.category,
-        size: 200,
-    },
-    {
-        id: "status",
-        header: "상태",
-        accessorFn: (row) => row.status,
-        size: 200,
-    },
-    {
-        id: "batteryID",
-        header: "ID",
-        accessorFn: (row) => row.batteryID,
-        cell: ({ getValue }) => (
-            <Anchor to={`/search/${getValue()}`}>{getValue()}</Anchor>
-        ),
-        size: 600,
-    },
-];
-
 const StyledContentContainer = styled.div`
     padding: 20px 30px 0 30px;
     margin-top: 60px;
@@ -95,7 +49,7 @@ const StyledListContainer = styled.div`
 
 const BatteryFilter = {
     category: {
-        "Electric Vehicle Battery": {
+        "EV Battery": {
             active: true,
             name: "EV",
             icon: "electric_car",
@@ -152,9 +106,13 @@ const BatteryFilter = {
             active: true,
             icon: "raw_off",
             name: "Disassembled",
-            filtering: (target) => target.status === "Disassembled",
+            filtering: (target) => target.status === "DISASSEMBLED",
         },
     },
+};
+
+const BatteryImage = {
+    "EV Battery": "/assets/battery_example.png",
 };
 
 const BatteryListPage = () => {
@@ -192,7 +150,7 @@ const BatteryListPage = () => {
                     ...data,
                     battery_list: response.data.map((element, idx) => {
                         return {
-                            img: "./assets/test.png",
+                            img: BatteryImage[element.category],
                             id: element.batteryID,
                             category: element.category,
                             status: element.status,

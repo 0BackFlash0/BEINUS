@@ -2,6 +2,7 @@ import Content from "../atoms/Content";
 import Icon from "../atoms/Icon";
 import Label from "../atoms/Label";
 import Photo from "../atoms/Photo";
+import Scroller from "../atoms/Scoller";
 import Subtitle from "../atoms/Subtitle";
 import styled from "styled-components";
 
@@ -113,7 +114,9 @@ const BatteryCard = ({
             </StyledUpperContent>
             <StyledMainContent>
                 <Photo src={img} width="50px" height="60px" />
-                <StyledName>{id}</StyledName>
+                <Scroller>
+                    <StyledName>{id}</StyledName>
+                </Scroller>
             </StyledMainContent>
             <StyledLowerContent>
                 <StyledRow>
@@ -141,7 +144,7 @@ const BatteryCard = ({
                     <StyledLabel>Status</StyledLabel>
                     <StyledContentContainer>
                         <StyledLabel>{status}</StyledLabel>
-                        {status === "Disassembled" ? (
+                        {status === "DISASSEMBLED" ? (
                             <Icon icon={"raw_off"} size="16pt"></Icon>
                         ) : (
                             <Icon icon={"raw_on"} size="16pt"></Icon>

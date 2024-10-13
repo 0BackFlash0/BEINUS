@@ -38,13 +38,13 @@ const StyledBatteryInfoContainer = styled.div`
 const StyledMaterialListContainer = styled.div`
     position: relative;
     padding: 0 10px;
-    width: 450px;
+    width: 500px;
     flex-grow: 0;
     height: 400px;
     display: flex;
     flex-direction: column;
     align-items: start;
-    overflow: auto;
+    /* overflow: auto; */
     gap: 10px;
 `;
 
@@ -112,18 +112,18 @@ const StyledSubtitle = styled(Subtitle)`
 const CategoryOptions = [
     {
         key: "EV Battery",
-        name: "전기차",
+        name: "Electric Vehicle",
     },
 ];
 
 const HarzardousOptions = [
     {
         key: "yes",
-        name: "포함",
+        name: "O",
     },
     {
         key: "no",
-        name: "미포함",
+        name: "X",
     },
 ];
 
@@ -156,22 +156,32 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                     setMaterialData({
                         ...materialData,
                         material_list: [
-                            ...response.data.newMaterials.map((element) => {
-                                return {
-                                    id: element.materialID,
-                                    type: element.name,
-                                    amount: element.quantity,
-                                };
-                            }),
-                            ...response.data.recycledMaterials.map(
-                                (element) => {
+                            ...response.data.newMaterials
+                                .filter(
+                                    (element) =>
+                                        element.available === "AVAILABLE" &&
+                                        element.verified === "VERIFIED"
+                                )
+                                .map((element) => {
                                     return {
                                         id: element.materialID,
                                         type: element.name,
                                         amount: element.quantity,
                                     };
-                                }
-                            ),
+                                }),
+                            ...response.data.recycledMaterials
+                                .filter(
+                                    (element) =>
+                                        element.available === "AVAILABLE" &&
+                                        element.verified === "VERIFIED"
+                                )
+                                .map((element) => {
+                                    return {
+                                        id: element.materialID,
+                                        type: element.name,
+                                        amount: element.quantity,
+                                    };
+                                }),
                         ],
                     });
                 } else {
@@ -239,7 +249,7 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledTopic>배터리 제조</StyledTopic>
+            <StyledTopic>Create Battery</StyledTopic>
 
             <StyledRowGroupContainer>
                 <StyledBatteryInfoContainer>
@@ -250,35 +260,34 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                             name="category"
                             value={value.category ? value.category : ""}
                             onChange={handleOnChange}
-                            title="카테고리"
+                            title="Category"
                         />
-
+                    </StyledRowGroupContainer>
+                    <StyledRowGroupContainer>
                         <StyledInputGroup
                             type="number"
                             id="voltage"
                             name="voltage"
                             value={value.voltage ? value.voltage : ""}
                             onChange={handleOnChange}
-                            title="전압"
+                            title="Voltage (V)"
                         />
-                    </StyledRowGroupContainer>
-                    <StyledRowGroupContainer>
                         <StyledInputGroup
                             type="text"
                             id="weight"
                             name="weight"
                             value={value.weight ? value.weight : ""}
                             onChange={handleOnChange}
-                            title="무게(kg)"
+                            title="Weight (kg)"
                         />
-                        <StyledOptionGroup
+                        {/* <StyledOptionGroup
                             options={HarzardousOptions}
                             id="isHazrardous"
                             name="isHazrardous"
                             value={value.isHazrardous ? value.isHazrardous : ""}
                             onChange={handleOnChange}
                             title="위험물질 여부"
-                        />
+                        /> */}
                     </StyledRowGroupContainer>
 
                     <StyledRowGroupContainer>
@@ -288,7 +297,7 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                             name="capacity"
                             value={value.capacity ? value.capacity : ""}
                             onChange={handleOnChange}
-                            title="용량"
+                            title="Capacity (Ah)"
                         />
                         <StyledInputGroup
                             type="text"
@@ -296,12 +305,12 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                             name="lifecycle"
                             value={value.lifecycle ? value.lifecycle : ""}
                             onChange={handleOnChange}
-                            title="생명주기"
+                            title="Lifecycle"
                         />
                     </StyledRowGroupContainer>
                 </StyledBatteryInfoContainer>
                 <StyledMaterialListContainer>
-                    <StyledSubtitle>원자재 목록</StyledSubtitle>
+                    <StyledSubtitle>Used Materials</StyledSubtitle>
 
                     <FlexCarousel
                         container_width={"100%"}
@@ -325,6 +334,17 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                                                           key: target.id,
                                                           name: target.id,
                                                           amount: target.amount,
+                                                          disabled:
+                                                              value.materialList.filter(
+                                                                  (
+                                                                      check_element,
+                                                                      check_idx
+                                                                  ) =>
+                                                                      check_element.materialID ===
+                                                                          target.id &&
+                                                                      check_idx !=
+                                                                          idx
+                                                              ).length > 0,
                                                       };
                                                   })}
                                               material_id_value={

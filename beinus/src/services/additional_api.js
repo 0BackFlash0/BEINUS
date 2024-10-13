@@ -209,6 +209,27 @@ export const verifyBattery = (data) => {
     });
 };
 
+export const verifyMaterial = (data) => {
+    const { materialID } = data;
+
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        message: "verify Material success",
+                    },
+                });
+            }, 100);
+        });
+    }
+
+    return instance.post("/verifyMaterial", {
+        materialID: materialID,
+    });
+};
+
 export const requestMaintenance = (data) => {
     const { batteryID } = data;
 
@@ -300,6 +321,29 @@ export const setRecycleAvailability = (data) => {
     });
 };
 
+export const queryBatterySOCEAndLifeCycle = (data) => {
+    const { batteryID } = data;
+
+    if (TEST) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    status: 200,
+                    data: {
+                        batteryID: "BATTERY-1727510556941983129",
+                        capacity: 4000,
+                        remainingLifeCycle: 1000,
+                        soce: 100,
+                        totalLifeCycle: 1000,
+                    },
+                });
+            }, 100);
+        });
+    }
+
+    return instance.get(`/queryBatterySOCEAndLifeCycle/${batteryID}`, {});
+};
+
 export const extractMaterials = (data) => {
     const { batteryID, nickel, cobalt, lithium, manganese } = data;
 
@@ -388,8 +432,8 @@ const tempMaterial = {
         name: "Lithium",
         quantity: 10045,
         status: "NEW",
-        available: "Available",
-        verified: "Verified",
+        available: "AVAILABLE",
+        verified: "NOT VERIFIED",
         timestamp: "2024-09-30T06:25:20Z",
     },
 };
@@ -400,20 +444,20 @@ const tempMaterials = {
             materialID: "MATERIAL-1727677344651572222",
             supplierID: "SUPPLIER-001",
             name: "Lithium",
-            quantity: 100,
+            quantity: 0,
             status: "NEW",
-            available: "Available",
-            verified: "Verified",
+            available: "UNAVAILABLE",
+            verified: "VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
             materialID: "MATERIAL-1727677344653635347",
             supplierID: "SUPPLIER-001",
             name: "Cobalt",
-            quantity: 150,
+            quantity: 0,
             status: "NEW",
-            available: "Available",
-            verified: "Verified",
+            available: "UNAVAILABLE",
+            verified: "VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
@@ -422,8 +466,8 @@ const tempMaterials = {
             name: "Manganese",
             quantity: 70,
             status: "NEW",
-            available: "Available",
-            verified: "Verified",
+            available: "AVAILABLE",
+            verified: "VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
@@ -432,8 +476,8 @@ const tempMaterials = {
             name: "Nickel",
             quantity: 200,
             status: "NEW",
-            available: "Available",
-            verified: "Verified",
+            available: "AVAILABLE",
+            verified: "VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
@@ -442,8 +486,8 @@ const tempMaterials = {
             name: "Lithium",
             quantity: 100,
             status: "NEW",
-            available: "Available",
-            verified: "Verified",
+            available: "AVAILABLE",
+            verified: "NOT VERIFIED",
             timestamp: "2024-09-30T06:24:32Z",
         },
         {
@@ -452,8 +496,8 @@ const tempMaterials = {
             name: "Lithium",
             quantity: 10045,
             status: "NEW",
-            available: "Available",
-            verified: "Verified",
+            available: "AVAILABLE",
+            verified: "NOT VERIFIED",
             timestamp: "2024-09-30T06:25:20Z",
         },
     ],
@@ -463,9 +507,9 @@ const tempMaterials = {
             supplierID: "SUPPLIER-001",
             name: "Nickel",
             quantity: 50,
-            status: "Recycled",
-            available: "Available",
-            verified: "Verified",
+            status: "RECYCLED",
+            available: "AVAILABLE",
+            verified: "VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
@@ -473,9 +517,9 @@ const tempMaterials = {
             supplierID: "SUPPLIER-001",
             name: "Manganese",
             quantity: 40,
-            status: "Recycled",
-            available: "Available",
-            verified: "Verified",
+            status: "RECYCLED",
+            available: "AVAILABLE",
+            verified: "VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
@@ -483,9 +527,9 @@ const tempMaterials = {
             supplierID: "SUPPLIER-001",
             name: "Lithium",
             quantity: 30,
-            status: "Recycled",
-            available: "Available",
-            verified: "Verified",
+            status: "RECYCLED",
+            available: "AVAILABLE",
+            verified: "NOT VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
         {
@@ -493,9 +537,9 @@ const tempMaterials = {
             supplierID: "SUPPLIER-001",
             name: "Cobalt",
             quantity: 30,
-            status: "Recycled",
-            available: "Available",
-            verified: "",
+            status: "RECYCLED",
+            available: "AVAILABLE",
+            verified: "NOT VERIFIED",
             timestamp: "2024-09-30T06:22:24Z",
         },
     ],
@@ -584,7 +628,7 @@ const tempBattery = {
         maintenanceRequest: true,
         analysisRequest: false,
         containsHazardous: "Cadmium, Lithium, Nickel, Lead",
-        recycleAvailability: false,
+        recycleAvailability: true,
         recyclingRatesByMaterial: {
             Cobalt: 16.666666666666664,
             Lithium: 12.5,
@@ -596,7 +640,7 @@ const tempBattery = {
 
 const tempBatteries = [
     {
-        batteryID: "BATTERY-1727677381828333336",
+        batteryID: "BATTERY-17276773818283333361828333336",
         PassportID: "b8b6c09e-4068-4a6a-8413-eabaed172324",
         rawMaterials: {
             material1: {
@@ -653,7 +697,7 @@ const tempBatteries = [
         location: "",
         category: "EV Battery",
         weight: 500.5,
-        status: "Disassembled",
+        status: "DISASSEMBLED",
         Verified: "VERIFIED",
         capacity: 3000,
         voltage: 0,
@@ -733,7 +777,7 @@ const tempBatteries = [
         location: "",
         category: "EV Battery",
         weight: 500.5,
-        status: "Disassembled",
+        status: "ORIGINAL",
         Verified: "VERIFIED",
         capacity: 3000,
         voltage: 0,
@@ -813,7 +857,7 @@ const tempBatteries = [
         location: "",
         category: "EV Battery",
         weight: 500.5,
-        status: "Disassembled",
+        status: "DISASSEMBLED",
         Verified: "VERIFIED",
         capacity: 3000,
         voltage: 0,
@@ -893,7 +937,7 @@ const tempBatteries = [
         location: "",
         category: "EV Battery",
         weight: 500.5,
-        status: "Disassembled",
+        status: "ORIGINAL",
         Verified: "VERIFIED",
         capacity: 3000,
         voltage: 0,
