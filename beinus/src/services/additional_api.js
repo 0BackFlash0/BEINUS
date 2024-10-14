@@ -350,14 +350,15 @@ export const extractMaterials = (data) => {
     const body = {
         batteryID: batteryID,
         extractedQuantities: {
-            Nickel: nickel,
-            Cobalt: cobalt,
-            Lithium: lithium,
-            Manganese: manganese,
+            Nickel: parseInt(nickel),
+            Cobalt: parseInt(cobalt),
+            Lithium: parseInt(lithium),
+            Manganese: parseInt(manganese),
         },
     };
 
     if (TEST) {
+        console.log(body);
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({
