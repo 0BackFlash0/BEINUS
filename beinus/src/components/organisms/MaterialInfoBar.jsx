@@ -184,6 +184,7 @@ const MaterialInfoBar = ({
                 setData({
                     ...data,
                     ...response.data.rawMaterial,
+                    ...response.data.recycledMaterials,
                 });
                 setLoading(false);
             })

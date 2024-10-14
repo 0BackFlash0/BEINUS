@@ -276,12 +276,13 @@ const MainPage = () => {
             <GNB />
             <Section ref={(el) => (sectionsRef.current[0] = el)}>
                 <StyledSectionTitle>
-                    <StyledLogo
+                    {/* <StyledLogo
                         src="/assets/logo.png"
                         alt="로고"
                         objectfit="cover"
                         height="60px"
-                    />
+                    /> */}
+                    BE IN US
                 </StyledSectionTitle>
                 <StyledIntroductContent>
                     <StyledSlogun>

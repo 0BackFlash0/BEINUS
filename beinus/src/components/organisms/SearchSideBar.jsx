@@ -279,16 +279,16 @@ const SearchSideBar = ({
                         </StyledMenuInfo>
 
                         {is_requested_analysis ? (
-                            <MenuButton onClick={handleRequestAnalysis}>
-                                REQUEST
-                            </MenuButton>
-                        ) : (
                             <MenuButton
                                 onClick={() => {
                                     showBatteryAnalysis(battery_id);
                                 }}
                             >
                                 CHECK AVAILABILITY
+                            </MenuButton>
+                        ) : (
+                            <MenuButton onClick={handleRequestAnalysis}>
+                                REQUEST
                             </MenuButton>
                         )}
                     </StyledRequestContainer>
