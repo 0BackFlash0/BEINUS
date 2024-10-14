@@ -90,7 +90,7 @@ const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
         })
             .then((response) => {
                 showCaution(
-                    `원자재 ID가 발급되었습니다. \n ID : ${response.data.materialID}`
+                    `원자재 ID가 발급되었습니다. \n ID : ${response.data.result}`
                 );
                 handle_close();
             })
