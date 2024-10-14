@@ -99,10 +99,10 @@ const BatteryExtractModal = ({
             .then((response) => {
                 showCaution(
                     `원자재 추출에 성공했습니다. \n 
-                        리튬 ID: ${response.data.exxtractedMaterials.Lithium.materialID} \n
-                        코발트 ID: ${response.data.exxtractedMaterials.Cobalt.materialID} \n
-                        망간 ID: ${response.data.exxtractedMaterials.Manganese.materialID} \n
-                        니켈 ID: ${response.data.exxtractedMaterials.Nickel.materialID} \n`,
+                        리튬 ID: ${response.data.extractedMaterials.Lithium.materialID} \n
+                        코발트 ID: ${response.data.extractedMaterials.Cobalt.materialID} \n
+                        망간 ID: ${response.data.extractedMaterials.Manganese.materialID} \n
+                        니켈 ID: ${response.data.extractedMaterials.Nickel.materialID} \n`,
                     handle_close
                 );
             })
