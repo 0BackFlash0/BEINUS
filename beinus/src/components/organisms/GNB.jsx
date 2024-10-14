@@ -84,7 +84,7 @@ const StyledUser = styled.div`
     align-items: start;
     gap: 10px;
 
-    font-size: 12pt;
+    font-size: 11pt;
     font-weight: 500;
 
     margin: 0;
