@@ -70,7 +70,7 @@ const StyledMenuBar = styled.div`
 `;
 
 const StyledUserInfoContainer = styled.div`
-    width: 150px;
+    width: 160px;
     display: flex;
     flex-direction: column;
     align-items: start;
