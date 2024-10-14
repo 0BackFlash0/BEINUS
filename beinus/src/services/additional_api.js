@@ -103,7 +103,7 @@ export const queryBatteryDetails = async function (data) {
 };
 
 export const queryMaterial = (data) => {
-    const { material_id } = data;
+    const { materialID } = data;
 
     if (TEST) {
         return new Promise((resolve) => {
@@ -118,7 +118,7 @@ export const queryMaterial = (data) => {
         });
     }
 
-    return instance.get(`/queryMaterial/${material_id}`, {});
+    return instance.get(`/queryMaterial/${materialID}`, {});
 };
 
 export const createBattery = (data) => {
