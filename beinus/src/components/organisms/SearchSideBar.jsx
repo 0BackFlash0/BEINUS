@@ -192,13 +192,15 @@ const SearchSideBar = ({
                     <StyledMenuInfo>
                         {/* <StyledHead>VERIFICATION</StyledHead> */}
                         <StyledContent status={is_verified}>
-                            {is_verified ? "VERIFIED" : "NOT VERIFIED"}
+                            {is_verified === "VERIFIED"
+                                ? "VERIFIED"
+                                : "NOT VERIFIED"}
                         </StyledContent>
                         {/* <RequestButton onClick={handleRequestMaintenance}>
                             Request
                         </RequestButton> */}
                     </StyledMenuInfo>
-                    {is_verified ? (
+                    {is_verified === "VERIFIED" ? (
                         ""
                     ) : (
                         <MenuButton onClick={handleVerifyBattery}>

@@ -272,8 +272,8 @@ export const addMaintenanceLog = (data) => {
         company: name,
         info: info,
         maintenanceDate: date,
-        soc: soc,
-        soh: soh,
+        soc: parseInt(soc),
+        soh: parseInt(soh),
     });
 };
 
@@ -606,7 +606,7 @@ const tempBattery = {
         category: "EV Battery",
         weight: 500.5,
         status: "ORIGINAL",
-        Verified: "VERIFIED",
+        Verified: "NOT VERIFIED",
         capacity: 3000,
         voltage: 300.6,
         soc: 100,
@@ -627,7 +627,7 @@ const tempBattery = {
 
         accidentLogs: [],
         maintenanceRequest: true,
-        analysisRequest: false,
+        analysisRequest: true,
         containsHazardous: "Cadmium, Lithium, Nickel, Lead",
         recycleAvailability: true,
         recyclingRatesByMaterial: {
