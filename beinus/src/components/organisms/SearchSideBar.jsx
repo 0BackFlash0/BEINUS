@@ -191,7 +191,7 @@ const SearchSideBar = ({
                 <DropDown icon="license" name="VERIFICAITON">
                     <StyledMenuInfo>
                         {/* <StyledHead>VERIFICATION</StyledHead> */}
-                        <StyledContent status={is_verified}>
+                        <StyledContent status={is_verified === "VERIFIED"}>
                             {is_verified === "VERIFIED"
                                 ? "VERIFIED"
                                 : "NOT VERIFIED"}

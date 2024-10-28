@@ -159,7 +159,7 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                             ...response.data.newMaterials
                                 .filter(
                                     (element) =>
-                                        element.available === "AVAILABLE" &&
+                                        element.availability === "AVAILABLE" &&
                                         element.verified === "VERIFIED"
                                 )
                                 .map((element) => {
@@ -172,7 +172,7 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
                             ...response.data.recycledMaterials
                                 .filter(
                                     (element) =>
-                                        element.available === "AVAILABLE" &&
+                                        element.availability === "AVAILABLE" &&
                                         element.verified === "VERIFIED"
                                 )
                                 .map((element) => {

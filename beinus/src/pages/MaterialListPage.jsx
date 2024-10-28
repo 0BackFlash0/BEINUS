@@ -182,7 +182,7 @@ const MaterialListPage = () => {
                                 type: element.name,
                                 amount: element.quantity,
                                 verified: element.verified,
-                                availability: element.available,
+                                availability: element.availability,
                                 status: element.status,
                                 date: element.timestamp.slice(0, 10),
                             };
@@ -194,7 +194,7 @@ const MaterialListPage = () => {
                                 type: element.name,
                                 amount: element.quantity,
                                 verified: element.verified,
-                                availability: element.available,
+                                availability: element.availability,
                                 status: element.status,
                                 date: element.timestamp.slice(0, 10),
                             };
