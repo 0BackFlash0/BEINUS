@@ -113,6 +113,10 @@ const MaterialCard = ({
             </StyledMainContent>
             <StyledLowerContent>
                 <StyledRow>
+                    <StyledLabel>Quantity</StyledLabel>
+                    <StyledLabel>{amount}</StyledLabel>
+                </StyledRow>
+                <StyledRow>
                     <StyledLabel>Verification</StyledLabel>
                     <StyledContentContainer>
                         <StyledLabel>{verified}</StyledLabel>
@@ -130,11 +134,6 @@ const MaterialCard = ({
                             ></Icon>
                         )}
                     </StyledContentContainer>
-                </StyledRow>
-
-                <StyledRow>
-                    <StyledLabel>Quantity</StyledLabel>
-                    <StyledLabel>{amount}</StyledLabel>
                 </StyledRow>
                 <StyledRow>
                     <StyledLabel>Status</StyledLabel>

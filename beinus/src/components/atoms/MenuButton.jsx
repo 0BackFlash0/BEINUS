@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledMenuButton = styled.button`
     display: inline-block;
-    background-color: ${(props) => props.color || "#1ed760"};
+    background-color: ${(props) => props.$color || "#1ed760"};
     border-style: none;
     border-radius: 10px;
     padding: 6px 0 4px 0;
@@ -10,10 +10,10 @@ const StyledMenuButton = styled.button`
     height: auto;
     font-size: 13pt;
     font-weight: 500;
-    color: ${(props) => props.font_color || "white"};
+    color: ${(props) => props.$font_color || "white"};
 
     &:hover {
-        background-color: ${(props) => props.hover_color || "#13c752"};
+        background-color: ${(props) => props.$hover_color || "#13c752"};
     }
 `;
 
@@ -27,9 +27,9 @@ const MenuButton = ({
     ...props
 }) => {
     const optionalProps = {
-        ...(color && { color: color }),
-        ...(hover_color && { hover_color: hover_color }),
-        ...(font_color && { font_color: font_color }),
+        ...(color && { $color: color }),
+        ...(hover_color && { $hover_color: hover_color }),
+        ...(font_color && { $font_color: font_color }),
     };
 
     return (

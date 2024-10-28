@@ -7,16 +7,16 @@ const StyledPicture = styled("div")`
 
 const StyledSource = styled.source`
     display: block;
-    max-width: ${(props) => props.width || "auto"};
-    max-height: ${(props) => props.height || "auto"};
-    object-fit: ${(props) => props.objectfit || "contain"};
+    max-width: ${(props) => props.$width || "auto"};
+    max-height: ${(props) => props.$height || "auto"};
+    object-fit: ${(props) => props.$objectfit || "contain"};
 `;
 
 const StyledImg = styled.img`
     display: block;
-    max-width: ${(props) => props.width || "auto"};
-    max-height: ${(props) => props.height || "auto"};
-    object-fit: ${(props) => props.objectfit || "contain"};
+    max-width: ${(props) => props.$width || "auto"};
+    max-height: ${(props) => props.$height || "auto"};
+    object-fit: ${(props) => props.$objectfit || "contain"};
 `;
 
 const Photo = ({
@@ -29,9 +29,9 @@ const Photo = ({
     ...props
 }) => {
     const optionalProps = {
-        ...(width && { width: width }),
-        ...(height && { height: height }),
-        ...(objectfit && { objectfit: objectfit }),
+        ...(width && { $width: width }),
+        ...(height && { $height: height }),
+        ...(objectfit && { $objectfit: objectfit }),
     };
 
     return (

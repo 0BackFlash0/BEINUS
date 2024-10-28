@@ -5,13 +5,13 @@ import Icon from "../atoms/Icon";
 const StyledCarouselContainer = styled.div`
     position: relative;
     display: flex;
-    width: ${(props) => props.container_width || "auto"};
+    width: ${(props) => props.$container_width || "auto"};
     flex-direction: row;
     justify-content: space-around;
 `;
 
 const StyledElement = styled.div`
-    width: ${(props) => `${Math.floor(100 / props.showing_num)}px`};
+    width: ${(props) => `${Math.floor(100 / props.$showing_num)}px`};
     /* width: 100%; */
     /* width: ${(props) => props.element_width || "auto"}; */
     display: flex;
@@ -28,7 +28,7 @@ const StyledMoveButton = styled.button`
     position: absolute;
     top: 50%;
     ${(props) =>
-        props.position === "left"
+        props.$position === "left"
             ? css`
                   left: 0;
                   transform: translateY(-50%) translateX(-30%);
@@ -83,7 +83,6 @@ const FlexCarousel = ({
                         ? 1
                         : new_shownum;
                 setShowNumber(new_shownum);
-                console.log(new_shownum);
                 if (firstElement + showNumber > elements.length) {
                     setFirstElement(elements.length - new_shownum);
                 }
@@ -103,12 +102,12 @@ const FlexCarousel = ({
     return (
         <StyledCarouselContainer
             className={`${className}`}
-            container_width={container_width}
+            $container_width={container_width}
             ref={carouselRef}
         >
             {firstElement > 0 && (
                 <StyledMoveButton
-                    position="left"
+                    $position="left"
                     onClick={() => {
                         handleNumber(-1);
                     }}
@@ -122,7 +121,7 @@ const FlexCarousel = ({
             )}
             {firstElement + showNumber !== elements.length && (
                 <StyledMoveButton
-                    position="right"
+                    $position="right"
                     onClick={() => {
                         handleNumber(1);
                     }}
@@ -145,8 +144,8 @@ const FlexCarousel = ({
                     .map((element, idx) => (
                         <StyledElement
                             key={idx}
-                            showing_num={showNumber}
-                            element_width={`${element_width}px`}
+                            $showing_num={showNumber}
+                            $element_width={`${element_width}px`}
                         >
                             {element}
                         </StyledElement>

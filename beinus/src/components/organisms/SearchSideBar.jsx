@@ -98,7 +98,7 @@ const StyledContent = styled.h5`
     font-weight: 800;
     color: #666666;
     text-align: end;
-    color: ${(props) => (props.status ? "blue" : "red")};
+    color: ${(props) => (props.$status ? "blue" : "red")};
 `;
 
 const StyledMenuButton = styled.button`
@@ -191,7 +191,7 @@ const SearchSideBar = ({
                 <DropDown icon="license" name="VERIFICAITON">
                     <StyledMenuInfo>
                         {/* <StyledHead>VERIFICATION</StyledHead> */}
-                        <StyledContent status={is_verified === "VERIFIED"}>
+                        <StyledContent $status={is_verified === "VERIFIED"}>
                             {is_verified === "VERIFIED"
                                 ? "VERIFIED"
                                 : "NOT VERIFIED"}
@@ -210,7 +210,7 @@ const SearchSideBar = ({
                 </DropDown>
                 <DropDown icon="handyman" name="MAINTENANCE">
                     <StyledMenuInfo>
-                        <StyledContent status={is_requested_maintenance}>
+                        <StyledContent $status={is_requested_maintenance}>
                             {is_requested_maintenance
                                 ? "REQUESTED"
                                 : "NOT REQUESTED"}
@@ -273,7 +273,7 @@ const SearchSideBar = ({
                 <DropDown icon="search_insights" name="RECYCLE CHECK">
                     <StyledRequestContainer>
                         <StyledMenuInfo>
-                            <StyledContent status={is_requested_analysis}>
+                            <StyledContent $status={is_requested_analysis}>
                                 {is_requested_analysis
                                     ? "REQUESTED"
                                     : "NOT REQUESTED"}
@@ -299,7 +299,7 @@ const SearchSideBar = ({
                 <DropDown icon="recycling" name="RECYCLE">
                     <StyledRequestContainer>
                         <StyledMenuInfo>
-                            <StyledContent status={recycle_availability}>
+                            <StyledContent $status={recycle_availability}>
                                 {recycle_availability
                                     ? "AVAILABLE"
                                     : "NOT AVAILABLE"}
@@ -322,7 +322,7 @@ const SearchSideBar = ({
 
                 {/* <DropDown icon="search_insights" name="RECYCLE">
                     <StyledMenuInfo>
-                        <StyledHead status={recycle_availability}>
+                        <StyledHead $status={recycle_availability}>
                             {recycle_availability
                                 ? "AVAILABLE"
                                 : "NOT AVAILABLE"}

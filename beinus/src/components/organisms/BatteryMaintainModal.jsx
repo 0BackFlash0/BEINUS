@@ -76,7 +76,7 @@ const BatteryMaintainModal = ({
     const { showCaution } = useCaution();
 
     const [value, handleOnChange] = useInput({
-        name: "정비회사",
+        name: "",
         date: new Date().toISOString().substring(0, 10),
         info: "",
         soc: "0",
@@ -105,7 +105,7 @@ const BatteryMaintainModal = ({
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledTopic>배터리 정비</StyledTopic>
+            <StyledTopic>Battery Maintenance</StyledTopic>
             <StyledInputGroupContainer>
                 <StyledInputGroup
                     type="text"
@@ -113,7 +113,7 @@ const BatteryMaintainModal = ({
                     name="name"
                     value={value.name ? value.name : ""}
                     onChange={handleOnChange}
-                    title="정비업체"
+                    title="Company ID"
                 />
                 <StyledInputGroup
                     type="date"
@@ -121,7 +121,7 @@ const BatteryMaintainModal = ({
                     name="date"
                     value={value.date ? value.date : ""}
                     onChange={handleOnChange}
-                    title="정비일자"
+                    title="Date"
                 />
             </StyledInputGroupContainer>
             <StyledInputGroupContainer>
@@ -148,7 +148,7 @@ const BatteryMaintainModal = ({
                 name="info"
                 value={value.info ? value.info : ""}
                 onChange={handleOnChange}
-                title="정비 내용"
+                title="Maintenance Log"
             />
             <StyledButtonContainer>
                 <Button onClick={handleMaintain}>확인</Button>

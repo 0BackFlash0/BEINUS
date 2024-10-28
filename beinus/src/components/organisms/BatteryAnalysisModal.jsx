@@ -142,7 +142,7 @@ const BatteryAnalysisModal = ({
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledTopic>재활용 여부 분석</StyledTopic>
+            <StyledTopic>Recycle Ability Analysis</StyledTopic>
             <StyledInfoContainer>
                 <Subtitle>Capacity</Subtitle>
                 <StyledInfo>{data.capacity}</StyledInfo>

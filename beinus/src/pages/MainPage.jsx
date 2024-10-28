@@ -1,15 +1,12 @@
 import styled from "styled-components";
 import GNB from "../components/organisms/GNB";
-import PageTemplate from "../components/templates/PageTemplate";
 import Photo from "../components/atoms/Photo";
 import IntroductionList from "../components/organisms/IntroductionList";
 import { useNavigate } from "react-router-dom";
 import useInput from "../hooks/useInput";
-import { checkBattery } from "../services/additional_api";
 import { useEffect, useRef, useState } from "react";
 import Subtitle from "../components/atoms/Subtitle";
 import FlexCarousel from "../components/molecules/FlexCarousel";
-import Content from "../components/atoms/Content";
 import Button from "../components/atoms/Button";
 import { useSelector } from "react-redux";
 
@@ -97,13 +94,13 @@ const Section = styled.section`
 `;
 
 const StyledSectionTitle = styled.div`
-    font-family: "Source Serif 4", serif;
+    font-family: "Lora", serif;
     height: 60px;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
-    font-size: 32pt;
+    font-size: 30pt;
     font-weight: 700;
     margin-top: 15px;
 `;
@@ -170,7 +167,7 @@ const StyledRoleElement = styled.div`
     justify-content: space-between;
 
     background-color: ${(props) =>
-        props.is_selected ? "#edffed" : "#f8f8f8;"};
+        props.$is_selected ? "#edffed" : "#f8f8f8;"};
 `;
 
 const StyledRoleName = styled.div`
@@ -282,7 +279,7 @@ const MainPage = () => {
                         objectfit="cover"
                         height="60px"
                     /> */}
-                    BE IN US
+                    Welcome to BE IN US
                 </StyledSectionTitle>
                 <StyledIntroductContent>
                     <StyledSlogun>
@@ -343,7 +340,7 @@ const MainPage = () => {
                             return (
                                 <StyledRoleElement
                                     onClick={() => setSelectedRole(idx)}
-                                    is_selected={idx === selectedRole}
+                                    $is_selected={idx === selectedRole}
                                 >
                                     <Photo
                                         alt={element.role}

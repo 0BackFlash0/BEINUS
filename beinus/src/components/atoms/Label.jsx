@@ -5,7 +5,7 @@ const StyledLabel = styled.label`
     font-size: 12pt;
     padding: 5px 10px 5px 10px;
     color: ${(props) => {
-        return props.valid === "success" ? "#13C752" : "red";
+        return props.$valid === "success" ? "#13C752" : "red";
     }};
 `;
 
@@ -25,7 +25,7 @@ const Label = ({
             className={`label ${className}`}
             {...optionalProps}
             {...props}
-            valid={valid}
+            $valid={valid}
         >
             {children}
         </StyledLabel>

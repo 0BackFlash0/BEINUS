@@ -16,9 +16,9 @@ const StyledScroller = styled.div`
     white-space: nowrap;
     transform: translateX(0);
     animation: ${(props) =>
-            props.scroll &&
+            props.$scroll &&
             css`
-                ${keyframes`${props.animation}`} ${props.time}s
+                ${keyframes`${props.$animation}`} ${props.$time}s
             `}
         linear infinite;
 `;
@@ -72,9 +72,9 @@ function Scroller({ children }) {
     return (
         <StyledScrollerContainer ref={containerRef}>
             <StyledScroller
-                scroll={shouldScroll}
-                animation={animation}
-                time={animationTime}
+                $scroll={shouldScroll}
+                $animation={animation}
+                $time={animationTime}
             >
                 {children}
             </StyledScroller>

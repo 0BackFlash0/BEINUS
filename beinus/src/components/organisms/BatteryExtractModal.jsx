@@ -116,7 +116,7 @@ const BatteryExtractModal = ({
             className={`battery-extract-modal ${className}`}
             {...props}
         >
-            <StyledTopic>원자재 추출</StyledTopic>
+            <StyledTopic>Material Extraction</StyledTopic>
             <StyledInputGroupContainer>
                 <StyledInputGroup
                     type="number"

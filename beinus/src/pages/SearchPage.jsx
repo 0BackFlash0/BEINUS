@@ -1,27 +1,13 @@
-import BatteryAnalysisModal from "../components/organisms/BatteryAnalysisModal";
-import BatteryExtractModal from "../components/organisms/BatteryExtractModal";
-import BatteryInformation from "../components/organisms/BatteryInformation";
-import BatteryMaintainModal from "../components/organisms/BatteryMaintainModal";
-import BatteryPassport from "../components/organisms/BatteryPassport";
-import ModalTemplate from "../components/templates/ModelTemplate";
 import GNB from "../components/organisms/GNB";
 import PageTemplate from "../components/templates/PageTemplate";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import {
-    queryBatteryDetails,
-    requestAnalysis,
-    requestMaintenance,
-} from "../services/additional_api";
+import { queryBatteryDetails } from "../services/additional_api";
 import { useNavigate } from "react-router-dom";
 import { useCaution } from "../hooks/useCaution";
-import BatterySideBar from "../components/organisms/BatterySideBar";
 import SearchSideBar from "../components/organisms/SearchSideBar";
 import styled from "styled-components";
-import TabInfo from "../components/molecules/TabInfo";
 import CardInfo from "../components/molecules/CardInfo";
-import Line from "../components/atoms/Line";
-import CardMultiChart from "../components/molecules/CardMultiChart";
 import Icon from "../components/atoms/Icon";
 import Photo from "../components/atoms/Photo";
 import TabBar from "../components/molecules/TabBar";
@@ -404,7 +390,7 @@ const SearchPage = () => {
                             {data.maintenanceLogs ? (
                                 data.maintenanceLogs.map((element, idx) => {
                                     return (
-                                        <StyledLogContainer>
+                                        <StyledLogContainer key={idx}>
                                             {element}
                                         </StyledLogContainer>
                                     );

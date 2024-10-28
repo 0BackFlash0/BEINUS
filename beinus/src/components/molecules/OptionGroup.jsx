@@ -40,7 +40,7 @@ const StyledSelectedOption = styled.div`
     font-size: 16pt;
     color: #383838;
     ${(props) =>
-        props.disabled &&
+        props.$disabled &&
         css`
             color: red;
         `}
@@ -57,7 +57,7 @@ const StyledOptionList = styled.div`
     z-index: 100;
     max-height: 200px;
     overflow-y: auto;
-    display: ${(props) => (props.show ? "block" : "none")};
+    display: ${(props) => (props.$show ? "block" : "none")};
 `;
 
 const StyledOption = styled.div`
@@ -70,14 +70,14 @@ const StyledOption = styled.div`
     }
 
     ${(props) =>
-        props.selected &&
+        props.$selected &&
         css`
             /* background-color: #e4e4e4; */
             color: blue;
             /* font-weight: bold; */
         `}
     ${(props) =>
-        props.disabled &&
+        props.$disabled &&
         css`
             background-color: red;
             color: white;
@@ -182,7 +182,7 @@ const OptionGroup = ({
                     weight="700"
                 />
                 <StyledSelectedOption
-                    disabled={
+                    $disabled={
                         options.find((option) => option.key === selected)
                             ?.disabled || false
                     }
@@ -190,7 +190,7 @@ const OptionGroup = ({
                     {options.find((option) => option.key === selected)?.name ||
                         "Select an option"}
                 </StyledSelectedOption>
-                <StyledOptionList show={showOptions}>
+                <StyledOptionList $show={showOptions}>
                     {options.map((option, index) => (
                         <StyledOption
                             key={option.key}
@@ -199,8 +199,8 @@ const OptionGroup = ({
                                     handleOptionSelect(option.key);
                                 }
                             }}
-                            selected={option.key === selected}
-                            disabled={option.disabled || false}
+                            $selected={option.key === selected}
+                            $disabled={option.disabled || false}
                             className="option"
                         >
                             {option.name}

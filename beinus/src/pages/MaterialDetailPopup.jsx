@@ -1,8 +1,4 @@
 import styled from "styled-components";
-import InputGroup from "../components/molecules/InputGroup";
-import Topic from "../components/atoms/Topic";
-import Subtitle from "../components/atoms/Subtitle";
-import Button from "../components/atoms/Button";
 import TabInfo from "../components/molecules/TabInfo";
 import Photo from "../components/atoms/Photo";
 import { useParams } from "react-router-dom";

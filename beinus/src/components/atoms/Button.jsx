@@ -1,19 +1,19 @@
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-    background-color: ${(props) => props.color || "#1ed760"};
+    background-color: ${(props) => props.$color || "#1ed760"};
     border-style: none;
     border-radius: 5px;
     padding: 12px 36px 10px 36px;
     font-size: 16pt;
     font-weight: 600;
-    color: ${(props) => props.font_color || "white"};
+    color: ${(props) => props.$font_color || "white"};
 
-    width: ${(props) => props.width || "auto"};
-    height: ${(props) => props.height || "auto"};
+    width: ${(props) => props.$width || "auto"};
+    height: ${(props) => props.$height || "auto"};
 
     &:hover {
-        background-color: ${(props) => props.hover_color || "#13c752"};
+        background-color: ${(props) => props.$hover_color || "#13c752"};
     }
 `;
 
@@ -29,11 +29,11 @@ const Button = ({
     ...props
 }) => {
     const optionalProps = {
-        ...(width && { width: width }),
-        ...(height && { height: height }),
-        ...(color && { color: color }),
-        ...(hover_color && { hover_color: hover_color }),
-        ...(font_color && { font_color: font_color }),
+        ...(width && { $width: width }),
+        ...(height && { $height: height }),
+        ...(color && { $color: color }),
+        ...(hover_color && { $hover_color: hover_color }),
+        ...(font_color && { $font_color: font_color }),
     };
 
     return (

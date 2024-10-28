@@ -1,23 +1,23 @@
 import styled from "styled-components";
 
 const StyledLine = styled.div`
-    border-style: ${(props) => props.borderstyle};
+    border-style: ${(props) => props.$borderstyle};
     min-height: ${(props) => {
-        return props.direction === "horizontal" ? "0" : "100%";
+        return props.$direction === "horizontal" ? "0" : "100%";
     }};
     min-width: ${(props) => {
-        return props.direction === "horizontal" ? "100%" : "0";
+        return props.$direction === "horizontal" ? "100%" : "0";
     }};
     margin: ${(props) => {
-        return props.direction === "horizontal"
-            ? `${props.margin} 0`
-            : `0 ${props.margin}`;
+        return props.$direction === "horizontal"
+            ? `${props.$margin} 0`
+            : `0 ${props.$margin}`;
     }};
-    border-color: ${(props) => props.color};
+    border-color: ${(props) => props.$color};
     border-width: ${(props) => {
-        return props.direction === "horizontal"
-            ? `${props.width} 0 0 0`
-            : `0 ${props.width} 0 0`;
+        return props.$direction === "horizontal"
+            ? `${props.$width} 0 0 0`
+            : `0 ${props.$width} 0 0`;
     }};
 `;
 
@@ -34,11 +34,11 @@ const Line = ({
     return (
         <StyledLine
             className={`line ${className}`}
-            direction={direction}
-            borderstyle={borderstyle}
-            margin={margin}
-            width={width}
-            color={color}
+            $direction={direction}
+            $borderstyle={borderstyle}
+            $margin={margin}
+            $width={width}
+            $color={color}
             {...props}
         ></StyledLine>
     );

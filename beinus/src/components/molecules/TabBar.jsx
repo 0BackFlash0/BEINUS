@@ -30,10 +30,10 @@ const StyledTab = styled.button`
     outline: none;
 
     color: ${(props) =>
-        props.actived === props.index ? "#1ED760" : "#adadad"};
+        props.$actived === props.$index ? "#1ED760" : "#adadad"};
 
     border-bottom: ${(props) =>
-        props.actived === props.index
+        props.$actived === props.$index
             ? "2px solid #1ED760"
             : "2px solid #d8d8d8"};
 
@@ -42,9 +42,9 @@ const StyledTab = styled.button`
         props.actived === props.index ? "#EDFFED" : "white"}; */
 
     border-radius: ${(props) => {
-        return props.index == 0
+        return props.$index == 0
             ? "10px 0 0 0"
-            : props.index == props.length - 1
+            : props.$index == props.$length - 1
             ? "0 10px 0 0"
             : "0 0 0 0";
     }};
@@ -61,9 +61,9 @@ const TabBar = ({ tabs, className = "", onClick, actived }) => {
                 <StyledTab
                     key={tab.key}
                     onClick={() => onClick(index)}
-                    index={index}
-                    length={array.length}
-                    actived={actived}
+                    $index={index}
+                    $length={array.length}
+                    $actived={actived}
                 >
                     <Icon
                         icon={tab.icon}

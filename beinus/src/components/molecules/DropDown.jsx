@@ -33,7 +33,7 @@ const StyledMenuButton = styled.button`
     cursor: pointer;
 
     ${(props) =>
-        props.is_on === "true" &&
+        props.$is_on === "true" &&
         css`
             background-color: #edffed;
         `}

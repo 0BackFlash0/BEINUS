@@ -2,9 +2,7 @@ import GNB from "../components/organisms/GNB";
 import PageTemplate from "../components/templates/PageTemplate";
 import { useState } from "react";
 import React from "react";
-import Photo from "../components/atoms/Photo";
 import styled from "styled-components";
-import Anchor from "../components/atoms/Anchor";
 import { queryAllBatteries } from "../services/additional_api";
 import { useEffect } from "react";
 import BatterySideBar from "../components/organisms/BatterySideBar";
@@ -12,7 +10,6 @@ import { useCaution } from "../hooks/useCaution";
 import BatteryCard from "../components/molecules/BatteryCard";
 import SearchingFilter from "../components/molecules/SearchingFilter";
 import BatteryInfoBar from "../components/organisms/BatteryInfoBar";
-import { useModal } from "../hooks/useModal";
 import useInput from "../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 

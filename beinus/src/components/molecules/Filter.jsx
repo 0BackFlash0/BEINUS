@@ -32,7 +32,7 @@ const StyledMenuButton = styled.button`
     cursor: pointer;
 
     ${(props) =>
-        props.is_on === "true" &&
+        props.$is_on === "true" &&
         css`
             background-color: #edffed;
         `}
@@ -71,7 +71,7 @@ const Filter = ({
                         return (
                             <StyledMenuButton
                                 key={key}
-                                is_on={value.active.toString()}
+                                $is_on={value.active.toString()}
                                 onClick={() => {
                                     console.log(key);
                                     handle_filter(key);

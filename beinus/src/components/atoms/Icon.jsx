@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const StyledIcon = styled.span`
-    font-size: ${(props) => props.size || "24px"};
-    color: ${(props) => props.color || "#5f6368"};
-    font-weight: ${(props) => props.weight || "400"};
+    font-size: ${(props) => props.$size || "24px"};
+    color: ${(props) => props.$color || "#5f6368"};
+    font-weight: ${(props) => props.$weight || "400"};
 `;
 
 const Icon = ({
@@ -17,9 +17,9 @@ const Icon = ({
     return (
         <StyledIcon
             className={`material-symbols-outlined ${className}`}
-            size={size}
-            color={color}
-            weight={weight}
+            $size={size}
+            $color={color}
+            $weight={weight}
             {...props}
         >
             {icon}
