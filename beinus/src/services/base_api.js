@@ -43,7 +43,7 @@ instance.interceptors.response.use(
     },
     (error) => {
         localStorage.removeItem("token");
-        console.log(error);
+        // console.log(error);
         return Promise.reject(error);
     }
 );

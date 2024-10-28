@@ -17,7 +17,6 @@ export const userSlice = createSlice({
             state.user = action.payload.username;
             state.role = action.payload.role;
             state.time = action.payload.time;
-            console.log(action);
         },
         userLogout: (state) => {
             state.isLogin = false;

@@ -49,7 +49,6 @@ const StyledTitle = styled.div`
 `;
 
 const CardMultiChart = ({ className = "", chartname = "-", datas }) => {
-    console.log(datas);
     return (
         <StyledChartContainer className={`${className}`}>
             <StyledTitle>{chartname}</StyledTitle>

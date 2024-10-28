@@ -152,46 +152,40 @@ const BatteryRegisterModal = ({ className = "", handle_close, ...props }) => {
     useEffect(() => {
         queryAllMaterials()
             .then((response) => {
-                if (response.status === 200) {
-                    setMaterialData({
-                        ...materialData,
-                        material_list: [
-                            ...response.data.newMaterials
-                                .filter(
-                                    (element) =>
-                                        element.availability === "AVAILABLE" &&
-                                        element.verified === "VERIFIED"
-                                )
-                                .map((element) => {
-                                    return {
-                                        id: element.materialID,
-                                        type: element.name,
-                                        amount: element.quantity,
-                                    };
-                                }),
-                            ...response.data.recycledMaterials
-                                .filter(
-                                    (element) =>
-                                        element.availability === "AVAILABLE" &&
-                                        element.verified === "VERIFIED"
-                                )
-                                .map((element) => {
-                                    return {
-                                        id: element.materialID,
-                                        type: element.name,
-                                        amount: element.quantity,
-                                    };
-                                }),
-                        ],
-                    });
-                } else {
-                    console.log(response.data);
-                    showCaution("알수없는 에러가 발생했습니다.");
-                }
+                setMaterialData({
+                    ...materialData,
+                    material_list: [
+                        ...response.data.newMaterials
+                            .filter(
+                                (element) =>
+                                    element.availability === "AVAILABLE" &&
+                                    element.verified === "VERIFIED"
+                            )
+                            .map((element) => {
+                                return {
+                                    id: element.materialID,
+                                    type: element.name,
+                                    amount: element.quantity,
+                                };
+                            }),
+                        ...response.data.recycledMaterials
+                            .filter(
+                                (element) =>
+                                    element.availability === "AVAILABLE" &&
+                                    element.verified === "VERIFIED"
+                            )
+                            .map((element) => {
+                                return {
+                                    id: element.materialID,
+                                    type: element.name,
+                                    amount: element.quantity,
+                                };
+                            }),
+                    ],
+                });
             })
-            .catch((response) => {
-                showCaution(`에러가 발생했습니다. \n ${response.data.error}`);
-                console.log(response);
+            .catch((error) => {
+                showCaution(`${error.message}`);
             });
     }, []);
 

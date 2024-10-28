@@ -38,7 +38,7 @@ const StyledChartTitle = styled(Subtitle)`
 `;
 
 const TabMultiChart = ({ className = "", chartname = "-", datas }) => {
-    console.log(datas);
+    // console.log(datas);
     return (
         <StyledChartContainer className={`${className}`}>
             <Subtitle>{chartname}</Subtitle>

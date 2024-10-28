@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import TextInput from "../atoms/TextInput";
-import Icon from "../atoms/Icon";
-import useInput from "../../hooks/useInput";
 
 const StyledSearchingContainer = styled.div`
     position: relative;

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import PieChart from "../atoms/PieChart";
-import Subtitle from "../atoms/Subtitle";
 
 const StyledChartContainer = styled.div`
     width: 100%;

@@ -4,9 +4,7 @@ import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import { useCaution } from "../../hooks/useCaution";
-import { useState } from "react";
 import useInput from "../../hooks/useInput";
-import ExtractMaterialOption from "./ExtractMaterialOption";
 import { extractMaterials } from "../../services/additional_api";
 
 const StyledBatteryExtractContainer = styled.div`

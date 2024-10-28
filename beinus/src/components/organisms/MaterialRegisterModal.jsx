@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import InputGroup from "../molecules/InputGroup";
 import Topic from "../atoms/Topic";
-import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
 import OptionGroup from "../molecules/OptionGroup";
 import useInput from "../../hooks/useInput";

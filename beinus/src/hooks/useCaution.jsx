@@ -1,8 +1,6 @@
 import Button from "../components/atoms/Button";
 import React, { createContext, useState, useContext } from "react";
 import styled from "styled-components";
-import Topic from "../components/atoms/Topic";
-import Content from "../components/atoms/Content";
 import Subtitle from "../components/atoms/Subtitle";
 
 // Context 생성

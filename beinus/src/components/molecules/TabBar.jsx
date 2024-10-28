@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Photo from "../atoms/Photo";
 import Icon from "../atoms/Icon";
 
 const StyledBarContainer = styled.div`

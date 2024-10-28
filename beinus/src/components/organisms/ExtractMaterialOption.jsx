@@ -1,12 +1,6 @@
 import styled from "styled-components";
 import InputGroup from "../molecules/InputGroup";
 import OptionGroup from "../molecules/OptionGroup";
-import Topic from "../atoms/Topic";
-import Subtitle from "../atoms/Subtitle";
-import Button from "../atoms/Button";
-import useInput from "../../hooks/useInput";
-import { registerBattery } from "../../services/additional_api";
-import { useState } from "react";
 
 const StyledMaterialOptionContainer = styled.div`
     position: relative;

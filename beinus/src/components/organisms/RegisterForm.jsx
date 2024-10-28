@@ -205,7 +205,7 @@ const RegisterForm = ({
             />
             <Button
                 onClick={async function () {
-                    console.log(value);
+                    // console.log(value);
                     if (
                         valid.username &&
                         valid.password &&

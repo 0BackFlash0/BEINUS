@@ -1,15 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import Label from "../atoms/Label";
-import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
-import Line from "../atoms/Line";
-import Icon from "../atoms/Icon";
 import { useSelector, useDispatch } from "react-redux";
 import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
-import Subtitle from "../atoms/Subtitle";
 import Menu from "../molecules/Menu";
 import { useNavigate } from "react-router-dom";
 import DropDownMenu from "../molecules/DropDownMenu";

@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import Label from "../atoms/Label";
 import Button from "../atoms/Button";
 import Anchor from "../atoms/Anchor";
-import Line from "../atoms/Line";
 import Title from "../atoms/Title";
-import Icon from "../atoms/Icon";
 import { useSelector, useDispatch } from "react-redux";
 import { persistor } from "../../";
 import Photo from "../atoms/Photo";
 import { userLogout } from "../../store/userSlice";
-import Subtitle from "../atoms/Subtitle";
 import { useNavigate } from "react-router-dom";
 import SearchingBar from "../molecules/SearchingBar";
 
@@ -66,7 +62,7 @@ const StyledMenuBar = styled.div`
     flex-direction: row;
     align-items: center;
     margin-left: 30px;
-    gap: 20px;
+    gap: 25px;
 `;
 
 const StyledUserInfoContainer = styled.div`

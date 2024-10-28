@@ -32,7 +32,7 @@ const StyledPieContainer = styled.div`
 `;
 
 const TabChart = ({ className = "", chartname = "-", data }) => {
-    console.log("chart");
+    // console.log("chart");
     return (
         <StyledChartContainer className={`${className}`}>
             <Subtitle>{chartname}</Subtitle>

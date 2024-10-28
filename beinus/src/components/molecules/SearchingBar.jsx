@@ -55,7 +55,7 @@ const SearchingBar = ({ className = "" }) => {
     };
 
     const handleKeyDown = (e) => {
-        console.log(e);
+        // console.log(e);
         if (e.key === "Enter") {
             onSearch();
         }

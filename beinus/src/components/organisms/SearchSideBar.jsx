@@ -1,19 +1,5 @@
-import React, { useRef, useState } from "react";
-import styled, { css } from "styled-components";
-import Label from "../atoms/Label";
-import Button from "../atoms/Button";
-import Anchor from "../atoms/Anchor";
-import Line from "../atoms/Line";
-import Icon from "../atoms/Icon";
-import { useSelector, useDispatch } from "react-redux";
-import { persistor } from "../../";
-import Photo from "../atoms/Photo";
-import { userLogout } from "../../store/userSlice";
-import Subtitle from "../atoms/Subtitle";
-import Menu from "../atoms/Menu";
-import { useNavigate } from "react-router-dom";
-import Filter from "../molecules/Filter";
-import Topic from "../atoms/Topic";
+import React from "react";
+import styled from "styled-components";
 import Title from "../atoms/Title";
 import MenuButton from "../atoms/MenuButton";
 import { useModal } from "../../hooks/useModal";
@@ -24,8 +10,6 @@ import {
 } from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
 import DropDown from "../molecules/DropDown";
-import FlexCarousel from "../molecules/FlexCarousel";
-import Scroller from "../atoms/Scoller";
 
 const StyledSideBarContainer = styled.div`
     position: fixed;
@@ -64,22 +48,6 @@ const StyledMenuInfo = styled.div`
     justify-content: center;
 `;
 
-const LogContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px 5px;
-    gap: 7px;
-`;
-
-const StyledHead = styled.h5`
-    margin: 1px 6px;
-    font-size: 11pt;
-    font-weight: 600;
-    color: #666666;
-`;
-
 const StyledRequestContainer = styled.div`
     width: 100%;
     display: flex;
@@ -99,35 +67,6 @@ const StyledContent = styled.h5`
     color: #666666;
     text-align: end;
     color: ${(props) => (props.$status ? "blue" : "red")};
-`;
-
-const StyledMenuButton = styled.button`
-    width: 100%;
-    padding: 0;
-    margin: 2px 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    border-style: none;
-    border-radius: 10px;
-    background: none;
-
-    cursor: pointer;
-
-    &:hover {
-        background-color: ${(props) => props.hover_color || "#ebebeb"};
-    }
-`;
-
-const StyledMenuBar = styled.div`
-    width: 100%;
-    height: 100%;
-    padding: 40px 0px 0 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    /* margin-left: 30px; */
 `;
 
 const SearchSideBar = ({

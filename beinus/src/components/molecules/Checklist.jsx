@@ -1,6 +1,5 @@
 import React from "react";
 import { Form } from "react-bootstrap";
-import Label from "../atoms/Label";
 
 export const Checklist = ({
     checkLabels, // Check 라벨들

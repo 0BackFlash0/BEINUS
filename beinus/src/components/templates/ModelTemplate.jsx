@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Icon from "../atoms/Icon";
 
 const StyledModalContainer = styled.div`
     position: relative;
@@ -52,7 +51,7 @@ const ModalTemplate = ({
 
     // 모달 닫기
     const closeModal = () => {
-        console.log("hello");
+        // console.log("hello");
         set_ismodalopen(false);
     };
 

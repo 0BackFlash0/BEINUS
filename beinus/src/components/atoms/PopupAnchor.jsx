@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledLink = styled.div`
@@ -16,17 +15,12 @@ const PopupAnchor = ({
     className = "", // class
     ...props
 }) => {
-
     const openPopup = () => {
-        const popupWindow = window.open(
-          to, 
-          name, 
-          `popup,${feature}`
-        );
+        const popupWindow = window.open(to, name, `popup,${feature}`);
         if (popupWindow) {
-          popupWindow.focus();
+            popupWindow.focus();
         }
-      };
+    };
 
     return (
         <StyledLink className={`${className}`} onClick={openPopup} {...props}>

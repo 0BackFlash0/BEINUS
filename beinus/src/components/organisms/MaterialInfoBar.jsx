@@ -1,25 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Label from "../atoms/Label";
-import Button from "../atoms/Button";
-import Anchor from "../atoms/Anchor";
 import Line from "../atoms/Line";
 import Icon from "../atoms/Icon";
-import { useSelector, useDispatch } from "react-redux";
-import { persistor } from "../../";
 import Photo from "../atoms/Photo";
-import { userLogout } from "../../store/userSlice";
-import Subtitle from "../atoms/Subtitle";
-import Menu from "../atoms/Menu";
-import { useNavigate } from "react-router-dom";
-import Topic from "../atoms/Topic";
-import Title from "../atoms/Title";
-import MenuButton from "../atoms/MenuButton";
-import {
-    queryMaterial,
-    verifyBattery,
-    verifyMaterial,
-} from "../../services/additional_api";
+import { queryMaterial, verifyMaterial } from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
 
 const StyledInfoBarContainer = styled.div`
@@ -180,7 +164,7 @@ const MaterialInfoBar = ({
             materialID: material_id,
         })
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 setData({
                     ...data,
                     ...response.data.rawMaterial,

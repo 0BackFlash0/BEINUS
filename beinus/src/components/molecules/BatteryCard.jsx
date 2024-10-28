@@ -1,9 +1,6 @@
-import Content from "../atoms/Content";
 import Icon from "../atoms/Icon";
-import Label from "../atoms/Label";
 import Photo from "../atoms/Photo";
 import Scroller from "../atoms/Scoller";
-import Subtitle from "../atoms/Subtitle";
 import styled from "styled-components";
 
 const StyledCardContainer = styled.div`

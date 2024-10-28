@@ -19,17 +19,15 @@ instance.interceptors.request.use(async function (config) {
     }
 
     const token = localStorage.getItem("token");
-    console.log(token);
 
     if (token && token !== "undefined") {
         // console.log(token);
         config.headers["Authorization"] = `Bearer ${token}`;
     } else {
-        console.log("no token");
+        // console.log("no token");
     }
 
     const user_data = await getUser().then((response) => response.data);
-    console.log(user_data);
 
     if (user_data && user_data.username !== "anonymousUser") {
         // console.log(user_data.role);
@@ -46,7 +44,7 @@ instance.interceptors.request.use(async function (config) {
 instance.interceptors.response.use(
     (response) => {
         // return response;
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
             return response;
             // } else if (response.status === 403) {
@@ -144,8 +142,6 @@ export const createBattery = (data) => {
             }, {})
         ),
     };
-
-    console.log(body);
 
     if (TEST) {
         return new Promise((resolve) => {
@@ -358,7 +354,6 @@ export const extractMaterials = (data) => {
     };
 
     if (TEST) {
-        console.log(body);
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({

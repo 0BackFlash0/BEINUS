@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import Subtitle from "../atoms/Subtitle";
-import MainContent from "../atoms/MainContent";
 
 const StyledInfoContainer = styled.div`
     width: 100%;

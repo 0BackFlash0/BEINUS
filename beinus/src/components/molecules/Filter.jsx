@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 import Menu from "../atoms/Menu";
-import { useState } from "react";
 import Icon from "../atoms/Icon";
 
 const StyledFilterContainer = styled.div`
@@ -73,7 +72,7 @@ const Filter = ({
                                 key={key}
                                 $is_on={value.active.toString()}
                                 onClick={() => {
-                                    console.log(key);
+                                    // console.log(key);
                                     handle_filter(key);
                                 }}
                             >

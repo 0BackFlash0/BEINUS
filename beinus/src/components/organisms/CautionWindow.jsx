@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import InputGroup from "../molecules/InputGroup";
-import Topic from "../atoms/Topic";
-import Subtitle from "../atoms/Subtitle";
 import Button from "../atoms/Button";
-import useInput from "../../hooks/useInput";
-import OptionGroup from "../molecules/OptionGroup";
-import { analysisBattery } from "../../services/additional_api";
 
 const StyledBatteryRegisterContainer = styled.div`
     position: relative;

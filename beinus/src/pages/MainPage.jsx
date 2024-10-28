@@ -152,10 +152,6 @@ const StyledRoleList = styled.div`
     justify-content: space-around;
 `;
 
-const StyledLogo = styled(Photo)`
-    display: inline-block;
-`;
-
 const StyledRoleElement = styled.div`
     width: 200px;
     height: 200px;
@@ -200,6 +196,27 @@ const StyledStartButton = styled(Button)`
     /* font-size: 24pt;
     padding: 20 50px;
     font-weight: 900; */
+`;
+
+const SectionSelectorContainer = styled.div`
+    z-index: 5;
+    position: fixed;
+    top: 50%;
+    right: 50px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-50%);
+`;
+
+const SectionSelector = styled.button`
+    padding: 0;
+    margin: 10px 0;
+    width: 8px;
+    height: 35px;
+    border-radius: 4px;
+    border: none;
+    background-color: ${(props) =>
+        props.$is_selected ? "#d8d8d8" : "#929292;"};
 `;
 
 const MainPage = () => {
@@ -271,16 +288,22 @@ const MainPage = () => {
     return (
         <FullPageContainer ref={containerRef}>
             <GNB />
+            <SectionSelectorContainer>
+                <SectionSelector
+                    onClick={() => moveToSection(0)}
+                    $is_selected={currentSection === 0}
+                />
+                <SectionSelector
+                    onClick={() => moveToSection(1)}
+                    $is_selected={currentSection === 1}
+                />
+                <SectionSelector
+                    onClick={() => moveToSection(2)}
+                    $is_selected={currentSection === 2}
+                />
+            </SectionSelectorContainer>
             <Section ref={(el) => (sectionsRef.current[0] = el)}>
-                <StyledSectionTitle>
-                    {/* <StyledLogo
-                        src="/assets/logo.png"
-                        alt="로고"
-                        objectfit="cover"
-                        height="60px"
-                    /> */}
-                    Welcome to BE IN US
-                </StyledSectionTitle>
+                <StyledSectionTitle>Welcome to BE IN US</StyledSectionTitle>
                 <StyledIntroductContent>
                     <StyledSlogun>
                         Empowering a Sustainable Future with Transparent

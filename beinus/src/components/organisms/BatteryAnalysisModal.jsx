@@ -10,7 +10,6 @@ import {
     setRecycleAvailability,
 } from "../../services/additional_api";
 import { useCaution } from "../../hooks/useCaution";
-import PassInfo from "../molecules/PassInfo";
 import { useEffect, useState } from "react";
 
 const StyledBatteryRegisterContainer = styled.div`
@@ -126,7 +125,7 @@ const BatteryAnalysisModal = ({
             batteryID: battery_id,
         })
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 setData({
                     ...data,
                     ...response.data,

@@ -54,13 +54,13 @@ const LoginForm = ({
     const dispatch = useDispatch();
 
     const handleLogin = async function () {
-        console.log(value.username);
+        // console.log(value.username);
         const loginCheck = await login({
             username: value.username,
             password: value.password,
         })
             .then(async function (response) {
-                console.log(response);
+                // console.log(response);
 
                 localStorage.setItem("token", response.data.token);
 

@@ -1,12 +1,8 @@
 import styled from "styled-components";
 import InputGroup from "../molecules/InputGroup";
 import OptionGroup from "../molecules/OptionGroup";
-import Topic from "../atoms/Topic";
 import Subtitle from "../atoms/Subtitle";
-import Button from "../atoms/Button";
-import useInput from "../../hooks/useInput";
-import { registerBattery } from "../../services/additional_api";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const StyledRowGroupContainer = styled.div`
     width: 100%;
@@ -107,7 +103,7 @@ const RegisterMaterialOption = ({
     }, [material_id_value]);
 
     useEffect(() => {
-        console.log(amount_value, maxAmount);
+        // console.log(amount_value, maxAmount);
         if (amount_value < 0) {
             setErrorMsg("원자재의 개수는 1개 이상 사용해야 합니다.");
         } else if (amount_value > maxAmount) {
