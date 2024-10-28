@@ -144,8 +144,8 @@ const BatteryMaintainModal = ({
             </StyledInputGroupContainer>
             <StyledInputGroup
                 type="text"
-                id="others"
-                name="others"
+                id="info"
+                name="info"
                 value={value.info ? value.info : ""}
                 onChange={handleOnChange}
                 title="정비 내용"

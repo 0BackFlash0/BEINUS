@@ -51,20 +51,20 @@ const StyledButtonContainer = styled.div`
 
 const MaterialOptions = [
     {
-        key: "nickel",
-        name: "니켈",
+        key: "Nickel",
+        name: "Nickel",
     },
     {
-        key: "cobalt",
-        name: "코발트",
+        key: "Cobalt",
+        name: "Cobalt",
     },
     {
-        key: "lithium",
-        name: "리튬",
+        key: "Lithium",
+        name: "Lithium",
     },
     {
-        key: "lead",
-        name: "납",
+        key: "Manganese",
+        name: "Manganese",
     },
 ];
 
@@ -108,7 +108,7 @@ const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
             className={`battery-register-modal ${className}`}
             {...props}
         >
-            <StyledTopic>원자재 등록</StyledTopic>
+            <StyledTopic>Register Material</StyledTopic>
             <StyledInputGroupContainer>
                 <StyledOptionGroup
                     options={MaterialOptions}
@@ -116,7 +116,7 @@ const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
                     name="type"
                     value={value.type ? value.type : ""}
                     onChange={handleOnChange}
-                    title="종류"
+                    title="Type"
                 />
                 <StyledInputGroup
                     type="number"
@@ -124,7 +124,7 @@ const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
                     name="amount"
                     value={value.amount ? value.amount : ""}
                     onChange={handleOnChange}
-                    title="수량"
+                    title="Quantity"
                 />
             </StyledInputGroupContainer>
             <StyledInputGroup
@@ -133,7 +133,7 @@ const MaterialRegisterModal = ({ className = "", handle_close, ...props }) => {
                 name="vendor"
                 value={value.vendor ? value.vendor : ""}
                 onChange={handleOnChange}
-                title="공급업체"
+                title="Supplier ID"
             />
             <StyledButtonContainer>
                 <Button onClick={handleRegister}>확인</Button>
