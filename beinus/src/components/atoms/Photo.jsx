@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 const StyledPicture = styled("div")`
-    display: block;
+    display: flex;
     overflow: hidden;
+    width: ${(props) => props.$width || "auto"};
+    height: ${(props) => props.$height || "auto"};
 `;
 
 const StyledSource = styled.source`
@@ -35,7 +37,7 @@ const Photo = ({
     };
 
     return (
-        <StyledPicture className={`${className}`} {...props}>
+        <StyledPicture className={`${className}`} {...optionalProps} {...props}>
             <StyledSource srcSet={`${src}`} {...optionalProps} />
             <StyledImg src={`${src}`} alt={alt} {...optionalProps} />
         </StyledPicture>

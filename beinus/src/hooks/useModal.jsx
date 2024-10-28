@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import BatteryAnalysisModal from "../components/organisms/BatteryAnalysisModal";
 import BatteryMaintainModal from "../components/organisms/BatteryMaintainModal";
 import BatteryExtractModal from "../components/organisms/BatteryExtractModal";
@@ -8,6 +8,46 @@ import MaterialRegisterModal from "../components/organisms/MaterialRegisterModal
 
 // Context 생성
 const ModalContext = createContext();
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
+const fadeOut = keyframes`
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+`;
+
+const scaleIn = keyframes`
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+`;
+
+const scaleOut = keyframes`
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+`;
 
 const StyledBackdrop = styled.div`
     position: fixed;
@@ -21,6 +61,7 @@ const StyledBackdrop = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
+    animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} 0.3s ease;
 `;
 
 const StyledModalContainer = styled.div`
@@ -32,6 +73,7 @@ const StyledModalContainer = styled.div`
     z-index: 3;
     /* max-width: 500px; */
     /* width: 100%; */
+    animation: ${({ $visible }) => ($visible ? scaleIn : scaleOut)} 0.3s ease;
 `;
 
 // ModalProvider: 모달 상태를 관리하는 컴포넌트
@@ -86,8 +128,14 @@ export const ModalProvider = ({ children }) => {
         >
             {children}
             {modalContent && (
-                <StyledBackdrop className="modal-backdrop">
-                    <StyledModalContainer className="caution">
+                <StyledBackdrop
+                    className="modal-backdrop"
+                    $visible={!!modalContent}
+                >
+                    <StyledModalContainer
+                        className="caution"
+                        $visible={!!modalContent}
+                    >
                         {modalContent}
                     </StyledModalContainer>
                 </StyledBackdrop>

@@ -1,10 +1,50 @@
 import Button from "../components/atoms/Button";
 import React, { createContext, useState, useContext } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Subtitle from "../components/atoms/Subtitle";
 
 // Context 생성
 const CautionContext = createContext();
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
+const fadeOut = keyframes`
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+`;
+
+const scaleIn = keyframes`
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+`;
+
+const scaleOut = keyframes`
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+`;
 
 const StyledBackdrop = styled.div`
     position: fixed;
@@ -18,6 +58,7 @@ const StyledBackdrop = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
+    animation: ${({ $visible }) => ($visible ? fadeIn : fadeOut)} 0.3s ease;
 `;
 
 const StyledCautionContainer = styled.div`
@@ -32,6 +73,7 @@ const StyledCautionContainer = styled.div`
     align-items: center;
     gap: 15px;
     background-color: white;
+    animation: ${({ $visible }) => ($visible ? scaleIn : scaleOut)} 0.3s ease;
 `;
 
 // CautionProvider: 모달 상태를 관리하는 컴포넌트
@@ -67,8 +109,14 @@ export const CautionProvider = ({ children }) => {
         >
             {children}
             {modalContent && (
-                <StyledBackdrop className="modal-backdrop">
-                    <StyledCautionContainer className="caution">
+                <StyledBackdrop
+                    className="modal-backdrop"
+                    $visible={!!modalContent}
+                >
+                    <StyledCautionContainer
+                        className="caution"
+                        $visible={!!modalContent}
+                    >
                         <Subtitle>{modalContent}</Subtitle>
                         <Button onClick={hideCaution}>확인</Button>
                     </StyledCautionContainer>
